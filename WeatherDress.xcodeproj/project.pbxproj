@@ -15,6 +15,7 @@
 		3381DDEF27F20C6A007FBCAE /* WeatherDressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDEE27F20C6A007FBCAE /* WeatherDressTests.swift */; };
 		3381DDF927F20C6A007FBCAE /* WeatherDressUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDF827F20C6A007FBCAE /* WeatherDressUITests.swift */; };
 		3381DDFB27F20C6A007FBCAE /* WeatherDressUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDFA27F20C6A007FBCAE /* WeatherDressUITestsLaunchTests.swift */; };
+		3381DE0F27F2101C007FBCAE /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DE0E27F2101C007FBCAE /* APIProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		3381DDF427F20C6A007FBCAE /* WeatherDressUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherDressUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3381DDF827F20C6A007FBCAE /* WeatherDressUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDressUITests.swift; sourceTree = "<group>"; };
 		3381DDFA27F20C6A007FBCAE /* WeatherDressUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDressUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3381DE0E27F2101C007FBCAE /* APIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +99,12 @@
 		3381DDD627F20C66007FBCAE /* WeatherDress */ = {
 			isa = PBXGroup;
 			children = (
-				3381DE0C27F20F3A007FBCAE /* Data */,
-				3381DE0927F20F1F007FBCAE /* Presentation */,
-				3381DE0827F20F12007FBCAE /* Domain */,
+				3381DE0D27F2100B007FBCAE /* Networking */,
 				3381DDD727F20C66007FBCAE /* AppDelegate.swift */,
 				3381DDD927F20C66007FBCAE /* SceneDelegate.swift */,
-				3381DDE227F20C69007FBCAE /* LaunchScreen.storyboard */,
+				3381DE0927F20F1F007FBCAE /* Presentation */,
+				3381DE0827F20F12007FBCAE /* Domain */,
+				3381DE0C27F20F3A007FBCAE /* Data */,
 				3381DE0727F20D92007FBCAE /* Resources */,
 				3381DDE527F20C69007FBCAE /* Info.plist */,
 			);
@@ -152,6 +154,7 @@
 		3381DE0A27F20F2E007FBCAE /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				3381DDE227F20C69007FBCAE /* LaunchScreen.storyboard */,
 				3381DE0B27F20F34007FBCAE /* Main */,
 			);
 			path = Scene;
@@ -170,6 +173,14 @@
 			children = (
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		3381DE0D27F2100B007FBCAE /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				3381DE0E27F2101C007FBCAE /* APIProvider.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3381DDDC27F20C66007FBCAE /* MainViewController.swift in Sources */,
+				3381DE0F27F2101C007FBCAE /* APIProvider.swift in Sources */,
 				3381DDD827F20C66007FBCAE /* AppDelegate.swift in Sources */,
 				3381DDDA27F20C66007FBCAE /* SceneDelegate.swift in Sources */,
 			);

@@ -97,9 +97,11 @@
 		3381DDD627F20C66007FBCAE /* WeatherDress */ = {
 			isa = PBXGroup;
 			children = (
+				3381DE0C27F20F3A007FBCAE /* Data */,
+				3381DE0927F20F1F007FBCAE /* Presentation */,
+				3381DE0827F20F12007FBCAE /* Domain */,
 				3381DDD727F20C66007FBCAE /* AppDelegate.swift */,
 				3381DDD927F20C66007FBCAE /* SceneDelegate.swift */,
-				3381DDDB27F20C66007FBCAE /* MainViewController.swift */,
 				3381DDE227F20C69007FBCAE /* LaunchScreen.storyboard */,
 				3381DE0727F20D92007FBCAE /* Resources */,
 				3381DDE527F20C69007FBCAE /* Info.plist */,
@@ -130,6 +132,44 @@
 				3381DDE027F20C69007FBCAE /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		3381DE0827F20F12007FBCAE /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		3381DE0927F20F1F007FBCAE /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				3381DE0A27F20F2E007FBCAE /* Scene */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		3381DE0A27F20F2E007FBCAE /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				3381DE0B27F20F34007FBCAE /* Main */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		3381DE0B27F20F34007FBCAE /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3381DDDB27F20C66007FBCAE /* MainViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		3381DE0C27F20F3A007FBCAE /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

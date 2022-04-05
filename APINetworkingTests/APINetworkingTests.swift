@@ -9,27 +9,75 @@ import XCTest
 
 class APINetworkingTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    func testUSTWeatherRequest() {
+        let expectation = XCTestExpectation()
+        let request = ShortForecastRequest(
+            function: .ultraShortNowcast,
+            method: .get,
+            pageNo: 1,
+            numOfRows: 1000,
+            baseTime: Date(timeIntervalSinceNow: -2400),
+            baseDate: Date(),
+            xAxisNumber: 55,
+            yAxisNumber: 127,
+            serviceKey: Bundle.main.apiKey
+        )
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+        APIProvider().request(request: request) { result in
+            switch result {
+            case .success(let data):
+                let decoder = JSONDecoder()
+                do {
+                    let decoded = try decoder.decode(UltraShortNowcastWeatherResponse.self, from: data)
+                    let weatherComponents = decoded.response.body?.items.item ?? []
+                    let resultWeather = UltraShortNowcastWeatherItem(items: weatherComponents)
+                    XCTAssertNotNil(resultWeather)
+                } catch {
+                    XCTFail("파싱 에러")
+                }
+            case .failure:
+                XCTFail("통신 에러")
+            }
+            expectation.fulfill()
         }
+
+        wait(for: [expectation], timeout: 2.0)
+    }
+
+    func testSFWeatherRequest() {
+        let expectation = XCTestExpectation()
+        let request = ShortForecastRequest(
+            function: .shortForecast,
+            method: .get,
+            pageNo: 1,
+            numOfRows: 1000,
+            baseTime: Date(timeIntervalSinceNow: -3200),
+            baseDate: Date(),
+            xAxisNumber: 55,
+            yAxisNumber: 127,
+            serviceKey: Bundle.main.apiKey
+        )
+
+        APIProvider().request(request: request) { result in
+            switch result {
+            case .success(let data):
+                let decoder = JSONDecoder()
+                do {
+                    let decoded = try decoder.decode(ShortForecastWeatherResponse.self, from: data)
+                    let weatherItem = decoded.response.body.items.item
+                    let list = ShortForecastWeatherList(items: weatherItem)
+                    XCTAssertTrue(list.forecastList.count != 0)
+                } catch {
+                    XCTFail("파싱 에러")
+                }
+
+            case .failure:
+                XCTFail("통신 에러")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 2.0)
     }
 
 }

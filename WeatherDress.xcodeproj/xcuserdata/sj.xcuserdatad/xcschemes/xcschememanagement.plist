@@ -7,7 +7,30 @@
 		<key>WeatherDress.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>5</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>3381DDD327F20C66007FBCAE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3381DDE927F20C69007FBCAE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3381DDF327F20C6A007FBCAE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3381DE1327F21067007FBCAE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

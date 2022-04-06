@@ -63,6 +63,7 @@
 		337ECA1A27FC77E700EC2D00 /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA1827FC77E700EC2D00 /* APIProvider.swift */; };
 		337ECA1C27FC790700EC2D00 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA1B27FC790700EC2D00 /* WeatherService.swift */; };
 		337ECA1D27FC790700EC2D00 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA1B27FC790700EC2D00 /* WeatherService.swift */; };
+		337ECA2427FC9AAB00EC2D00 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA2327FC9AAB00EC2D00 /* MainViewModel.swift */; };
 		3381DDD827F20C66007FBCAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDD727F20C66007FBCAE /* AppDelegate.swift */; };
 		3381DDDA27F20C66007FBCAE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDD927F20C66007FBCAE /* SceneDelegate.swift */; };
 		3381DDDC27F20C66007FBCAE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DDDB27F20C66007FBCAE /* MainViewController.swift */; };
@@ -133,6 +134,7 @@
 		337ECA1527FC765D00EC2D00 /* DefaultWeatherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWeatherRepository.swift; sourceTree = "<group>"; };
 		337ECA1827FC77E700EC2D00 /* APIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
 		337ECA1B27FC790700EC2D00 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
+		337ECA2327FC9AAB00EC2D00 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		3381DDD427F20C66007FBCAE /* WeatherDress.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherDress.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3381DDD727F20C66007FBCAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3381DDD927F20C66007FBCAE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -317,6 +319,22 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		337ECA2127FC8C5A00EC2D00 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3381DDDB27F20C66007FBCAE /* MainViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		337ECA2227FC8C6200EC2D00 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				337ECA2327FC9AAB00EC2D00 /* MainViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		3381DDCB27F20C66007FBCAE = {
 			isa = PBXGroup;
 			children = (
@@ -416,7 +434,8 @@
 		3381DE0B27F20F34007FBCAE /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				3381DDDB27F20C66007FBCAE /* MainViewController.swift */,
+				337ECA2127FC8C5A00EC2D00 /* View */,
+				337ECA2227FC8C6200EC2D00 /* ViewModel */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -789,6 +808,7 @@
 				337EC9B727FAD51E00EC2D00 /* UltraShortNowcastWeatherItem.swift in Sources */,
 				337ECA1927FC77E700EC2D00 /* APIProvider.swift in Sources */,
 				337EC9E327FC2E5000EC2D00 /* MidForecastRequestable.swift in Sources */,
+				337ECA2427FC9AAB00EC2D00 /* MainViewModel.swift in Sources */,
 				3381DDDC27F20C66007FBCAE /* MainViewController.swift in Sources */,
 				337EC9FC27FC660500EC2D00 /* SkyCondition.swift in Sources */,
 				337EC9DC27FC2E1100EC2D00 /* NetworkingError.swift in Sources */,

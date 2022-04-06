@@ -7,11 +7,11 @@
 
 import Foundation
 
-class APIProvider {
+class DefaultAPIProvider: APIProvider {
     let session = URLSession.shared
 
     func request<T: APIRequest>(
-        request: T,
+        _ request: T,
         completion: @escaping (Result<Data, NetworkingError>) -> Void
     ) {
         guard let urlRequest = request.urlReqeust else {

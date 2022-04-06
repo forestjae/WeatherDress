@@ -9,6 +9,8 @@ target 'WeatherDress' do
 
   pod 'RxSwift' 
   pod 'SwiftLint'
+  pod 'SnapKit'  
+  pod 'RxDataSources', '~> 5.0'
 
   target 'WeatherDressTests' do
     inherit! :search_paths

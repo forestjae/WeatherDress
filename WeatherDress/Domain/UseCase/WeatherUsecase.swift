@@ -15,7 +15,11 @@ final class WeatherUsecase {
         self.repository = repository
     }
 
-    func fetchCurrentWeather() -> Single<UltraShortNowcastWeatherItem> {
+    func fetch() -> Observable<UltraShortNowcastWeatherItem?> {
+        return self.repository.fetch()
+    }
+
+    func fetchCurrentWeather() {
         self.repository.fetchUltraShortNowcastWeather()
     }
 }

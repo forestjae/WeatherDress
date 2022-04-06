@@ -38,8 +38,8 @@ final class WeatherService {
                         return
                     }
                     single(.success(resultWeather))
-                case .failure:
-                    print("error")
+                case .failure(let error):
+                    single(.failure(error))
                 }
             }
             return Disposables.create()

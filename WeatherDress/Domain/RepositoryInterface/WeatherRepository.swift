@@ -9,5 +9,6 @@ import Foundation
 import RxSwift
 
 protocol WeatherRepository {
-    func fetchUltraShortNowcastWeather() -> Single<UltraShortNowcastWeatherItem>
+    func fetchUltraShortNowcastWeather()
+    func fetch() -> Observable<UltraShortNowcastWeatherItem?>
 }

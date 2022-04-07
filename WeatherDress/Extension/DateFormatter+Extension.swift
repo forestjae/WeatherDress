@@ -28,4 +28,11 @@ extension DateFormatter {
         formatter.dateFormat = "yyyyMMdd HHmm"
         return formatter
     }()
+
+    static let hourlyWeatherTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "H시"
+        return formatter
+    }()
 }

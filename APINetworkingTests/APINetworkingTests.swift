@@ -6,24 +6,21 @@
 //
 
 import XCTest
+@testable import WeatherDress
 
 class APINetworkingTests: XCTestCase {
+    let apiProvider = DefaultAPIProvider()
 
-    func testUSTWeatherRequest() {
+    func test_초단기실황_request() {
         let expectation = XCTestExpectation()
         let request = ShortForecastRequest(
             function: .ultraShortNowcast,
-            method: .get,
-            pageNo: 1,
-            numOfRows: 1000,
-            baseTime: Date(timeIntervalSinceNow: -2400),
-            baseDate: Date(),
             xAxisNumber: 55,
             yAxisNumber: 127,
-            serviceKey: Bundle.main.apiKey
+            serviceKey: Bundle.main.weatherApiKey
         )
 
-        APIProvider().request(request: request) { result in
+        self.apiProvider.request(request) { result in
             switch result {
             case .success(let data):
                 let decoder = JSONDecoder()
@@ -44,21 +41,16 @@ class APINetworkingTests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
 
-    func testSFWeatherRequest() {
+    func test_단기예보_request() {
         let expectation = XCTestExpectation()
         let request = ShortForecastRequest(
             function: .shortForecast,
-            method: .get,
-            pageNo: 1,
-            numOfRows: 1000,
-            baseTime: Date(timeIntervalSinceNow: -3200),
-            baseDate: Date(),
             xAxisNumber: 55,
             yAxisNumber: 127,
-            serviceKey: Bundle.main.apiKey
+            serviceKey: Bundle.main.weatherApiKey
         )
 
-        APIProvider().request(request: request) { result in
+        self.apiProvider.request(request) { result in
             switch result {
             case .success(let data):
                 let decoder = JSONDecoder()
@@ -71,6 +63,36 @@ class APINetworkingTests: XCTestCase {
                     XCTFail("파싱 에러")
                 }
 
+            case .failure:
+                XCTFail("통신 에러")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 2.0)
+    }
+
+    func test_초단기예보_request() {
+        let expectation = XCTestExpectation()
+        let request = ShortForecastRequest(
+            function: .ultraShortForecast,
+            xAxisNumber: 121,
+            yAxisNumber: 61,
+            serviceKey: Bundle.main.weatherApiKey
+        )
+        self.apiProvider.request(request) { result in
+            switch result {
+            case .success(let data):
+                let decoder = JSONDecoder()
+                do {
+                    let decoded = try decoder.decode(UltraShortForecastWeatherResponse.self, from: data)
+                    let items = decoded.response.body.items.item
+                    let result = UltraShortForecastWeatherList(items: items)
+                    print(result)
+                    XCTAssert(result.forecastList.count != 0)
+                } catch {
+                    XCTFail("파싱 에러")
+                }
             case .failure:
                 XCTFail("통신 에러")
             }

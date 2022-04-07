@@ -11,7 +11,6 @@ import RxRelay
 
 final class DefaultWeatherRepository: WeatherRepository {
     let apiService: WeatherService
-    private let weather = BehaviorRelay<UltraShortNowcastWeatherItem?>(value: nil)
     private let disposeBag = DisposeBag()
 
     init(apiService: WeatherService) {
@@ -19,14 +18,16 @@ final class DefaultWeatherRepository: WeatherRepository {
     }
 
     func fetch() -> Observable<UltraShortNowcastWeatherItem?> {
-        return self.weather.asObservable()
+        return self.apiService.fetchUltraShortNowcastWeather(xAxisNumber: 61, yAxisNumber: 121).asObservable()
     }
 
-    func fetchUltraShortNowcastWeather() {
-        self.apiService.fetchUltraShortNowcastWeather(xAxisNumber: 61, yAxisNumber: 121)
-            .subscribe(onSuccess: { emmiter in
-                self.weather.accept(emmiter)
-            })
-            .disposed(by: self.disposeBag)
+    func fetchHourlyWeathers() -> Observable<[HourlyWeather]> {
+        return self.apiService.fetchUltraShortForecastWeather(xAxisNumber: 61, yAxisNumber: 121)
+            .map { $0.forecastList.map { item in
+                return HourlyWeather(date: item.forecastDate, skyCondition: item.skyCondition.rawValue, temperature: Int(item.temperature))
+            } }
+            .map { $0.sorted { $0.date < $1.date }
+            }
+            .asObservable()
     }
 }

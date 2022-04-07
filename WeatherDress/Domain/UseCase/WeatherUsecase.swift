@@ -19,7 +19,7 @@ final class WeatherUsecase {
         return self.repository.fetch()
     }
 
-    func fetchCurrentWeather() {
-        self.repository.fetchUltraShortNowcastWeather()
+    func fetchHourlWeatehr() -> Observable<[HourlyWeather]> {
+        return self.repository.fetchHourlyWeathers()
     }
 }

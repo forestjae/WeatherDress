@@ -11,10 +11,12 @@ target 'WeatherDress' do
   pod 'SwiftLint'
   pod 'SnapKit'  
   pod 'RxDataSources', '~> 5.0'
+  pod 'lottie-ios'
 
-  target 'WeatherDressTests' do
+  target 'APINetworkingTests' do
     inherit! :search_paths
-    # Pods for testing
+   
+  pod 'RxSwift' 
   end
 
   target 'WeatherDressUITests' do

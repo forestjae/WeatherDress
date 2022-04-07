@@ -1,15 +1,15 @@
 //
-//  ShortForecastRequest.swift
+//  MidForecastRequest.swift
 //  WeatherDress
 //
-//  Created by Lee Seung-Jae on 2022/03/29.
+//  Created by Lee Seung-Jae on 2022/04/06.
 //
 
 import Foundation
 
-struct ShortForecastRequest: ShortForecastRequestable {
+struct MidForecastRequest: MidForecastRequestable {
     let headers: [String : String]? = nil
-    let function: ShortForecastFunction
+    let function: MidForecastFunction
     let method: HTTPMethod = .get
     let pageNo: Int = 1
     let numOfRows: Int = 1000

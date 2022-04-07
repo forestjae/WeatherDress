@@ -8,14 +8,23 @@
 import Foundation
 
 extension Bundle {
-    var apiKey: String {
+    var weatherApiKey: String {
         guard let file = self.path(forResource: "Secret", ofType: "plist"),
               let resource = NSDictionary(contentsOfFile: file),
-              let key = resource["API_KEY"] as? String
+              let key = resource["API_KEY_Weather"] as? String
         else {
             fatalError("API키가 없습니다.")
         }
+        return key
+    }
 
+    var kakaoApiKey: String {
+        guard let file = self.path(forResource: "Secret", ofType: "plist"),
+              let resource = NSDictionary(contentsOfFile: file),
+              let key = resource["API_KEY_Kakao"] as? String
+        else {
+            fatalError("API키가 없습니다.")
+        }
         return key
     }
 }

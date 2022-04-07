@@ -14,6 +14,7 @@ protocol APIRequest {
     var baseURL: URL? { get }
     var url: URL? { get }
     var parameters: [String: String] { get }
+    var headers: [String: String]? { get }
     var function: Function { get }
 }
 
@@ -26,6 +27,7 @@ extension APIRequest {
         let urlQuries = self.parameters.map { key, value in
             URLQueryItem(name: key, value: value)
         }
+
         urlComponents?.percentEncodedQueryItems = urlQuries
 
         return urlComponents?.url
@@ -37,6 +39,13 @@ extension APIRequest {
         }
         var request = URLRequest(url: url)
         request.httpMethod = self.method.rawValue
+
+        if let headers = self.headers {
+            headers.forEach { key, value in
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+        }
+
         return request
     }
 }

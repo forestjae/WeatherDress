@@ -14,9 +14,9 @@ enum WeatherForecastAPIInfo: String {
     var urlString: URL? {
         switch self {
         case .shortForecast:
-            return URL(string: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
+            return URL(string: "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
         case .midForecast:
-            return URL(string: "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
+            return URL(string: "https://apis.data.go.kr/1360000/MidFcstInfoService/")
         }
     }
 }

@@ -16,7 +16,11 @@ private enum Design {
 }
 
 class MainViewController: UIViewController {
-    var viewModel: MainViewModel = MainViewModel(useCase: WeatherUsecase(repository: DefaultWeatherRepository(apiService: WeatherService(apiProvider: DefaultAPIProvider()))))
+    var viewModel: MainViewModel = MainViewModel(
+        useCase: WeatherUseCase(repository: DefaultWeatherRepository(
+            apiService: WeatherService(apiProvider: DefaultAPIProvider()))),
+        locationUseCase: LocationUseCase(repository: DefaultLocationRepository(
+            apiService: GeoSearchService(apiProvider: DefaultAPIProvider()))))
 
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -25,6 +29,13 @@ class MainViewController: UIViewController {
         collectionView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
         collectionView.layer.cornerRadius = 5
         return collectionView
+    }()
+
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
+        tableView.layer.cornerRadius = 5
+        return tableView
     }()
 
     private let disposeBag = DisposeBag()
@@ -122,6 +133,7 @@ class MainViewController: UIViewController {
         self.configureHierarchy()
         self.configureConstraint()
         self.configureCollectionView()
+        self.configureTableView()
         self.binding()
     }
 
@@ -134,6 +146,7 @@ class MainViewController: UIViewController {
         self.scrollView.addSubview(self.degreeLabel)
         self.stackView.addArrangedSubview(self.currentStackView)
         self.stackView.addArrangedSubview(self.collectionView)
+        self.stackView.addArrangedSubview(self.tableView)
         self.currentStackView.addArrangedSubview(self.locationLabel)
         self.currentStackView.addArrangedSubview(self.currentWeatherImageView)
         self.currentStackView.addArrangedSubview(self.currentTemperatureLabel)
@@ -165,6 +178,11 @@ class MainViewController: UIViewController {
             $0.width.equalTo(400)
             $0.height.equalTo(90)
         }
+
+        self.tableView.snp.makeConstraints {
+            $0.width.equalTo(400)
+            $0.height.equalTo(600)
+        }
     }
 
     private func binding() {
@@ -187,11 +205,28 @@ class MainViewController: UIViewController {
                 cell.configure(with: item, indexPath: indexPath)
             }
             .disposed(by: self.disposeBag)
+
+        output.dailyWeather
+            .bind(to: self.tableView.rx.items(cellIdentifier: "daily", cellType: DailyWeaterTableViewCell.self)) { index, item, cell in
+                cell.configure(with: item, indexPath: index)
+            }
+            .disposed(by: self.disposeBag)
+
+        output.location
+            .map { $0.address.secondRegion + " " + ($0.address.thirdRegion ?? "") }
+            .asDriver(onErrorJustReturn: "잘못된 주소입니다")
+            .drive(self.locationLabel.rx.text)
+            .disposed(by: self.disposeBag)
     }
 
     private func configureCollectionView() {
         self.collectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
         self.collectionView.register(HourlyWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+    }
+
+    private func configureTableView() {
+        self.tableView.rx.setDelegate(self).disposed(by: self.disposeBag)
+        self.tableView.register(DailyWeaterTableViewCell.self, forCellReuseIdentifier: "daily")
     }
 }
 

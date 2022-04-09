@@ -45,4 +45,12 @@ class GeoSearchAPINetworkingTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 2.0)
     }
+
+    func test_converting() {
+        print(RegionCodeConverting.shared.convert(from: "경상남도 고성군", to: .temperature))
+        print(RegionCodeConverting.shared.convert(from: "강원도 고성군", to: .temperature))
+        print(RegionCodeConverting.shared.convert(from: "강원도 평창군 대관령면", to: .weather))
+        print(RegionCodeConverting.shared.convert(from: "경상북도 울릉군 울릉읍 독도리", to: .weather))
+        print(RegionCodeConverting.shared.convert(from: "울산광역시 울주군 언양읍 반천리", to: .weather))
+    }
 }

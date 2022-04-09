@@ -13,6 +13,6 @@ protocol MidForecastRequestable: APIRequest {
 
 extension MidForecastRequestable {
     var baseURL: URL? {
-        return WeatherForecastAPIInfo.shortForecast.urlString
+        return WeatherForecastAPIInfo.midForecast.urlString
     }
 }

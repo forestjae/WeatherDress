@@ -8,6 +8,7 @@
 import Foundation
 
 struct LocationInfo {
+    let identifier: UUID
     let longtitude: Double
     let latitude: Double
     let address: Address
@@ -19,6 +20,14 @@ struct LocationInfo {
         let thirdRegion: String?
         let fourthRegion: String?
     }
+
+    init(identifer: UUID = UUID(), longtitude: Double, latitude: Double, address: Address) {
+        self.identifier = identifer
+        self.longtitude = longtitude
+        self.latitude = latitude
+        self.address = address
+    }
+
 }
 
 extension LocationInfo {
@@ -27,6 +36,7 @@ extension LocationInfo {
               let latitude = Double(searchedAddressSet.yCoordinate) else {
                   return nil
               }
+        self.identifier = UUID()
         self.longtitude = longtitude
         self.latitude = latitude
         self.address = Address(

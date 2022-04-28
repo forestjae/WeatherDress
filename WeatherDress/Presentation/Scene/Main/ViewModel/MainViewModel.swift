@@ -7,44 +7,52 @@
 
 import Foundation
 import RxSwift
+import RxDataSources
 
 final class MainViewModel {
 
-    private let bag = DisposeBag()
-    private let useCase: WeatherUsecase
-    private let weather: Observable<UltraShortNowcastWeatherItem?>
+    var coordinator: PageSceneCoordinator?
 
-    init(useCase: WeatherUsecase) {
+    private let disposeBag = DisposeBag()
+    private let useCase: LocationUseCase
+    private(set) var locations = PublishSubject<[LocationInfo]>()
+    private(set) var locationButtonDidTap = PublishSubject<Void>()
+
+    init(useCase: LocationUseCase) {
         self.useCase = useCase
-        self.weather = self.useCase.fetch()
     }
 
     struct Input {
         let viewWillAppear: Observable<Void>
+        let locationButtonDidTap: Observable<Void>
     }
 
     struct Output {
-        //let locationLabelText: Observable<String>
-        //let currentWeatherImageName: Observable<String>
-        let currentTemperatureLabelText: Observable<String>
-//        let currentWeatherConditionLabelText: Observable<String>
-//        let currentWeatherDescriptionLabelText: Observable<String>
-//        let currentMinMaxTemperatureLabelText: Observable<(String, String)>
+        let locations: Observable<[LocationInfo]>
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        input.viewWillAppear
-            .subscribe(onNext: { [weak self] in
-                self?.useCase.fetchCurrentWeather()
-            })
-            .disposed(by: disposeBag)
+        let locations = input.viewWillAppear
+            .flatMap {
+                self.useCase.fetchLocations()
+            }
 
-        let currentTemperatureLabelText = self.weather
-            .compactMap { $0 }
-            .compactMap { String($0.temperature) }
+        locations
+            .subscribe(onNext: {
+                self.locations.onNext($0)
+                print("위치정보 받아옴")
+            })
+            .disposed(by: self.disposeBag)
+
+        input.locationButtonDidTap
+            .subscribe(onNext: {
+                print("button did tap")
+                self.locationButtonDidTap.onNext($0)
+            })
+            .disposed(by: self.disposeBag)
 
         return Output(
-            currentTemperatureLabelText: currentTemperatureLabelText
+            locations: self.locations
         )
     }
 }

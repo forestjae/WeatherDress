@@ -8,6 +8,7 @@
 import Foundation
 
 extension DateFormatter {
+    
     static let requestableDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -22,6 +23,34 @@ extension DateFormatter {
         return formatter
     }()
 
+    static let ultraShortNowcastTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "HH00"
+        return formatter
+    }()
+
+    static let ultraShortForecastTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "HH00"
+        return formatter
+    }()
+
+    static let shortForecastTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "0200"
+        return formatter
+    }()
+
+    static let midForecastRequestableTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyyMMdd0600"
+        return formatter
+    }()
+
     static let forecastDateAndTime: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -33,6 +62,13 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "H시"
+        return formatter
+    }()
+
+    static let DailyWeatherDate: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "dd일"
         return formatter
     }()
 }

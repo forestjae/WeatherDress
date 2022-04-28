@@ -1,6 +1,11 @@
 PODS:
   - Differentiator (5.0.0)
   - lottie-ios (3.3.0)
+  - Realm (10.23.0):
+    - Realm/Headers (= 10.23.0)
+  - Realm/Headers (10.23.0)
+  - RealmSwift (10.23.0):
+    - Realm (= 10.23.0)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -16,6 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - lottie-ios
+  - RealmSwift (~> 10)
   - RxDataSources (~> 5.0)
   - RxSwift
   - SnapKit
@@ -25,6 +31,8 @@ SPEC REPOS:
   trunk:
     - Differentiator
     - lottie-ios
+    - Realm
+    - RealmSwift
     - RxCocoa
     - RxDataSources
     - RxRelay
@@ -35,6 +43,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
+  Realm: bdac9baede54becb2883f319fc50e9e12b35235c
+  RealmSwift: e083456e083dcfd6ef9087cdde6b031ec6224783
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -42,6 +52,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftLint: ae76d82f056734f853c8cd0371503252c606c482
 
-PODFILE CHECKSUM: 9ec793c54e0e4f95859828e72c3d9b64b8d89eac
+PODFILE CHECKSUM: c55fa965c6575ed5dce6e6b0abadb9f701d3c13b
 
 COCOAPODS: 1.11.2

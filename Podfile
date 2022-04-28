@@ -12,6 +12,7 @@ target 'WeatherDress' do
   pod 'SnapKit'  
   pod 'RxDataSources', '~> 5.0'
   pod 'lottie-ios'
+  pod 'RealmSwift', '~> 10'
 
   target 'APINetworkingTests' do
     inherit! :search_paths

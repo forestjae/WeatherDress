@@ -6,21 +6,9 @@
 //
 
 import Foundation
+import RxSwift
 
 struct CurrentWeather {
     let temperature: Int
-    let skyCondition: SkyCondition2
-    let description: String
-    let maximumTemperature: Int
-    let minimunTemperature: Int
-}
-
-enum SkyCondition2 {
-    case clear
-    case cloudy
-    case cloudyAndRain
-    case rain
-    case heavyRain
-    case snow
-    case sleet
+    let weatherCondition: WeatherCondition
 }

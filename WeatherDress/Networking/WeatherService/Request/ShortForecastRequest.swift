@@ -13,7 +13,7 @@ struct ShortForecastRequest: ShortForecastRequestable {
     let method: HTTPMethod = .get
     let pageNo: Int = 1
     let numOfRows: Int = 1000
-    let baseDate: Date = Date() - 2400
+    let baseDate: Date
     let dataType = "JSON"
     let xAxisNumber: Int
     let yAxisNumber: Int
@@ -23,7 +23,7 @@ struct ShortForecastRequest: ShortForecastRequestable {
         [
             "pageNo": String(self.pageNo),
             "numOfRows": String(self.numOfRows),
-            "base_time": self.baseDate.convert(to: DateFormatter.requestableTime),
+            "base_time": self.baseDate.convert(to: function.timeFormatter),
             "base_date": self.baseDate.convert(to: DateFormatter.requestableDate),
             "dataType": self.dataType,
             "nx": String(self.xAxisNumber),

@@ -11,23 +11,17 @@ struct MidForecastRequest: MidForecastRequestable {
     let headers: [String : String]? = nil
     let function: MidForecastFunction
     let method: HTTPMethod = .get
-    let pageNo: Int = 1
-    let numOfRows: Int = 1000
-    let baseDate: Date = Date() - 2400
+    let baseDate = Date() - 3600 * 6 - 1
     let dataType = "JSON"
-    let xAxisNumber: Int
-    let yAxisNumber: Int
+    let regionIdentification: String
+
     let serviceKey: String
 
     var parameters: [String: String] {
         [
-            "pageNo": String(self.pageNo),
-            "numOfRows": String(self.numOfRows),
-            "base_time": self.baseDate.convert(to: DateFormatter.requestableTime),
-            "base_date": self.baseDate.convert(to: DateFormatter.requestableDate),
             "dataType": self.dataType,
-            "nx": String(self.xAxisNumber),
-            "ny": String(self.yAxisNumber),
+            "regId": self.regionIdentification,
+            "tmFc": self.baseDate.convert(to: DateFormatter.midForecastRequestableTime),
             "serviceKey": self.serviceKey
         ]
     }

@@ -1,237 +1,192 @@
 //
-//  ViewController.swift
+//  PageViewController.swift
 //  WeatherDress
 //
-//  Created by Lee Seung-Jae on 2022/03/29.
+//  Created by Lee Seung-Jae on 2022/04/10.
 //
 
 import UIKit
 import SnapKit
 import RxSwift
-import RxCocoa
-import Lottie
-
-private enum Design {
-    static let locationLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-}
 
 class MainViewController: UIViewController {
-    var viewModel: MainViewModel = MainViewModel(
-        useCase: WeatherUseCase(repository: DefaultWeatherRepository(
-            apiService: WeatherService(apiProvider: DefaultAPIProvider()))),
-        locationUseCase: LocationUseCase(repository: DefaultLocationRepository(
-            apiService: GeoSearchService(apiProvider: DefaultAPIProvider()))))
 
-    var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
-        collectionView.layer.cornerRadius = 5
-        return collectionView
-    }()
-
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
-        tableView.layer.cornerRadius = 5
-        return tableView
-    }()
+    var viewModel: MainViewModel?
+    var orderedViewControllers: [WeatherViewController] = []
 
     private let disposeBag = DisposeBag()
-
-    let scrollView = UIScrollView()
-
-    let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        stackView.spacing = 10
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        stackView.isLayoutMarginsRelativeArrangement = true
-        return stackView
+    private let toolBar = UIToolbar()
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.isUserInteractionEnabled = false
+        return pageControl
     }()
 
-    let currentStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        stackView.spacing = 8
-        return stackView
+    private let pageViewController: UIPageViewController = {
+        let pageViewController = UIPageViewController(
+            transitionStyle: .scroll,
+            navigationOrientation: .horizontal
+        )
+        return pageViewController
     }()
 
-    let locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "수원시 이의동"
-        label.font = Design.locationLabelFont
-        label.textColor = .white
-        return label
+    private lazy var listBarButtonItem: UIBarButtonItem = {
+        let barButtomItem = UIBarButtonItem(
+            image: UIImage(systemName: "list.bullet"),
+            style: .plain,
+            target: self,
+            action: nil
+        )
+        barButtomItem.tintColor = .white
+        return barButtomItem
     }()
-
-    let currentWeatherImageView: AnimationView = {
-        let animationView = AnimationView(name: "Snow_Animated")
-        animationView.play()
-        animationView.loopMode = .loop
-        return animationView
-    }()
-
-    let currentTemperatureLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 63, weight: .medium)
-        label.textColor = .white
-        return label
-    }()
-
-    let currentWeatherConditionLabel: UILabel = {
-        let label = UILabel()
-        label.text = "청명함"
-        label.font = .systemFont(ofSize: 22)
-        label.textColor = .white
-        return label
-    }()
-
-    let degreeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 50, weight: .medium)
-        label.text = "°"
-        label.textColor = .white
-        return label
-    }()
-
-    let currentWeatherDescriptionStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        stackView.spacing = 5
-        return stackView
-    }()
-
-    let currentWeatherDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = "어제보다 1°높아요"
-        label.font = .preferredFont(forTextStyle: .callout)
-        label.textColor = .white
-        return label
-    }()
-
-    let currentMinMaxTemperatureLabel: UILabel = {
-        let label = UILabel()
-        label.text = "최고 29° / 최저 17°"
-        label.textColor = .white
-        label.font = .preferredFont(forTextStyle: .footnote)
-        return label
-    }()
-
-//    let weatherCollectionView: UICollectionView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureController()
+        self.binding()
+        self.configureSubviews()
         self.configureHierarchy()
         self.configureConstraint()
-        self.configureCollectionView()
-        self.configureTableView()
-        self.binding()
     }
 
-    private func configureController() {
-        self.view.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 30/255, blue: 50/255, alpha: 1))    }
+    func setCurrentPageViewController(at index: Int) {
+        self.pageViewController.dataSource = nil
+        self.pageViewController.dataSource = self
+        self.pageViewController.setViewControllers(
+            [self.orderedViewControllers[index]],
+            direction: .forward,
+            animated: true
+        )
+        self.pageControl.currentPage = index
+        self.pageViewController.didMove(toParent: self)
+    }
 
     private func configureHierarchy() {
-        self.view.addSubview(scrollView)
-        self.scrollView.addSubview(stackView)
-        self.scrollView.addSubview(self.degreeLabel)
-        self.stackView.addArrangedSubview(self.currentStackView)
-        self.stackView.addArrangedSubview(self.collectionView)
-        self.stackView.addArrangedSubview(self.tableView)
-        self.currentStackView.addArrangedSubview(self.locationLabel)
-        self.currentStackView.addArrangedSubview(self.currentWeatherImageView)
-        self.currentStackView.addArrangedSubview(self.currentTemperatureLabel)
-        self.currentStackView.addArrangedSubview(self.currentWeatherConditionLabel)
-        self.currentStackView.addArrangedSubview(self.currentWeatherDescriptionStackView)
-        self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentWeatherDescriptionLabel)
-        self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentMinMaxTemperatureLabel)
-
+        self.addChild(self.pageViewController)
+        self.view.addSubview(self.pageViewController.view)
+        self.view.addSubview(self.toolBar)
     }
 
     private func configureConstraint() {
-
-        self.scrollView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-        }
-        self.stackView.snp.makeConstraints {
-            $0.top.bottom.equalTo(self.scrollView.contentLayoutGuide)
-            $0.width.equalTo(self.scrollView.frameLayoutGuide)
-        }
-        self.currentWeatherImageView.snp.makeConstraints {
-            $0.width.height.equalTo(120)
-        }
-        self.degreeLabel.snp.makeConstraints {
-            $0.leading.equalTo(self.currentTemperatureLabel.snp.trailing)
-            $0.top.equalTo(self.currentTemperatureLabel.snp.top)
+        self.pageViewController.view.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(self.view)
+            $0.bottom.equalTo(self.toolBar.snp.top)
         }
 
-        self.collectionView.snp.makeConstraints {
-            $0.width.equalTo(400)
-            $0.height.equalTo(90)
+        self.toolBar.snp.makeConstraints {
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            $0.width.equalTo(self.view)
         }
+    }
 
-        self.tableView.snp.makeConstraints {
-            $0.width.equalTo(400)
-            $0.height.equalTo(600)
+    private func configureSubviews() {
+        self.configureToolbar()
+        self.configurePageControl()
+        self.configurePageViewController()
+    }
+
+    private func configurePageViewController() {
+        self.pageViewController.dataSource = self
+        self.pageViewController.delegate = self
+    }
+
+    private func configureToolbar() {
+        self.toolBar.isHidden = false
+        self.toolBar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(customView: self.pageControl),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            self.listBarButtonItem
+        ]
+    }
+
+    private func configurePageControl() {
+        self.pageControl.numberOfPages = 1
+        if #available(iOS 14.0, *) {
+            self.pageControl.setIndicatorImage(UIImage(systemName: "location.fill"), forPage: 0)
         }
     }
 
     private func binding() {
+        guard let viewModel = self.viewModel else { return }
+
         let input = MainViewModel.Input(
-            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in }
+            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear(_:)))
+                .map { _ in },
+            locationButtonDidTap: self.listBarButtonItem.rx.tap.asObservable()
         )
+        let output = viewModel.transform(input: input, disposeBag: self.disposeBag)
 
-        let output = self.viewModel.transform(input: input, disposeBag: self.disposeBag)
-        self.bindingOutput(for: output)
-    }
-
-    private func bindingOutput(for output: MainViewModel.Output) {
-        output.currentTemperatureLabelText
-            .asDriver(onErrorJustReturn: "")
-            .drive(self.currentTemperatureLabel.rx.text)
+        output.locations
+            .map { $0.count }
+            .observe(on: MainScheduler.instance)
+            .bind(to: self.pageControl.rx.numberOfPages)
             .disposed(by: self.disposeBag)
-
-        output.hourlyWeathers
-            .bind(to: self.collectionView.rx.items(cellIdentifier: "cell", cellType: HourlyWeatherCollectionViewCell.self)) { indexPath, item, cell in
-                cell.configure(with: item, indexPath: indexPath)
-            }
-            .disposed(by: self.disposeBag)
-
-        output.dailyWeather
-            .bind(to: self.tableView.rx.items(cellIdentifier: "daily", cellType: DailyWeaterTableViewCell.self)) { index, item, cell in
-                cell.configure(with: item, indexPath: index)
-            }
-            .disposed(by: self.disposeBag)
-
-        output.location
-            .map { $0.address.secondRegion + " " + ($0.address.thirdRegion ?? "") }
-            .asDriver(onErrorJustReturn: "잘못된 주소입니다")
-            .drive(self.locationLabel.rx.text)
-            .disposed(by: self.disposeBag)
-    }
-
-    private func configureCollectionView() {
-        self.collectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
-        self.collectionView.register(HourlyWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-    }
-
-    private func configureTableView() {
-        self.tableView.rx.setDelegate(self).disposed(by: self.disposeBag)
-        self.tableView.register(DailyWeaterTableViewCell.self, forCellReuseIdentifier: "daily")
     }
 }
 
-extension MainViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: self.collectionView.frame.height)
+extension MainViewController: UIPageViewControllerDataSource {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerBefore viewController: UIViewController
+    ) -> UIViewController? {
+        guard let weatherViewController = viewController as? WeatherViewController else {
+            return nil
+        }
+
+        guard let viewControllerIndex = self.orderedViewControllers.firstIndex(of: weatherViewController) else {
+            return nil
+        }
+
+        let previousIndex = viewControllerIndex - 1
+
+        guard previousIndex >= 0 else {
+            return nil
+        }
+
+        guard self.orderedViewControllers.count > previousIndex else {
+            return nil
+        }
+
+        return self.orderedViewControllers[previousIndex]
+    }
+
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        viewControllerAfter viewController: UIViewController
+    ) -> UIViewController? {
+        guard let weatherViewController = viewController as? WeatherViewController else {
+            return nil
+        }
+        guard let index = self.orderedViewControllers.firstIndex(of: weatherViewController) else {
+            return nil
+        }
+
+        let nextIndex = index + 1
+        let orderedViewControllerCount = orderedViewControllers.count
+
+        guard orderedViewControllerCount != nextIndex else {
+            return nil
+        }
+
+        guard orderedViewControllerCount > nextIndex else {
+            return nil
+        }
+
+        return orderedViewControllers[nextIndex]
+    }
+}
+
+extension MainViewController: UIPageViewControllerDelegate {
+    func pageViewController(
+        _ pageViewController: UIPageViewController,
+        didFinishAnimating finished: Bool,
+        previousViewControllers: [UIViewController],
+        transitionCompleted completed: Bool
+    ) {
+        if let vc = pageViewController.viewControllers?.first {
+            pageControl.currentPage = vc.view.tag
+        }
     }
 }

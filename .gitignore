@@ -136,3 +136,4 @@ xcuserdata
 *.xcconfig
 WeatherDress/Secret.plist
 WeatherDress/Resources
+.swiftlint.yml

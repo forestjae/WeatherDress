@@ -23,6 +23,7 @@ final class WeatherService {
         return Single.create { single in
             let request = ShortForecastRequest(
                 function: .ultraShortNowcast,
+                baseDate: Date() - 40 * 60 - 1,
                 xAxisNumber: xAxisNumber,
                 yAxisNumber: yAxisNumber,
                 serviceKey: self.serviceKey

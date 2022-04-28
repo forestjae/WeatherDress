@@ -17,8 +17,8 @@ class AppFlowCoordinator: Coordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        let mainViewController = MainViewController()
-        let navigationController = UINavigationController(rootViewController: mainViewController)
+        let mainVC = MainViewController()
+        let navigationController = UINavigationController(rootViewController: mainVC)
         navigationController.setNavigationBarHidden(true, animated: false)
 
         let pageSceneCoordinator = PageSceneCoordinator(navigationController: navigationController)

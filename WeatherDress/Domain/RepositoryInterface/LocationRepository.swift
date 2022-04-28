@@ -9,5 +9,9 @@ import Foundation
 import RxSwift
 
 protocol LocationRepository {
-    func fetchLocations() -> Observable<LocationInfo>
+    func fetchCurrentLocation() -> Observable<LocationInfo?>
+    func fetchFavoriteLocations() -> Observable<[LocationInfo]>
+    func deleteLocation(location: LocationInfo) -> Completable
+    func createLocation(location: LocationInfo) -> Completable
+    func searchLocation(for query: String) -> Observable<[LocationInfo]>
 }

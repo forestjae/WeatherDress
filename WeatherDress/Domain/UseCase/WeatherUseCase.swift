@@ -26,13 +26,4 @@ final class WeatherUseCase {
     func fetchDailyWeather(from location: LocationInfo) -> Observable<[DailyWeather]> {
         return self.repository.fetchDailyWeathers(from: location)
     }
-
-    /*
-     fetchCurrentWeather
-     fetchHourlyWeather
-     fetchDailyWeather
-
-     fetchCurrentLoaction
-     fetchSearchResult
-     */
 }

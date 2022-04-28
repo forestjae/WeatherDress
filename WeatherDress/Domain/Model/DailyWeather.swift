@@ -9,7 +9,8 @@ import Foundation
 
 struct DailyWeather {
     let date: Date
-    let skyCondition: String
+    let weatherCondition: WeatherCondition
+    let rainfallProbability: Int
     let maximumTemperature: Int
     let minimunTemperature: Int
 }

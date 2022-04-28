@@ -9,6 +9,6 @@ import Foundation
 
 struct HourlyWeather {
     let date: Date
-    let skyCondition: String
+    let weatherCondition: WeatherCondition
     let temperature: Int
 }

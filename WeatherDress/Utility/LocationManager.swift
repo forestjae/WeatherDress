@@ -10,8 +10,14 @@ import CoreLocation
 import RxSwift
 
 final class LocationManager: NSObject {
+    
     static let shared = LocationManager()
-    private var manager = CLLocationManager()
+    private var manager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.distanceFilter = 100
+        return manager
+    }()
     private var locationPublisher = PublishSubject<CLLocation>()
 
     override init() {
@@ -23,9 +29,8 @@ final class LocationManager: NSObject {
         guard CLLocationManager.locationServicesEnabled() else {
             return .error(LocationError.disabledService)
         }
-        self.locationPublisher = PublishSubject<CLLocation>()
-        self.manager.startUpdatingLocation()
 
+        self.manager.startUpdatingLocation()
         return self.locationPublisher
     }
 }
@@ -42,6 +47,12 @@ extension LocationManager: CLLocationManagerDelegate {
         default:
             self.locationPublisher.onError(LocationError.unexpected)
         }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let last = locations.last else { return }
+
+        self.locationPublisher.onNext(last)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

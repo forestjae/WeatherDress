@@ -9,15 +9,6 @@ import Foundation
 import UIKit
 
 class DailyWeaterTableViewCell: UITableViewCell {
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.distribution = .fillEqually
-        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        stackView.isLayoutMarginsRelativeArrangement = true
-        return stackView
-    }()
 
     private let timeLabel: UILabel = {
         let label = UILabel()
@@ -29,7 +20,6 @@ class DailyWeaterTableViewCell: UITableViewCell {
 
     private let skyConditionImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Sunny")
         return imageView
     }()
 
@@ -62,6 +52,7 @@ class DailyWeaterTableViewCell: UITableViewCell {
         self.timeLabel.text = DateFormatter.DailyWeatherDate.string(from: weather.date)
         self.minTemperatureLabel.text = weather.minimunTemperature.description
         self.maxTemperatureLabel.text = weather.maximumTemperature.description
+        self.skyConditionImageView.image = UIImage(named: weather.weatherCondition.staticImageURL)
     }
 
     private func configureCell() {
@@ -70,19 +61,29 @@ class DailyWeaterTableViewCell: UITableViewCell {
     }
 
     private func configureHierarchy() {
-        self.contentView.addSubview(self.stackView)
-        self.stackView.addArrangedSubview(self.timeLabel)
-        self.stackView.addArrangedSubview(self.skyConditionImageView)
-        self.stackView.addArrangedSubview(self.maxTemperatureLabel)
-        self.stackView.addArrangedSubview(self.minTemperatureLabel)
+        self.contentView.addSubview(self.timeLabel)
+        self.contentView.addSubview(self.skyConditionImageView)
+        self.contentView.addSubview(self.maxTemperatureLabel)
+        self.contentView.addSubview(self.minTemperatureLabel)
     }
 
     private func configureConstraint() {
-        self.stackView.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalTo(self.contentView)
+        self.timeLabel.snp.makeConstraints {
+            $0.leading.centerY.equalTo(self.contentView)
         }
+
         self.skyConditionImageView.snp.makeConstraints {
             $0.width.height.equalTo(20)
+            $0.leading.equalTo(self.timeLabel.snp.trailing)
+            $0.centerY.equalTo(self.contentView)
+        }
+        self.minTemperatureLabel.snp.makeConstraints {
+            $0.leading.equalTo(self.skyConditionImageView.snp.trailing)
+            $0.centerY.equalTo(self.contentView)
+        }
+        self.maxTemperatureLabel.snp.makeConstraints {
+            $0.leading.equalTo(self.minTemperatureLabel.snp.trailing)
+            $0.centerY.equalTo(self.contentView)
         }
     }
 }

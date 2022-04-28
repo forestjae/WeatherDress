@@ -40,6 +40,7 @@ struct GeocodeResponse: Codable {
 
 extension LocationInfo {
     init?(geocodeAddress: GeocodeResponse.AddressSet) {
+        self.identifier = UUID()
         self.longtitude = geocodeAddress.xCoordinate
         self.latitude = geocodeAddress.yCoordinate
         self.address = Address(

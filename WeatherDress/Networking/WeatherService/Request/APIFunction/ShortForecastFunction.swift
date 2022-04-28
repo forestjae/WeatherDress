@@ -22,4 +22,15 @@ enum ShortForecastFunction: APIFunction {
             return "getVilageFcst"
         }
     }
+
+    var timeFormatter: DateFormatter {
+        switch self {
+        case .ultraShortNowcast:
+            return DateFormatter.ultraShortNowcastTime
+        case .ultraShortForecast:
+            return DateFormatter.ultraShortForecastTime
+        case .shortForecast:
+            return DateFormatter.shortForecastTime
+        }
+    }
 }

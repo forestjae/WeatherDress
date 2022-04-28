@@ -27,7 +27,6 @@ struct LocationInfo {
         self.latitude = latitude
         self.address = address
     }
-
 }
 
 extension LocationInfo {

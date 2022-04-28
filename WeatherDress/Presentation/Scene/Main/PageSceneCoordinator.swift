@@ -16,7 +16,7 @@ class PageSceneCoordinator: Coordinator<Void> {
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.mainViewController = navigationController.viewControllers[0] as! MainViewController
+        self.mainViewController = navigationController.viewControllers[0] as? MainViewController ?? MainViewController()
         let viewModel = MainViewModel(
             useCase: LocationUseCase(repository: sharedRepo))
         mainViewController.viewModel = viewModel

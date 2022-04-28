@@ -10,19 +10,26 @@ import RxSwift
 import RxCocoa
 
 class LocationViewModel {
+
     private let disposeBag = DisposeBag()
     private let useCase: LocationUseCase
+    private let coordinator: LocationListCoordinator
+    private(set) var locationListCellDidTap = PublishSubject<Int>()
+    private(set) var locationListCellDidDeletedAt = PublishSubject<Int>()
 
-    init(useCase: LocationUseCase) {
+    init(useCase: LocationUseCase, coordinator: LocationListCoordinator) {
         self.useCase = useCase
+        self.coordinator = coordinator
     }
 
     struct Input {
         let viewWillAppear: Observable<Void>
-        let searchQuery: Observable<String>
+        let locationListCellSelected: Observable<Int>
+        let searchBarText: Observable<String>
         let searchResultCellDidTap: Observable<LocationInfo>
-        let cellDidDeleted: Observable<LocationInfo>
-        let newLocationOK: Observable<LocationViewController.ActionType>
+        let listCellDidDeleted: Observable<LocationInfo>
+        let listCellDidDeletedAt: Observable<Int>
+        let createLocationAlertDidAccepted: Observable<LocationViewController.ActionType>
     }
 
     struct Output {
@@ -37,22 +44,21 @@ class LocationViewModel {
             }
             .asDriver(onErrorJustReturn: [])
 
-        let searchResult = input.searchQuery
+        let searchResult = input.searchBarText
             .flatMap { string in
                 self.useCase.search(for: string)
             }
             .asDriver(onErrorJustReturn: [])
 
-//        _ = input.searchResultCellDidTap
-//            .flatMap {
-//                self.useCase.createLocation(location: $0)
-//            }
-//            .subscribe(onNext: { _ in
-//                print("성공")
-//            })
-//            .disposed(by: self.disposeBag)
+        input.locationListCellSelected
+            .subscribe(self.locationListCellDidTap)
+            .disposed(by: self.disposeBag)
 
-        input.cellDidDeleted
+        input.listCellDidDeletedAt
+            .subscribe(self.locationListCellDidDeletedAt)
+            .disposed(by: self.disposeBag)
+
+        input.listCellDidDeleted
             .subscribe(onNext: {
                 self.useCase.deleteLocation(location: $0)
                     .subscribe(onCompleted: { 
@@ -61,7 +67,7 @@ class LocationViewModel {
             })
             .disposed(by: self.disposeBag)
 
-        input.newLocationOK
+        input.createLocationAlertDidAccepted
             .subscribe(onNext: { result in
                 switch result {
                 case .ok(let locationInfo):

@@ -31,18 +31,18 @@ extension WeatherCondition {
         }
     }
 
-    var animatedImageURL: String {
+    var animatedImageURL: String? {
         switch self {
         case .clear:
             return "Sunny_Animated"
-        case .partlyCloudy:
-            return "PatlyCloudy_Animated"
         case .cloudy:
-            return "PatlyCloudy_Animated"
+            return "PartlyCloudy_Animated"
         case .rain:
             return "Rain_Animated"
         case .snow:
             return "Snow_Animated"
+        default:
+            return nil
         }
     }
 }

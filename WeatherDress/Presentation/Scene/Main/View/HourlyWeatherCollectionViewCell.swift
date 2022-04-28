@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class HourlyWeatherCollectionViewCell: UICollectionViewCell {
+
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -29,7 +30,6 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
 
     private let skyConditionImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Sunny")
         return imageView
     }()
 
@@ -58,6 +58,7 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
             self.timeLabel.text = DateFormatter.hourlyWeatherTime.string(from: weather.date)
         }
         self.temperatureLabel.text = weather.temperature.description + "°"
+        self.skyConditionImageView.image = UIImage(named: weather.weatherCondition.staticImageURL)
     }
 
     private func configureCell() {
@@ -76,9 +77,8 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
             $0.top.bottom.leading.trailing.equalTo(self.contentView)
         }
         self.skyConditionImageView.snp.makeConstraints {
+
             $0.width.equalTo(self.skyConditionImageView.snp.height)
         }
     }
-
-
 }

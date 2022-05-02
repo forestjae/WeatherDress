@@ -8,7 +8,13 @@
 import Foundation
 
 extension DateFormatter {
-    
+    static let dayOfWeekDate: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "E"
+        return formatter
+    }()
+
     static let requestableDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")

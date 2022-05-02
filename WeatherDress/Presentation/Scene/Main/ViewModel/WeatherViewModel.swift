@@ -43,6 +43,11 @@ final class WeatherViewModel {
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
 
+        let currentWeather = locationInfo
+            .flatMap {
+                self.useCase.fetchCurrentWeather(from: $0)
+            }
+
         let hourlyWeathers = locationInfo
             .flatMap {
                 self.useCase.fetchHourlWeatehr(from: $0)

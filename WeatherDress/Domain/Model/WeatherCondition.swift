@@ -35,7 +35,7 @@ extension WeatherCondition {
         switch self {
         case .clear:
             return "Sunny_Animated"
-        case .cloudy:
+        case .partlyCloudy:
             return "PartlyCloudy_Animated"
         case .rain:
             return "Rain_Animated"

@@ -15,8 +15,8 @@ final class WeatherUseCase {
         self.repository = repository
     }
 
-    func fetch(from location: LocationInfo) -> Observable<UltraShortNowcastWeatherItem?> {
-        return self.repository.fetch(from: location)
+    func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather> {
+        return self.repository.fetchCurrentWeather(from: location)
     }
 
     func fetchHourlWeatehr(from location: LocationInfo) -> Observable<[HourlyWeather]> {

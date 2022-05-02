@@ -46,3 +46,12 @@ extension LocationInfo {
             fourthRegion: nil)
     }
 }
+
+extension LocationInfo {
+    func shortAddress() -> String {
+        return [self.address.secondRegion,
+                self.address.thirdRegion ?? "",
+                self.address.fourthRegion ?? ""]
+            .joined(separator: " ")
+    }
+}

@@ -22,7 +22,10 @@ class LocationListCoordinator: Coordinator<LocationListDismissAction> {
         let locationListViewModel = LocationViewModel(
             useCase: LocationUseCase(
                 repository: sharedRepo
-            ), coordinator: self
+            ), weatherUseCase: WeatherUseCase(
+                repository: DefaultWeatherRepository(
+                    apiService: WeatherService(apiProvider: DefaultAPIProvider())))
+            , coordinator: self
         )
         locationListViewController.viewModel = locationListViewModel
         let navigationController = UINavigationController(rootViewController: locationListViewController)

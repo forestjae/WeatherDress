@@ -13,12 +13,18 @@ class LocationViewModel {
 
     private let disposeBag = DisposeBag()
     private let useCase: LocationUseCase
+    private let weatherUseCase: WeatherUseCase
     private let coordinator: LocationListCoordinator
     private(set) var locationListCellDidTap = PublishSubject<Int>()
     private(set) var locationListCellDidDeletedAt = PublishSubject<Int>()
 
-    init(useCase: LocationUseCase, coordinator: LocationListCoordinator) {
+    init(
+        useCase: LocationUseCase,
+        weatherUseCase: WeatherUseCase,
+        coordinator: LocationListCoordinator
+    ) {
         self.useCase = useCase
+        self.weatherUseCase = weatherUseCase
         self.coordinator = coordinator
     }
 

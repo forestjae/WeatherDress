@@ -10,11 +10,14 @@ import SnapKit
 
 class LocationSearchResultViewController: UIViewController {
 
-    let tableView = UITableView()
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = UIColor.deepSkyDim
+        return tableView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
         self.configureHierarchy()
         self.configureConstraint()
     }

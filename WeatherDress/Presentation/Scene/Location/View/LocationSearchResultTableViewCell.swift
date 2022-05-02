@@ -11,7 +11,7 @@ class LocationSearchResultTableViewCell: UITableViewCell {
 
     private let locationLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .systemGray4
         label.font = .preferredFont(forTextStyle: .body)
         return label
     }()
@@ -27,8 +27,15 @@ class LocationSearchResultTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with string: String, indexPath: Int) {
-        self.locationLabel.text = string
+    func configure(with string: String, indexPath: Int, searchQuery: String?) {
+        guard let searchQuery = searchQuery else {
+            return
+        }
+
+        let attribtuedString = NSMutableAttributedString(string: string)
+        let range = (string as NSString).range(of: searchQuery)
+        attribtuedString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+        self.locationLabel.attributedText = attribtuedString
     }
 
     private func configureCell() {

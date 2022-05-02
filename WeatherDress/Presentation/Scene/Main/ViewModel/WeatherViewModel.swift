@@ -25,7 +25,6 @@ final class WeatherViewModel {
     }
 
     struct Output {
-        // currentWeather
         let hourlyWeathers: Observable<[HourlyWeather]>
         let dailyWeather: Observable<[DailyWeather]>
         let location: Observable<LocationInfo>
@@ -48,18 +47,31 @@ final class WeatherViewModel {
             .flatMap {
                 self.useCase.fetchHourlWeatehr(from: $0)
             }
-            .do(onError: { error in
-                print("에러발생!!!")
-            })
+            .map { $0.filter { $0.date > Date() - 3600 }}
 
         let dailyWeathers = locationInfo
             .flatMap {
                 self.useCase.fetchDailyWeather(from: $0)
             }
 
-        let currentWeather = locationInfo
-            .flatMap {
-                self.useCase.fetch(from: $0)
+        let dailWeathersConverted = Observable.zip(hourlyWeathers, dailyWeathers)
+            .map { hourly, dailyWeathers -> [DailyWeather] in
+                let today = Calendar.current.dateComponents([.day], from: Date()).day
+                let tommorrow = Calendar.current.dateComponents([.day], from: Date() + 3600 * 24).day
+                let theDayAfterTommorrow = Calendar.current.dateComponents([.day], from: Date() + 3600 * 48).day
+
+                let todayItems = hourly.filter { Calendar.current.dateComponents([.day], from: $0.date).day == today }
+                let tommorowItems = hourly.filter { Calendar.current.dateComponents([.day], from: $0.date).day == tommorrow }
+                let theDayAfterTommorrowItems = hourly.filter { Calendar.current.dateComponents([.day], from: $0.date).day == theDayAfterTommorrow }
+                let itemsSet = [todayItems, tommorowItems, theDayAfterTommorrowItems]
+                let dailyConverted = itemsSet.map { items -> DailyWeather in
+                    let temperatureList = items.map { $0.temperature }
+                    let maxTemp = temperatureList.max()!
+                    let minTemp = temperatureList.min()!
+                    return DailyWeather(date: items.first!.date, weatherCondition: .clear, rainfallProbability: 0, maximumTemperature: maxTemp, minimunTemperature: minTemp)
+                }
+
+                return dailyConverted + dailyWeathers
             }
 
         let currentTemperatureLabelText = currentWeather
@@ -71,7 +83,7 @@ final class WeatherViewModel {
 
         return Output(
             hourlyWeathers: hourlyWeathers,
-            dailyWeather: dailyWeathers,
+            dailyWeather: dailWeathersConverted,
             location: self.locationInfo.asObservable(),
             currentTemperatureLabelText: currentTemperatureLabelText,
             currentWeatherCondition: currentWeatherCondition

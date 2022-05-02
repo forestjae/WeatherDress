@@ -250,25 +250,126 @@ class WeatherViewController: UIViewController {
     }
 
     private func configureCollectionView() {
-        self.collectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
-        self.collectionView.register(
+        self.hourlyWeatherCollectionView.register(
             HourlyWeatherCollectionViewCell.self,
-            forCellWithReuseIdentifier: "cell"
+            forCellWithReuseIdentifier: "hourly"
         )
+        self.hourlyWeatherCollectionView.register(
+            DailyWeaterCollectionViewCell.self,
+            forCellWithReuseIdentifier: "daily"
+        )
+
+        self.hourlyWeatherCollectionView.register(HourlyCollectionReusableView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
+
+        self.snapshot.appendSections([WeatherSection.hourly, WeatherSection.daily])
+
+        self.weatherDataSource = dataSource()
+        self.provideSupplementaryViewForWeatherCollectionView()
     }
 
-    private func configureTableView() {
-        self.tableView.rx.setDelegate(self).disposed(by: self.disposeBag)
-        self.tableView.register(DailyWeaterTableViewCell.self, forCellReuseIdentifier: "daily")
+    static func createLayout() -> UICollectionViewLayout {
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+        configuration.interSectionSpacing = 10
+
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, layoutEnvironment in
+            guard let sectionLayoutKind = WeatherSection(rawValue: sectionIndex) else {
+                return nil
+            }
+
+            switch sectionLayoutKind {
+            case .hourly:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                let groupHeight = NSCollectionLayoutDimension.absolute(100)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: groupHeight)
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+                let section = NSCollectionLayoutSection(group: group)
+                let titleSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .estimated(34))
+                let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: titleSize,
+                    elementKind: "header",
+                    alignment: .top)
+                section.boundarySupplementaryItems = [titleSupplementary]
+                section.orthogonalScrollingBehavior = .continuous
+                let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "background")
+
+
+                section.decorationItems = [sectionBackgroundDecoration]
+                return section
+            case .daily:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+                let groupHeight = NSCollectionLayoutDimension.absolute(45)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+                let section = NSCollectionLayoutSection(group: group)
+                let titleSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .estimated(34))
+                let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: titleSize,
+                    elementKind: "header",
+                    alignment: .top)
+                section.boundarySupplementaryItems = [titleSupplementary]
+                let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "background")
+                section.decorationItems = [sectionBackgroundDecoration]
+                return section
+            }
+        }, configuration: configuration)
+
+        layout.register(
+            HourlyBackgroundView.self,
+            forDecorationViewOfKind: "background")
+
+        return layout
     }
 }
 
-extension WeatherViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return CGSize(width: 50, height: self.collectionView.frame.height)
+enum WeatherSection: Int {
+    case hourly
+    case daily
+}
+
+extension WeatherViewController {
+    func dataSource() -> UICollectionViewDiffableDataSource<WeatherSection, WeatherItem> {
+        return UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>(
+            collectionView: self.hourlyWeatherCollectionView
+        ) { collectionView, indexPath, itemIdentifier in
+            switch itemIdentifier {
+            case .daily(let dailyWeather):
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "daily",
+                    for: indexPath
+                ) as? DailyWeaterCollectionViewCell
+                cell?.configureContent(with: dailyWeather, indexPath: indexPath.row)
+                return cell
+            case .hourly(let hourlyWeather):
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "hourly",
+                    for: indexPath
+                ) as? HourlyWeatherCollectionViewCell
+                cell?.configure(with: hourlyWeather, indexPath: indexPath.row)
+                return cell
+            }
+        }
+    }
+
+    private func provideSupplementaryViewForWeatherCollectionView() {
+        self.weatherDataSource?.supplementaryViewProvider = { (view, kind, indexPath) in
+            guard let header = self.hourlyWeatherCollectionView.dequeueReusableSupplementaryView(
+                ofKind: "header",
+                withReuseIdentifier: "header",
+                for: indexPath
+            ) as? HourlyCollectionReusableView else {
+                return nil
+            }
+            let category = self.snapshot.sectionIdentifiers[indexPath.section]
+            header.configure(for: category)
+            return header
+        }
     }
 }

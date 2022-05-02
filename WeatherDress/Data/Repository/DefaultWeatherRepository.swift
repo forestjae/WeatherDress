@@ -17,7 +17,7 @@ final class DefaultWeatherRepository: WeatherRepository {
         self.apiService = apiService
     }
 
-    func fetch(from location: LocationInfo) -> Observable<UltraShortNowcastWeatherItem?> {
+    func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather> {
         let converted = GridConverting.convertGRID_GPS(
             mode: .toGrid,
             xComponent: location.longtitude,
@@ -26,7 +26,14 @@ final class DefaultWeatherRepository: WeatherRepository {
         return self.apiService.fetchUltraShortNowcastWeather(
             xAxisNumber: converted.xGrid,
             yAxisNumber: converted.yGRid
-        ).asObservable()
+        ).map {
+            CurrentWeather(
+                temperature: $0.temperature,
+                rainfallForAnHour: $0.rainfallForAnHour,
+                rainfallType: $0.rainfallType,
+                humidity: $0.humidity
+            )
+        }.asObservable()
     }
 
     func fetchHourlyWeathers(from location: LocationInfo) -> Observable<[HourlyWeather]> {

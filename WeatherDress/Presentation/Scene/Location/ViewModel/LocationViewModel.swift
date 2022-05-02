@@ -34,12 +34,12 @@ class LocationViewModel {
         let searchBarText: Observable<String>
         let searchResultCellDidTap: Observable<LocationInfo>
         let listCellDidDeleted: Observable<LocationInfo>
-        let listCellDidDeletedAt: Observable<Int>
         let createLocationAlertDidAccepted: Observable<LocationViewController.ActionType>
     }
 
     struct Output {
-        let locations: Driver<[LocationInfo]>
+        let locations: Observable<[LocationInfo]>
+        let weathers: Observable<[CurrentWeather]>
         let searchedLocations: Driver<[LocationInfo]>
     }
 
@@ -48,7 +48,12 @@ class LocationViewModel {
             .flatMap {
                 self.useCase.fetchLocations()
             }
-            .asDriver(onErrorJustReturn: [])
+            .debug()
+
+        let weathers = locations
+            .flatMap {
+                Observable.zip($0.map { self.weatherUseCase.fetchCurrentWeather(from: $0) })
+            }
 
         let searchResult = input.searchBarText
             .flatMap { string in
@@ -60,14 +65,10 @@ class LocationViewModel {
             .subscribe(self.locationListCellDidTap)
             .disposed(by: self.disposeBag)
 
-        input.listCellDidDeletedAt
-            .subscribe(self.locationListCellDidDeletedAt)
-            .disposed(by: self.disposeBag)
-
         input.listCellDidDeleted
             .subscribe(onNext: {
                 self.useCase.deleteLocation(location: $0)
-                    .subscribe(onCompleted: { 
+                    .subscribe(onCompleted: {
                         print("성공")
                     })
             })
@@ -87,6 +88,9 @@ class LocationViewModel {
             }
             )
 
-        return Output(locations: locations, searchedLocations: searchResult)
+        return Output(locations: locations,
+                      weathers: weathers,
+                      searchedLocations: searchResult
+        )
     }
 }

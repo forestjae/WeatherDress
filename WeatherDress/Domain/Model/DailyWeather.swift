@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DailyWeather {
+struct DailyWeather: Hashable {
     let date: Date
     let weatherCondition: WeatherCondition
     let rainfallProbability: Int

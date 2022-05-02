@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct LocationInfo {
+struct LocationInfo: Hashable {
     let identifier: UUID
     let longtitude: Double
     let latitude: Double
     let address: Address
 
-    struct Address {
+    struct Address: Hashable {
         let fullAddress: String
         let firstRegion: String
         let secondRegion: String

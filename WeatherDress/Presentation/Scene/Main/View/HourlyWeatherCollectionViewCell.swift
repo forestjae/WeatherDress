@@ -8,13 +8,21 @@
 import UIKit
 import SnapKit
 
+private enum Design {
+    static let mainFontColor: UIColor = .white
+    static let timeLabelFont: UIFont = .systemFont(ofSize: 15, weight: .semibold)
+        .metrics(for: .headline)
+    static let temperatureLabelFont: UIFont = .systemFont(ofSize: 18, weight: .semibold)
+        .metrics(for: .headline)
+}
+
 class HourlyWeatherCollectionViewCell: UICollectionViewCell {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.distribution = .fill
+        stackView.distribution = .equalCentering
         stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -22,9 +30,8 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
 
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
-        let custom = UIFont.systemFont(ofSize: 13, weight: .bold)
-        label.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: custom)
+        label.textColor = Design.mainFontColor
+        label.font = Design.timeLabelFont
         return label
     }()
 
@@ -35,14 +42,13 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
 
     private let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
-        label.font = .preferredFont(forTextStyle: .body)
+        label.textColor = Design.mainFontColor
+        label.font = Design.temperatureLabelFont
         return label
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.configureCell()
         self.configureHierarchy()
         self.configureConstraint()
     }
@@ -61,10 +67,6 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
         self.skyConditionImageView.image = UIImage(named: weather.weatherCondition.staticImageURL)
     }
 
-    private func configureCell() {
-
-    }
-
     private func configureHierarchy() {
         self.contentView.addSubview(self.stackView)
         self.stackView.addArrangedSubview(self.timeLabel)
@@ -76,9 +78,9 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
         self.stackView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(self.contentView)
         }
+        self.temperatureLabel.snp.contentHuggingVerticalPriority = 0
         self.skyConditionImageView.snp.makeConstraints {
-
-            $0.width.equalTo(self.skyConditionImageView.snp.height)
+            $0.width.height.equalTo(33)
         }
     }
 }

@@ -8,7 +8,9 @@
 import Foundation
 import RxSwift
 
-struct CurrentWeather {
-    let temperature: Int
-    let weatherCondition: WeatherCondition
+struct CurrentWeather: Hashable {
+    let temperature: Double
+    let rainfallForAnHour: Double
+    let rainfallType: UltraShortNowcastRainfall
+    let humidity: Double
 }

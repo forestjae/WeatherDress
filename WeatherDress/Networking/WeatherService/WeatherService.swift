@@ -19,7 +19,7 @@ final class WeatherService {
     func fetchUltraShortNowcastWeather(
         xAxisNumber: Int,
         yAxisNumber: Int
-    ) -> Single<UltraShortNowcastWeatherItem?> {
+    ) -> Single<UltraShortNowcastWeatherItem> {
         return Single.create { single in
             let request = ShortForecastRequest(
                 function: .ultraShortNowcast,

@@ -63,10 +63,12 @@ class LocationViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        self.title = "날씨"
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.topItem?.title = "날씨"
         self.navigationItem.searchController = self.searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
+        self.navigationController?.navigationBar.barTintColor = UIColor.deepSky
+        self.navigationController?.navigationBar.barStyle = .black
     }
 
     private func binding() {

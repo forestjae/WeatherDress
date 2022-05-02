@@ -21,6 +21,21 @@ class LocationViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
+    private var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: LocationSearchResultViewController())
+        controller.hidesNavigationBarDuringPresentation = true
+        controller.obscuresBackgroundDuringPresentation = true
+        controller.searchBar.barStyle = .black
+        controller.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "위치를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        controller.searchBar.searchTextField.tintColor = .white
+        controller.searchBar.searchTextField.backgroundColor = UIColor.darkSky
+        controller.searchBar.setValue("취소", forKey: "cancelButtonText")
+        controller.searchBar.tintColor = .white
+
+        return controller
+    }()
+
+    private var deletedContextualAction: UIContextualAction?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +50,6 @@ class LocationViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
-
-    private var searchController: UISearchController = {
-        let controller = UISearchController(searchResultsController: LocationSearchResultViewController())
-        controller.hidesNavigationBarDuringPresentation = true
-        controller.obscuresBackgroundDuringPresentation = true
-        controller.searchBar.placeholder = "위치를 입력해주세요."
-
-        return controller
-    }()
 
     private func configureHierarchy() {
         self.view.addSubview(self.locationCollectionView)

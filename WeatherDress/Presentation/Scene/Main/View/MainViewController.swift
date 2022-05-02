@@ -48,6 +48,7 @@ class MainViewController: UIViewController {
         self.configureSubviews()
         self.configureHierarchy()
         self.configureConstraint()
+        self.view.backgroundColor = UIColor.lightSky
     }
 
     func setCurrentPageViewController(at index: Int) {
@@ -92,6 +93,8 @@ class MainViewController: UIViewController {
     }
 
     private func configureToolbar() {
+        self.toolBar.barTintColor = UIColor.moderateSky
+        self.toolBar.backgroundColor = .white
         self.toolBar.isHidden = false
         self.toolBar.items = [
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),

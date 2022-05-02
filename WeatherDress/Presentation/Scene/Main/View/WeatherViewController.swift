@@ -10,31 +10,49 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Lottie
+import SwiftUI
 
 private enum Design {
-    static let locationLabelFont: UIFont = .preferredFont(forTextStyle: .title3)
-    static let mainFontColor: UIColor = .black
+    static let locationLabelFont: UIFont = .systemFont(ofSize: 23, weight: .semibold).metrics(for: .title3)
+    static let mainFontColor: UIColor = .white
+}
+
+enum WeatherItem: Hashable {
+    case hourly(HourlyWeather)
+    case daily(DailyWeather)
 }
 
 class WeatherViewController: UIViewController {
 
     var viewModel: WeatherViewModel?
+    var weatherDataSource: UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>?
+    var snapshot = NSDiffableDataSourceSnapshot<WeatherSection, WeatherItem>()
 
     private let disposeBag = DisposeBag()
-    private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
-        collectionView.layer.cornerRadius = 5
-        return collectionView
+
+    private let hourlyWeatherStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 10
+        return stackView
     }()
 
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = UIColor(cgColor: CGColor(red: 6/255, green: 20/255, blue: 70/255, alpha: 1))
-        tableView.layer.cornerRadius = 5
-        return tableView
+    private let hourlyWeatherWrappingView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
+
+    private let hourlyWeatherCollectionView: UICollectionView = {
+        let layout = createLayout()
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        return collectionView
     }()
 
     private let scrollView: UIScrollView = {
@@ -49,7 +67,7 @@ class WeatherViewController: UIViewController {
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.spacing = 10
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 15, bottom: 0, right: 15)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
@@ -132,7 +150,6 @@ class WeatherViewController: UIViewController {
         self.configureHierarchy()
         self.configureConstraint()
         self.configureCollectionView()
-        self.configureTableView()
         self.binding()
     }
 
@@ -141,15 +158,14 @@ class WeatherViewController: UIViewController {
     }
 
     private func configureController() {
-        self.view.backgroundColor = UIColor(cgColor: CGColor(red: 255/255, green: 255/255, blue: 246/255, alpha: 1))    }
+    }
 
     private func configureHierarchy() {
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(stackView)
         self.scrollView.addSubview(self.degreeLabel)
         self.stackView.addArrangedSubview(self.currentStackView)
-        self.stackView.addArrangedSubview(self.collectionView)
-        self.stackView.addArrangedSubview(self.tableView)
+        self.stackView.addArrangedSubview(self.hourlyWeatherStackView)
         self.currentStackView.addArrangedSubview(self.locationLabel)
         self.currentStackView.addArrangedSubview(self.currentWeatherImageView)
         self.currentStackView.addArrangedSubview(self.currentTemperatureLabel)
@@ -157,6 +173,8 @@ class WeatherViewController: UIViewController {
         self.currentStackView.addArrangedSubview(self.currentWeatherDescriptionStackView)
 //        self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentWeatherDescriptionLabel)
         self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentMinMaxTemperatureLabel)
+        self.hourlyWeatherStackView.addArrangedSubview(self.hourlyWeatherWrappingView)
+        self.hourlyWeatherWrappingView.addArrangedSubview(self.hourlyWeatherCollectionView)
     }
 
     private func configureConstraint() {
@@ -176,14 +194,9 @@ class WeatherViewController: UIViewController {
             $0.top.equalTo(self.currentTemperatureLabel.snp.top)
         }
 
-        self.collectionView.snp.makeConstraints {
+        self.hourlyWeatherCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
-            $0.height.equalTo(90)
-        }
-
-        self.tableView.snp.makeConstraints {
-            $0.width.equalTo(400)
-            $0.height.equalTo(600)
+            $0.height.equalTo(800)
         }
     }
 
@@ -203,23 +216,28 @@ class WeatherViewController: UIViewController {
             .asDriver(onErrorJustReturn: "")
             .drive(self.currentTemperatureLabel.rx.text)
             .disposed(by: self.disposeBag)
-
         output.hourlyWeathers
-            .bind(to: self.collectionView.rx.items(
-                cellIdentifier: "cell",
-                cellType: HourlyWeatherCollectionViewCell.self
-            )) { indexPath, item, cell in
-                cell.configure(with: item, indexPath: indexPath)
-            }
-            .disposed(by: self.disposeBag)
-
-        output.dailyWeather
-            .compactMap { $0.first }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { item in
-                self.currentMinMaxTemperatureLabel.text = "최고 \(item.maximumTemperature)° / 최저 \(item.minimunTemperature)°"
+            .subscribe(onNext: {
+                let identifer = self.snapshot.itemIdentifiers(inSection: .hourly)
+                self.snapshot.deleteItems(identifer)
+                self.snapshot.appendItems($0.map { WeatherItem.hourly($0)}, toSection: .hourly)
+                self.weatherDataSource?.apply(self.snapshot)
             })
-            .disposed(by: self.disposeBag)
+        output.dailyWeather
+            .subscribe(onNext: {
+                let identifer = self.snapshot.itemIdentifiers(inSection: .daily)
+                self.snapshot.deleteItems(identifer)
+                self.snapshot.appendItems($0.map { WeatherItem.daily($0)}, toSection: .daily)
+                self.weatherDataSource?.apply(self.snapshot)
+            })
+
+//        output.dailyWeather
+//            .compactMap { $0.first }
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { item in
+//                self.currentMinMaxTemperatureLabel.text = "최고 \(item.maximumTemperature)° / 최저 \(item.minimunTemperature)°"
+//            })
+//            .disposed(by: self.disposeBag)
 
         output.currentWeatherCondition
             .map { $0.rawValue }
@@ -232,15 +250,6 @@ class WeatherViewController: UIViewController {
                     self.currentWeatherImageView.setImage(by: item)
                 }
             })
-            .disposed(by: self.disposeBag)
-
-        output.dailyWeather
-            .bind(to: self.tableView.rx.items(
-                cellIdentifier: "daily",
-                cellType: DailyWeaterTableViewCell.self
-            )) { index, item, cell in
-                cell.configure(with: item, indexPath: index)
-            }
             .disposed(by: self.disposeBag)
 
         output.location

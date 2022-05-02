@@ -65,10 +65,10 @@ extension DateFormatter {
         return formatter
     }()
 
-    static let DailyWeatherDate: DateFormatter = {
+    static let dailyWeatherDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "dd일"
+        formatter.dateFormat = "M.d"
         return formatter
     }()
 }

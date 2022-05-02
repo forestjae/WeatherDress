@@ -39,7 +39,7 @@ class LocationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.deepSky
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.configureSubviews()
         self.configureHierarchy()

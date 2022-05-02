@@ -60,6 +60,11 @@ class WeatherViewController: UIViewController {
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.spacing = 8
+        stackView.layer.shadowColor = UIColor.black.cgColor
+        stackView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        stackView.layer.shadowRadius = 4
+        stackView.layer.masksToBounds = false
+        stackView.layer.shadowOpacity = 0.3
         return stackView
     }()
 

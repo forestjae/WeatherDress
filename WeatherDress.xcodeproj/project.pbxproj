@@ -38,6 +38,10 @@
 		3364A2A028214E3D00328A97 /* MidWeatherForecastRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A29C28214E3D00328A97 /* MidWeatherForecastRequest.swift */; };
 		3364A2A228214E8D00328A97 /* UltraShortForecastWeatherItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2A128214E8D00328A97 /* UltraShortForecastWeatherItem.swift */; };
 		3364A2A428214F5A00328A97 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2A328214F5A00328A97 /* APIResponse.swift */; };
+		3364A2AA282157A700328A97 /* CurrentWeather+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2A9282157A700328A97 /* CurrentWeather+Mapping.swift */; };
+		3364A2AC282158BA00328A97 /* HourlyWeather+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2AB282158BA00328A97 /* HourlyWeather+Mapping.swift */; };
+		3364A2AE28215FBC00328A97 /* DailWeather+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2AD28215FBC00328A97 /* DailWeather+Mapping.swift */; };
+		3364A2B0282160C100328A97 /* RoughWeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A2AF282160C100328A97 /* RoughWeatherCondition.swift */; };
 		3365BEAD280AFBF400E0A57D /* LocationListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3365BEAC280AFBF400E0A57D /* LocationListCoordinator.swift */; };
 		337EC9AA27FAA83800EC2D00 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 337EC9A927FAA83800EC2D00 /* .swiftlint.yml */; };
 		337EC9AC27FAC2C400EC2D00 /* ShortForecastRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DE2127F32577007FBCAE /* ShortForecastRequest.swift */; };
@@ -190,6 +194,10 @@
 		3364A29C28214E3D00328A97 /* MidWeatherForecastRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidWeatherForecastRequest.swift; sourceTree = "<group>"; };
 		3364A2A128214E8D00328A97 /* UltraShortForecastWeatherItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UltraShortForecastWeatherItem.swift; sourceTree = "<group>"; };
 		3364A2A328214F5A00328A97 /* APIResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		3364A2A9282157A700328A97 /* CurrentWeather+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentWeather+Mapping.swift"; sourceTree = "<group>"; };
+		3364A2AB282158BA00328A97 /* HourlyWeather+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HourlyWeather+Mapping.swift"; sourceTree = "<group>"; };
+		3364A2AD28215FBC00328A97 /* DailWeather+Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailWeather+Mapping.swift"; sourceTree = "<group>"; };
+		3364A2AF282160C100328A97 /* RoughWeatherCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoughWeatherCondition.swift; sourceTree = "<group>"; };
 		3365BEAC280AFBF400E0A57D /* LocationListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCoordinator.swift; sourceTree = "<group>"; };
 		337EC9A927FAA83800EC2D00 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		337EC9B227FACADB00EC2D00 /* UltraShortNowcastWeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraShortNowcastWeatherResponse.swift; sourceTree = "<group>"; };
@@ -328,10 +336,10 @@
 			isa = PBXGroup;
 			children = (
 				3364A27E28214E0800328A97 /* ShortForecast */,
-				3364A28328214E0800328A97 /* MidForecastTemperature */,
 				3364A28528214E0800328A97 /* UltraShortForecast */,
 				3364A28828214E0800328A97 /* UltraShortNowcast */,
 				3364A28C28214E0800328A97 /* MidForecastWeather */,
+				3364A28328214E0800328A97 /* MidForecastTemperature */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -378,8 +386,19 @@
 			isa = PBXGroup;
 			children = (
 				3364A28D28214E0800328A97 /* MidForecastWeatherItem.swift */,
+				3364A2AF282160C100328A97 /* RoughWeatherCondition.swift */,
 			);
 			path = MidForecastWeather;
+			sourceTree = "<group>";
+		};
+		3364A2A82821579700328A97 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				3364A2A9282157A700328A97 /* CurrentWeather+Mapping.swift */,
+				3364A2AB282158BA00328A97 /* HourlyWeather+Mapping.swift */,
+				3364A2AD28215FBC00328A97 /* DailWeather+Mapping.swift */,
+			);
+			path = Mapping;
 			sourceTree = "<group>";
 		};
 		3365BEAE280B039100E0A57D /* ViewModel */ = {
@@ -480,6 +499,7 @@
 		337ECA0A27FC73D100EC2D00 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				3364A2A82821579700328A97 /* Mapping */,
 				337ECA1527FC765D00EC2D00 /* DefaultWeatherRepository.swift */,
 				33A1EF7327FF42040031ACED /* DefaultLocationRepository.swift */,
 			);
@@ -1088,6 +1108,7 @@
 				33A1EF6127FE93550031ACED /* LocationInfo.swift in Sources */,
 				337ECA2827FD3C5800EC2D00 /* CurrentWeather.swift in Sources */,
 				3364A29F28214E3D00328A97 /* UltraShortForecastRequest.swift in Sources */,
+				3364A2AE28215FBC00328A97 /* DailWeather+Mapping.swift in Sources */,
 				33A1EF5B27FE8EBB0031ACED /* GeoSearchService.swift in Sources */,
 				33A0DA692818E4150080DE81 /* Coordinator.swift in Sources */,
 				33A1EFE42804522F0031ACED /* WeatherViewModel.swift in Sources */,
@@ -1108,6 +1129,7 @@
 				33A1EF7227FF358A0031ACED /* RegionCodeConverting.swift in Sources */,
 				33A1EFCF280330C90031ACED /* LocationViewController.swift in Sources */,
 				337EC9D327FC2DAD00EC2D00 /* HTTPMethod.swift in Sources */,
+				3364A2AA282157A700328A97 /* CurrentWeather+Mapping.swift in Sources */,
 				3364A22C281E883800328A97 /* LocationCollectionViewCell.swift in Sources */,
 				337EC9BE27FB637300EC2D00 /* ShortForecastWeatherResponse.swift in Sources */,
 				33A1EF6D27FEE5460031ACED /* MidForecastTemperatureResponse.swift in Sources */,
@@ -1132,6 +1154,7 @@
 				337ECA1C27FC790700EC2D00 /* WeatherService.swift in Sources */,
 				337ECA1027FC758F00EC2D00 /* WeatherRepository.swift in Sources */,
 				3364A29728214E0800328A97 /* UltraShortNowcastWeatherItem.swift in Sources */,
+				3364A2B0282160C100328A97 /* RoughWeatherCondition.swift in Sources */,
 				3364A22E281F71D000328A97 /* UIColor+Extension.swift in Sources */,
 				33A1EF6927FEB0990031ACED /* LocationManager.swift in Sources */,
 				3364A28E28214E0800328A97 /* ShortForecastRainFall.swift in Sources */,
@@ -1159,6 +1182,7 @@
 				3364A29328214E0800328A97 /* UltraShortForecastWeatherComponent.swift in Sources */,
 				33A1EFDB280407790031ACED /* LocalDatabaseService.swift in Sources */,
 				337EC9E027FC2E3A00EC2D00 /* ShortForecastRequestable.swift in Sources */,
+				3364A2AC282158BA00328A97 /* HourlyWeather+Mapping.swift in Sources */,
 				337ECA0327FC6C7C00EC2D00 /* WeatherDress+Bundle.swift in Sources */,
 				3364A2A028214E3D00328A97 /* MidWeatherForecastRequest.swift in Sources */,
 				337EC9CA27FC218D00EC2D00 /* DateFormatter+Extension.swift in Sources */,

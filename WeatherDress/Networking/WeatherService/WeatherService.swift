@@ -25,8 +25,7 @@ final class WeatherService {
             yComponent: location.latitude
         )
         return Single.create { single in
-            let request = ShortForecastRequest(
-                function: .ultraShortNowcast,
+            let request = UltraShortNowcastRequest(
                 baseDate: Date() - 40 * 60 - 1,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
@@ -35,18 +34,13 @@ final class WeatherService {
 
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(
-                        UltraShortNowcastWeatherResponse.self,
-                        from: data
-                    ) else {
-                        return
-                    }
-                    let weaterComponents = decoded.response.body?.items.item ?? []
-                    guard let resultWeather = UltraShortNowcastWeatherItem(items: weaterComponents) else {
-                        return
-                    }
+                case .success(let response):
+                    guard let weaterComponents = response.response.body?.items.item,
+                          let resultWeather = UltraShortNowcastWeatherItem(
+                            items: weaterComponents
+                          ) else {
+                              return
+                          }
                     single(.success(resultWeather))
                 case .failure(let error):
                     single(.failure(error))
@@ -65,8 +59,7 @@ final class WeatherService {
             yComponent: location.latitude
         )
         return Single.create { single in
-            let request = ShortForecastRequest(
-                function: .ultraShortForecast,
+            let request = UltraShortForecastRequest(
                 baseDate: Date() - 45 * 60 - 1,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
@@ -74,15 +67,8 @@ final class WeatherService {
             )
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(
-                        UltraShortForecastWeatherResponse.self,
-                        from: data
-                    ) else {
-                        return
-                    }
-                    let weaterComponents = decoded.response.body.items.item
+                case .success(let response):
+                    let weaterComponents = response.response.body.items.item
                     let resultWeather = UltraShortForecastWeatherList(items: weaterComponents)
                     single(.success(resultWeather))
                 case .failure(let error):
@@ -101,7 +87,6 @@ final class WeatherService {
         )
         return Single.create { single in
             let request = ShortForecastRequest(
-                function: .shortForecast,
                 baseDate: Date() - 2 * 3600,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
@@ -109,15 +94,8 @@ final class WeatherService {
             )
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(
-                        ShortForecastWeatherResponse.self,
-                        from: data
-                    ) else {
-                        return
-                    }
-                    let weaterComponents = decoded.response.body.items.item
+                case .success(let response):
+                    let weaterComponents = response.response.body.items.item
                     let resultWeather = ShortForecastWeatherList(items: weaterComponents)
                     single(.success(resultWeather))
                 case .failure(let error):
@@ -132,20 +110,15 @@ final class WeatherService {
         let address = location.address.fullAddress
         let weatherCode = RegionCodeConverting.shared.convert(from: address, to: .weather) ?? ""
         return Single.create { single in
-            let request = MidForecastRequest(
-                function: .midLandForecast,
+            let request = MidWeatherForecastRequest(
                 regionIdentification: weatherCode,
                 serviceKey: self.serviceKey
             )
 
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(MidForecastWeatherResponse.self, from: data) else {
-                        return
-                    }
-                    guard let item = decoded.response.body.items.item.first else {
+                case .success(let response):
+                    guard let item = response.response.body.items.item.first else {
                         return
                     }
 
@@ -163,20 +136,15 @@ final class WeatherService {
         let address = location.address.fullAddress
         let temperatureCode = RegionCodeConverting.shared.convert(from: address, to: .temperature) ?? ""
         return Single.create { single in
-            let request = MidForecastRequest(
-                function: .midTemperatureForecast,
+            let request = MidTemperatureForecastRequest(
                 regionIdentification: temperatureCode,
                 serviceKey: self.serviceKey
             )
 
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(MidForecastTemperatureResponse.self, from: data) else {
-                        return
-                    }
-                    guard let item = decoded.response.body.items.item.first else {
+                case .success(let response):
+                    guard let item = response.response.body.items.item.first else {
                         return
                     }
                     let result = MidForecastTemperatureItemList(response: item)

@@ -12,7 +12,7 @@ class DefaultAPIProvider: APIProvider {
 
     func request<T: APIRequest>(
         _ request: T,
-        completion: @escaping (Result<Data, NetworkingError>) -> Void
+        completion: @escaping (Result<T.Response, NetworkingError>) -> Void
     ) {
         guard let urlRequest = request.urlReqeust else {
             return
@@ -32,7 +32,12 @@ class DefaultAPIProvider: APIProvider {
                 return completion(.failure(.invalidData))
             }
 
-            return completion(.success(data))
+            let decoder = JSONDecoder()
+            guard let decoded = try? decoder.decode(T.Response.self, from: data) else {
+                return completion(.failure(.parsingError))
+            }
+
+            return completion(.success(decoded))
         }
         task.resume()
     }

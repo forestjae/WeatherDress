@@ -27,10 +27,8 @@ final class GeoSearchService {
             )
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(GeocodeResponse.self, from: data) else { return }
-                    guard let addressComponent = decoded.documents.first else { return }
+                case .success(let response):
+                    guard let addressComponent = response.documents.first else { return }
                     guard let locationInfo = LocationInfo(geocodeAddress: addressComponent) else { return }
                     single(.success(locationInfo))
                 case .failure(let error):
@@ -47,10 +45,8 @@ final class GeoSearchService {
 
             self.apiProvider.request(request) { result in
                 switch result {
-                case .success(let data):
-                    let decoder = JSONDecoder()
-                    guard let decoded = try? decoder.decode(AddressSearchResponse.self, from: data) else { return }
-                    let addressList = decoded.documents.compactMap { LocationInfo(searchedAddressSet: $0) }
+                case .success(let response):
+                    let addressList = response.documents.compactMap { LocationInfo(searchedAddressSet: $0) }
                     single(.success(addressList))
                 case .failure(let error):
                     single(.failure(error))

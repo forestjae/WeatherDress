@@ -8,19 +8,19 @@
 import Foundation
 
 protocol APIRequest {
-    associatedtype Function: APIFunction
+    associatedtype Response: APIResponse
 
     var method: HTTPMethod { get }
     var baseURL: URL? { get }
+    var path: String { get }
     var url: URL? { get }
     var parameters: [String: String] { get }
     var headers: [String: String]? { get }
-    var function: Function { get }
 }
 
 extension APIRequest {
     var url: URL? {
-        guard let url = self.baseURL?.appendingPathComponent(self.function.path) else {
+        guard let url = self.baseURL?.appendingPathComponent(self.path) else {
             return nil
         }
         var urlComponents = URLComponents(string: url.absoluteString)

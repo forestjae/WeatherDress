@@ -7,9 +7,11 @@
 
 import Foundation
 
-struct MidForecastRequest: MidForecastRequestable {
-    let headers: [String : String]? = nil
-    let function: MidForecastFunction
+struct MidWeatherForecastRequest: MidForecastRequestable {
+    typealias Response = MidForecastWeatherResponse
+
+    let path: String = "getMidLandFcst"
+    let headers: [String: String]? = nil
     let method: HTTPMethod = .get
     let baseDate = Date() - 3600 * 6 - 1
     let dataType = "JSON"

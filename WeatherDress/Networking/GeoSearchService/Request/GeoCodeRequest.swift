@@ -8,11 +8,14 @@
 import Foundation
 
 struct GeocodeRequest: GeoSerachRequestable {
+    typealias Response = GeocodeResponse
+
+    let path: String = "geo/coord2regioncode.json"
     let method: HTTPMethod = .get
     let headers: [String : String]? = ["Authorization": "KakaoAK \(Bundle.main.kakaoApiKey)"]
-    let function: GeoSearchFunction
     let xCoordinate: Double
     let yCoordinate: Double
+
     var parameters: [String: String] {
         [
             "x": String(self.xCoordinate),

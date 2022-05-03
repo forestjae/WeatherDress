@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MidForecastTemperatureResponse: Decodable {
+struct MidForecastTemperatureResponse: APIResponse {
     let response: Response
 
     struct Response: Decodable {

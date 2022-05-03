@@ -7,9 +7,7 @@
 
 import Foundation
 
-protocol MidForecastRequestable: APIRequest {
-    var function: MidForecastFunction { get }
-}
+protocol MidForecastRequestable: APIRequest {}
 
 extension MidForecastRequestable {
     var baseURL: URL? {

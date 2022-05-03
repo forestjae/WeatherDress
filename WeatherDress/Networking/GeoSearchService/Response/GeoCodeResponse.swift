@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GeocodeResponse: Codable {
+struct GeocodeResponse: APIResponse {
     let meta: Meta
     let documents: [AddressSet]
 

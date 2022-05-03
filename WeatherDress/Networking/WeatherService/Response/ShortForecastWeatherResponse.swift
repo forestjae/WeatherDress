@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ShortForecastWeatherResponse: Codable {
+struct ShortForecastWeatherResponse: APIResponse {
     let response: Response
 
     struct Response: Codable {

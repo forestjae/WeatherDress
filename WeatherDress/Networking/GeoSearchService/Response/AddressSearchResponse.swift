@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AddressSearchResponse: Codable {
+struct AddressSearchResponse: APIResponse {
     let documents: [AddressSet]
     let meta: Meta
 

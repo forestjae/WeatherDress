@@ -7,9 +7,7 @@
 
 import Foundation
 
-protocol GeoSerachRequestable: APIRequest {
-    var function: GeoSearchFunction { get }
-}
+protocol GeoSerachRequestable: APIRequest {}
 
 extension GeoSerachRequestable {
     var baseURL: URL? {

@@ -7,9 +7,7 @@
 
 import Foundation
 
-protocol ShortForecastRequestable: APIRequest {
-    var function: ShortForecastFunction { get }
-}
+protocol ShortForecastRequestable: APIRequest {}
 
 extension ShortForecastRequestable {
     var baseURL: URL? {

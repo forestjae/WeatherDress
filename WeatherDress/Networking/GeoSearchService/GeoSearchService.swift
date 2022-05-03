@@ -22,7 +22,6 @@ final class GeoSearchService {
     ) -> Single<LocationInfo> {
         return Single.create { single in
             let request = GeocodeRequest(
-                function: .geocode,
                 xCoordinate: xCoordinate,
                 yCoordinate: yCoordinate
             )
@@ -44,7 +43,7 @@ final class GeoSearchService {
 
     func searchAddress(by query: String) -> Single<[LocationInfo]> {
         return Single.create { single in
-            let request = AddressSearchRequest(function: .addressSearch, query: query)
+            let request = AddressSearchRequest(query: query)
 
             self.apiProvider.request(request) { result in
                 switch result {

@@ -1,16 +1,16 @@
 //
-//  ShortForecastRequest.swift
+//  UltraShortNowcastRequest.swift
 //  WeatherDress
 //
-//  Created by Lee Seung-Jae on 2022/03/29.
+//  Created by Lee Seung-Jae on 2022/05/03.
 //
 
 import Foundation
 
-struct ShortForecastRequest: ShortForecastRequestable {
-    typealias Response = ShortForecastWeatherResponse
+struct UltraShortNowcastRequest: ShortForecastRequestable {
+    typealias Response = UltraShortNowcastWeatherResponse
 
-    let path: String = "getVilageFcst"
+    let path: String = "getUltraSrtNcst"
     let headers: [String : String]? = nil
     let method: HTTPMethod = .get
     let pageNo: Int = 1
@@ -25,7 +25,7 @@ struct ShortForecastRequest: ShortForecastRequestable {
         [
             "pageNo": String(self.pageNo),
             "numOfRows": String(self.numOfRows),
-            "base_time": self.baseDate.convert(to: DateFormatter.shortForecastTime),
+            "base_time": self.baseDate.convert(to: DateFormatter.ultraShortNowcastTime),
             "base_date": self.baseDate.convert(to: DateFormatter.requestableDate),
             "dataType": self.dataType,
             "nx": String(self.xAxisNumber),

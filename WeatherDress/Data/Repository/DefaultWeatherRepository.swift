@@ -18,33 +18,25 @@ final class DefaultWeatherRepository: WeatherRepository {
     }
 
     func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather> {
-        let converted = GridConverting.convertGRID_GPS(
-            mode: .toGrid,
-            xComponent: location.longtitude,
-            yComponent: location.latitude
+        return Observable.combineLatest(
+            self.apiService.fetchUltraShortNowcast(for: location).asObservable(),
+            self.apiService.fetchUltraShortForecast(for: location)
+                .compactMap { $0.forecastList.first }.asObservable()
         )
-        return self.apiService.fetchUltraShortNowcastWeather(
-            xAxisNumber: converted.xGrid,
-            yAxisNumber: converted.yGRid
-        ).map {
-            CurrentWeather(
-                temperature: $0.temperature,
-                rainfallForAnHour: $0.rainfallForAnHour,
-                rainfallType: $0.rainfallType,
-                humidity: $0.humidity
-            )
-        }.asObservable()
+            .map { usn, usf in
+                CurrentWeather(
+                    temperature: usn.temperature,
+                    weatherCondition: DailyWeather.convertedFrom(usf.skyCondition, rainFall2: usf.rainfallType),
+                    rainfallForAnHour: usn.rainfallForAnHour,
+                    rainfallType: usn.rainfallType,
+                    humidity: usn.humidity
+                )
+            }.asObservable()
     }
 
     func fetchHourlyWeathers(from location: LocationInfo) -> Observable<[HourlyWeather]> {
-        let converted = GridConverting.convertGRID_GPS(
-            mode: .toGrid,
-            xComponent: location.longtitude,
-            yComponent: location.latitude
-        )
-
         return Observable.combineLatest(
-            self.apiService.fetchUltraShortForecastWeather(xAxisNumber: converted.xGrid, yAxisNumber: converted.yGRid)
+            self.apiService.fetchUltraShortForecast(for: location)
                 .map { $0.forecastList.map { item in
                     HourlyWeather(
                         date: item.forecastDate,
@@ -53,27 +45,24 @@ final class DefaultWeatherRepository: WeatherRepository {
                     )
                 }}
                 .asObservable(),
-            self.apiService.fetchShortForecastWeather(xAxisNumber: converted.xGrid, yAxisNumber: converted.yGRid)
-            .map { $0.forecastList.map { item in
-                HourlyWeather(
-                    date: item.forecastDate,
-                    weatherCondition: DailyWeather.convertedFrom(item.skyCondition, rainFall: item.rainfallType),
-                    temperature: Int(item.temperatureForAnHour)
-                )
-            }}.asObservable().startWith([]))
-            .map { ustList, stList in
-                ustList + stList.filter { !ustList.map { $0.date }.contains($0.date) }
-            }
-            .map { $0.sorted { $0.date < $1.date }}
+            self.apiService.fetchShortForecast(for: location)
+                .map { $0.forecastList.map { item in
+                    HourlyWeather(
+                        date: item.forecastDate,
+                        weatherCondition: DailyWeather.convertedFrom(item.skyCondition, rainFall: item.rainfallType),
+                        temperature: Int(item.temperatureForAnHour)
+                    )
+                }}.asObservable()
+        ).map { ustList, stList in
+            ustList + stList.filter { !ustList.map { $0.date }.contains($0.date) }
+        }
+        .map { $0.sorted { $0.date < $1.date }}
     }
 
     func fetchDailyWeathers(from location: LocationInfo) -> Observable<[DailyWeather]> {
-        let address = location.address.fullAddress
-        let temperatureCode = RegionCodeConverting.shared.convert(from: address, to: .temperature) ?? ""
-        let weatherCode = RegionCodeConverting.shared.convert(from: address, to: .weather) ?? ""
         return Observable.zip(
-            self.apiService.fetchMidForecastWeather(regionCode: weatherCode).asObservable(),
-            self.apiService.fetchMidForecastTemperature(regionCode: temperatureCode).asObservable())
+            self.apiService.fetchMidWeatherForecast(for: location).asObservable(),
+            self.apiService.fetchMidTemperatureForecast(for: location).asObservable())
             .map { weather, temperature in
                 zip(weather, temperature)
                     .map { weather, temperature in

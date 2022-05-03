@@ -16,16 +16,20 @@ final class WeatherService {
         self.apiProvider = apiProvider
     }
 
-    func fetchUltraShortNowcastWeather(
-        xAxisNumber: Int,
-        yAxisNumber: Int
+    func fetchUltraShortNowcast(
+        for location: LocationInfo
     ) -> Single<UltraShortNowcastWeatherItem> {
+        let converted = GridConverting.convertGRID_GPS(
+            mode: .toGrid,
+            xComponent: location.longtitude,
+            yComponent: location.latitude
+        )
         return Single.create { single in
             let request = ShortForecastRequest(
                 function: .ultraShortNowcast,
                 baseDate: Date() - 40 * 60 - 1,
-                xAxisNumber: xAxisNumber,
-                yAxisNumber: yAxisNumber,
+                xAxisNumber: converted.xGrid,
+                yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
             )
 
@@ -52,16 +56,20 @@ final class WeatherService {
         }
     }
 
-    func fetchUltraShortForecastWeather(
-        xAxisNumber: Int,
-        yAxisNumber: Int
+    func fetchUltraShortForecast(
+        for location: LocationInfo
     ) -> Single<UltraShortForecastWeatherList> {
+        let converted = GridConverting.convertGRID_GPS(
+            mode: .toGrid,
+            xComponent: location.longtitude,
+            yComponent: location.latitude
+        )
         return Single.create { single in
             let request = ShortForecastRequest(
                 function: .ultraShortForecast,
                 baseDate: Date() - 45 * 60 - 1,
-                xAxisNumber: xAxisNumber,
-                yAxisNumber: yAxisNumber,
+                xAxisNumber: converted.xGrid,
+                yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
             )
             self.apiProvider.request(request) { result in
@@ -85,17 +93,18 @@ final class WeatherService {
         }
     }
 
-    func fetchShortForecastWeather(
-        xAxisNumber: Int,
-        yAxisNumber: Int
-    ) -> Single<ShortForecastWeatherList> {
-        print("Short:\(Date())")
+    func fetchShortForecast(for location: LocationInfo) -> Single<ShortForecastWeatherList> {
+        let converted = GridConverting.convertGRID_GPS(
+            mode: .toGrid,
+            xComponent: location.longtitude,
+            yComponent: location.latitude
+        )
         return Single.create { single in
             let request = ShortForecastRequest(
                 function: .shortForecast,
                 baseDate: Date() - 2 * 3600,
-                xAxisNumber: xAxisNumber,
-                yAxisNumber: yAxisNumber,
+                xAxisNumber: converted.xGrid,
+                yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
             )
             self.apiProvider.request(request) { result in
@@ -119,11 +128,13 @@ final class WeatherService {
         }
     }
 
-    func fetchMidForecastWeather(regionCode: String) -> Single<[MidForecastWeatherItem]> {
+    func fetchMidWeatherForecast(for location: LocationInfo) -> Single<[MidForecastWeatherItem]> {
+        let address = location.address.fullAddress
+        let weatherCode = RegionCodeConverting.shared.convert(from: address, to: .weather) ?? ""
         return Single.create { single in
             let request = MidForecastRequest(
                 function: .midLandForecast,
-                regionIdentification: regionCode,
+                regionIdentification: weatherCode,
                 serviceKey: self.serviceKey
             )
 
@@ -148,11 +159,13 @@ final class WeatherService {
         }
     }
 
-    func fetchMidForecastTemperature(regionCode: String) -> Single<[MidForecastTemperatureItem]> {
+    func fetchMidTemperatureForecast(for location: LocationInfo) -> Single<[MidForecastTemperatureItem]> {
+        let address = location.address.fullAddress
+        let temperatureCode = RegionCodeConverting.shared.convert(from: address, to: .temperature) ?? ""
         return Single.create { single in
             let request = MidForecastRequest(
                 function: .midTemperatureForecast,
-                regionIdentification: regionCode,
+                regionIdentification: temperatureCode,
                 serviceKey: self.serviceKey
             )
 

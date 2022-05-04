@@ -13,23 +13,14 @@ private enum Design {
 }
 
 class LocationCollectionViewCell: UICollectionViewCell {
-    private lazy var listContentView = UIListContentView(configuration: .subtitleCell())
-
-    private let containerView: UIView = {
-        let view = UIView()
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 2, height: 2)
-        view.layer.shadowRadius = 2
-        view.layer.masksToBounds = false
-        view.layer.shadowOpacity = 0.3
-        return view
-    }()
-
-    private let locationLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = Design.mainFontColor
-        label.font = .systemFont(ofSize: 20, weight: .bold).metrics(for: .body)
-        return label
+    private let listContentView: UIListContentView = {
+        let listContentView = UIListContentView(configuration: .subtitleCell())
+        listContentView.layer.shadowColor = UIColor.black.cgColor
+        listContentView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        listContentView.layer.shadowRadius = 2
+        listContentView.layer.masksToBounds = false
+        listContentView.layer.shadowOpacity = 0.3
+        return listContentView
     }()
 
     private let locationDescriptionLabel: UILabel = {
@@ -40,19 +31,12 @@ class LocationCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    private let weatherLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = Design.mainFontColor
-        label.font = .preferredFont(forTextStyle: .body)
-        return label
-    }()
-
-    private let weatherImage = UIView()
+    private let weatherImage = UIImageView()
 
     private let temperatureLabel: UILabel = {
         let label = UILabel()
         label.textColor = Design.mainFontColor
-        label.font = .systemFont(ofSize: 27, weight: .medium).metrics(for: .body)
+        label.font = .systemFont(ofSize: 30, weight: .regular).metrics(for: .body)
         return label
     }()
 
@@ -71,67 +55,56 @@ class LocationCollectionViewCell: UICollectionViewCell {
 extension LocationCollectionViewCell {
     func configure(with locationInfo: LocationInfo, indexPath: Int, weather: CurrentWeather) {
         var content = UIListContentConfiguration.cell()
-        content.imageProperties.maximumSize = CGSize(width: 50, height: 50)
+
         if indexPath == 0 {
+            content.text = "나의 위치"
             self.locationDescriptionLabel.isHidden = false
             self.locationDescriptionLabel.text = locationInfo.shortAddress()
-            self.locationLabel.text = "나의 위치"
         } else {
-            self.locationLabel.text = locationInfo.shortAddress()
+            content.text = locationInfo.shortAddress()
         }
+        content.textProperties.font = .systemFont(ofSize: 20, weight: .bold).metrics(for: .body)
+        content.textProperties.color = Design.mainFontColor
+        content.secondaryText = weather.weatherCondition.rawValue
+        content.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
+        content.secondaryTextProperties.color = Design.mainFontColor
+        content.textToSecondaryTextVerticalPadding = 35
+
         self.listContentView.configuration = content
 
-        self.temperatureLabel.text = weather.temperature.description + "°"
+        self.weatherImage.image = UIImage(named: weather.weatherCondition.staticImageURL)
+        self.temperatureLabel.text = Int(weather.temperature).description + "°"
     }
 
     private func configureCell() {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = UIColor.lightSky
         self.contentView.layer.cornerRadius = 10
-//        self.contentView.layer.shadowColor = UIColor.black.cgColor
-//        self.contentView.layer.shadowOffset = CGSize(width: 5, height: 5)
-//        self.contentView.layer.shadowRadius = 5
-//        self.contentView.layer.masksToBounds = false
-//        self.contentView.layer.shadowOpacity = 0.5
     }
 
     private func configureHierarchy() {
         self.contentView.addSubview(self.listContentView)
-        self.listContentView.addSubview(self.containerView)
-        self.containerView.addSubview(self.locationLabel)
-        self.containerView.addSubview(self.temperatureLabel)
-        self.containerView.addSubview(self.weatherImage)
-        self.containerView.addSubview(self.locationDescriptionLabel)
-        self.containerView.addSubview(self.weatherLabel)
+        self.listContentView.addSubview(self.temperatureLabel)
+        self.listContentView.addSubview(self.weatherImage)
+        self.listContentView.addSubview(self.locationDescriptionLabel)
     }
 
     private func configureConstraint() {
         self.listContentView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(self.contentView)
-        }
-        self.containerView.snp.makeConstraints {
-            $0.top.leading.bottom.trailing.equalTo(self.listContentView)
-        }
-        self.locationLabel.snp.makeConstraints {
-            $0.top.equalTo(self.containerView).offset(10)
-            $0.leading.equalTo(self.containerView).offset(15)
+            $0.top.leading.bottom.trailing.equalTo(self.contentView)
         }
         self.locationDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(self.locationLabel.snp.bottom)
-            $0.leading.equalTo(self.locationLabel)
+            $0.top.equalTo(self.listContentView).offset(32)
+            $0.leading.equalTo(self.listContentView).offset(16)
         }
-        self.weatherLabel.snp.makeConstraints {
-            $0.top.equalTo(self.locationLabel.snp.bottom).offset(-30)
-            $0.leading.equalTo(self.locationLabel)
-        }
-//        self.weatherImage.snp.makeConstraints {
-//            $0.width.height.equalTo(45)
-//            $0.top.equalTo(self.containerView).offset(10)
-//            $0.trailing.equalTo(self.containerView.snp.trailing).offset(-10)
-//        }
         self.temperatureLabel.snp.makeConstraints {
-            $0.top.equalTo(self.weatherImage).offset(15)
-            $0.trailing.equalTo(self.containerView.snp.trailing).offset(-10)
+            $0.top.equalTo(self.listContentView).offset(15)
+            $0.trailing.equalTo(self.listContentView).offset(-20)
+        }
+        self.weatherImage.snp.makeConstraints {
+            $0.width.height.equalTo(45)
+            $0.top.equalTo(self.temperatureLabel.snp.bottom).offset(2)
+            $0.trailing.equalTo(self.listContentView).offset(-20)
         }
     }
 }

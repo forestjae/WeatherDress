@@ -9,8 +9,8 @@ import Foundation
 
 struct MidForecastTemperatureItem {
     let date: Int
-    let maxTemperature: Int
-    let minTemperature: Int
+    let maxTemperature: Double
+    let minTemperature: Double
 }
 
 struct MidForecastTemperatureItemList {

@@ -11,6 +11,6 @@ struct DailyWeather: Hashable {
     let date: Date
     let weatherCondition: WeatherCondition
     let rainfallProbability: Int
-    let maximumTemperature: Int
-    let minimunTemperature: Int
+    let maximumTemperature: Double
+    let minimunTemperature: Double
 }

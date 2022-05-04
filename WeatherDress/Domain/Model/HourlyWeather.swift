@@ -10,5 +10,5 @@ import Foundation
 struct HourlyWeather: Hashable {
     let date: Date
     let weatherCondition: WeatherCondition
-    let temperature: Int
+    let temperature: Double
 }

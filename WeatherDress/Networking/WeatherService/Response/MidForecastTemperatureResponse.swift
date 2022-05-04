@@ -31,22 +31,22 @@ struct MidForecastTemperatureResponse: APIResponse {
 
     struct Item: Decodable {
         let regionIdentifier: String
-        let temparatureMin3: Int
-        let temparatureMax3: Int
-        let temparatureMin4: Int
-        let temparatureMax4: Int
-        let temparatureMin5: Int
-        let temparatureMax5: Int
-        let temparatureMin6: Int
-        let temparatureMax6: Int
-        let temparatureMin7: Int
-        let temparatureMax7: Int
-        let temparatureMin8: Int
-        let temparatureMax8: Int
-        let temparatureMin9: Int
-        let temparatureMax9: Int
-        let temparatureMin10: Int
-        let temparatureMax10: Int
+        let temparatureMin3: Double
+        let temparatureMax3: Double
+        let temparatureMin4: Double
+        let temparatureMax4: Double
+        let temparatureMin5: Double
+        let temparatureMax5: Double
+        let temparatureMin6: Double
+        let temparatureMax6: Double
+        let temparatureMin7: Double
+        let temparatureMax7: Double
+        let temparatureMin8: Double
+        let temparatureMax8: Double
+        let temparatureMin9: Double
+        let temparatureMax9: Double
+        let temparatureMin10: Double
+        let temparatureMax10: Double
 
         enum CodingKeys: String, CodingKey {
             case regionIdentifier = "regId"

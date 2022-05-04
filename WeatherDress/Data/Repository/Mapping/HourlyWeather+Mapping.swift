@@ -15,7 +15,7 @@ extension HourlyWeather {
                 ultraShortForecast.skyCondition,
                 rainFall: ultraShortForecast.rainfallType
             ),
-            temperature: Int(ultraShortForecast.temperature)
+            temperature: ultraShortForecast.temperature
         )
     }
 
@@ -26,7 +26,7 @@ extension HourlyWeather {
                 shortForecast.skyCondition,
                 rainFall: shortForecast.rainfallType
             ),
-            temperature: Int(shortForecast.temperatureForAnHour)
+            temperature: shortForecast.temperatureForAnHour
         )
     }
 

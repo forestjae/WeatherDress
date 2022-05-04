@@ -40,13 +40,11 @@ final class MainViewModel {
         locations
             .subscribe(onNext: {
                 self.locations.onNext($0)
-                print("위치정보 받아옴")
             })
             .disposed(by: self.disposeBag)
 
         input.locationButtonDidTap
             .subscribe(onNext: {
-                print("button did tap")
                 self.locationButtonDidTap.onNext($0)
             })
             .disposed(by: self.disposeBag)

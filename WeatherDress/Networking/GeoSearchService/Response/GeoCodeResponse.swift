@@ -50,5 +50,6 @@ extension LocationInfo {
             thirdRegion: geocodeAddress.region3DepthName,
             fourthRegion: geocodeAddress.region4DepthName
         )
+        self.isCurrent = true
     }
 }

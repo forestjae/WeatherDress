@@ -31,6 +31,6 @@ class Coordinator<CoordinationResult>: NSObject {
     }
 
     func start() -> Observable<CoordinationResult> {
-        fatalError()
+        fatalError("not implemented")
     }
 }

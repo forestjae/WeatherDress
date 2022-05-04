@@ -14,18 +14,18 @@ private enum Design {
 
 class DailyWeaterCollectionViewCell: UICollectionViewCell {
 
-    private let timeLabel: UILabel = {
+    private let dayOfWeekLabel: UILabel = {
         let label = UILabel()
         label.textColor = Design.mainFontColor
-        let custom = UIFont.systemFont(ofSize: 10, weight: .bold)
+        let custom = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: custom)
         return label
     }()
 
-    private let dayOfWeekLabel: UILabel = {
+    private let timeLabel: UILabel = {
         let label = UILabel()
         label.textColor = Design.mainFontColor
-        let custom = UIFont.systemFont(ofSize: 16, weight: .bold)
+        let custom = UIFont.systemFont(ofSize: 12, weight: .bold)
         label.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: custom)
         return label
     }()
@@ -38,14 +38,14 @@ class DailyWeaterCollectionViewCell: UICollectionViewCell {
     private let minTemperatureLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.cold
-        label.font = .systemFont(ofSize: 17, weight: .medium).metrics(for: .body)
+        label.font = .systemFont(ofSize: 18, weight: .medium).metrics(for: .body)
         return label
     }()
 
     private let maxTemperatureLabel: UILabel = {
         let label = UILabel()
         label.textColor = Design.mainFontColor
-        label.font = .systemFont(ofSize: 17, weight: .medium).metrics(for: .body)
+        label.font = .systemFont(ofSize: 18, weight: .medium).metrics(for: .body)
         return label
     }()
 
@@ -66,23 +66,16 @@ class DailyWeaterCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureContent(with weather: DailyWeather, indexPath: Int) {
-        self.dayOfWeekLabel.text = DateFormatter.dayOfWeekDate.string(from: weather.date)
-        if indexPath == 0 {
-            self.timeLabel.text = "오늘"
-        } else if indexPath == 1 {
-            self.timeLabel.text = "내일"
-        } else if indexPath == 2 {
-            self.timeLabel.text = "모레"
-        } else {
-            self.timeLabel.text = DateFormatter.dailyWeatherDate.string(from: weather.date)
-        }
-        if indexPath == 10 {
+    func configureContent(with viewModel: DailyWeatherItemViewModel, index: Int) {
+        self.dayOfWeekLabel.text = viewModel.dayOfWeek
+        self.timeLabel.text = viewModel.dateDescription.description
+        self.minTemperatureLabel.text = viewModel.minTemperature
+        self.maxTemperatureLabel.text = viewModel.maxTemperature
+        self.skyConditionImageView.image = UIImage(named: viewModel.weatherImageURL)
+
+        if index == 10 {
             self.separatorView.isHidden = true
         }
-        self.minTemperatureLabel.text = weather.minimunTemperature.description + "°"
-        self.maxTemperatureLabel.text = weather.maximumTemperature.description + "°"
-        self.skyConditionImageView.image = UIImage(named: weather.weatherCondition.staticImageURL)
     }
 
     private func configureCell() {

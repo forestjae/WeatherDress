@@ -12,11 +12,17 @@ import Lottie
 
 class CurrentWeatherImageView: UIView {
 
+    enum ImageType {
+        case staticImage
+        case animation
+    }
+
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         return stackView
     }()
+
     private var imageView = UIView()
 
     override init(frame: CGRect) {
@@ -29,13 +35,14 @@ class CurrentWeatherImageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setImage(by weatherCondtion: WeatherCondition) {
-
-        if let imageURL = weatherCondtion.animatedImageURL {
+    func setImage(by imageURL: String, type: ImageType) {
+        switch type {
+        case .staticImage:
+            self.imageView = self.setStaticImage(imageURL: imageURL)
+        case .animation:
             self.imageView = self.setAnimationImage(imageURL: imageURL)
-        } else {
-            self.imageView = self.setStaticImage(imageURL: weatherCondtion.staticImageURL)
         }
+
         self.stackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
         }

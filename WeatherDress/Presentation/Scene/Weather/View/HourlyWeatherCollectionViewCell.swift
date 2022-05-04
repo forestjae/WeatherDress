@@ -57,14 +57,10 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with weather: HourlyWeather, indexPath: Int) {
-        if indexPath == 0 {
-            self.timeLabel.text = "지금"
-        } else {
-            self.timeLabel.text = DateFormatter.hourlyWeatherTime.string(from: weather.date)
-        }
-        self.temperatureLabel.text = weather.temperature.description + "°"
-        self.skyConditionImageView.image = UIImage(named: weather.weatherCondition.staticImageURL)
+    func configure(with viewModel: HourlyWeatherItemViewModel) {
+        self.timeLabel.text = viewModel.timeDescription.description
+        self.temperatureLabel.text = viewModel.temperature
+        self.skyConditionImageView.image = UIImage(named: viewModel.weatherImageURL)
     }
 
     private func configureHierarchy() {

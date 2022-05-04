@@ -18,8 +18,8 @@ private enum Design {
 }
 
 enum WeatherItem: Hashable {
-    case hourly(HourlyWeather)
-    case daily(DailyWeather)
+    case hourly(HourlyWeatherItemViewModel)
+    case daily(DailyWeatherItemViewModel)
 }
 
 class WeatherViewController: UIViewController {
@@ -94,10 +94,18 @@ class WeatherViewController: UIViewController {
         return label
     }()
 
+    private let isCurrentImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "location.circle.fill")
+        imageView.tintColor = .white
+        return imageView
+    }()
+
     private let currentWeatherImageView = CurrentWeatherImageView()
 
     private let currentTemperatureLabel: UILabel = {
         let label = UILabel()
+        label.text = "--"
         label.font = .systemFont(ofSize: 63, weight: .medium)
         label.textColor = Design.mainFontColor
         return label
@@ -105,16 +113,8 @@ class WeatherViewController: UIViewController {
 
     private let currentWeatherConditionLabel: UILabel = {
         let label = UILabel()
-        label.text = "청명함"
+        label.text = "-"
         label.font = .systemFont(ofSize: 22)
-        label.textColor = Design.mainFontColor
-        return label
-    }()
-
-    private let degreeLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 50, weight: .medium)
-        label.text = "°"
         label.textColor = Design.mainFontColor
         return label
     }()
@@ -138,15 +138,14 @@ class WeatherViewController: UIViewController {
 
     private let currentMinMaxTemperatureLabel: UILabel = {
         let label = UILabel()
-        label.text = "최고 29° / 최저 17°"
+        label.text = "- / -"
         label.textColor = Design.mainFontColor
-        label.font = .preferredFont(forTextStyle: .footnote)
+        label.font = .preferredFont(forTextStyle: .body)
         return label
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureController()
         self.configureHierarchy()
         self.configureConstraint()
         self.configureCollectionView()
@@ -157,21 +156,17 @@ class WeatherViewController: UIViewController {
         super.viewWillAppear(animated)
     }
 
-    private func configureController() {
-    }
-
     private func configureHierarchy() {
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(stackView)
-        self.scrollView.addSubview(self.degreeLabel)
         self.stackView.addArrangedSubview(self.currentStackView)
         self.stackView.addArrangedSubview(self.hourlyWeatherStackView)
         self.currentStackView.addArrangedSubview(self.locationLabel)
+        self.currentStackView.addSubview(self.isCurrentImage)
         self.currentStackView.addArrangedSubview(self.currentWeatherImageView)
         self.currentStackView.addArrangedSubview(self.currentTemperatureLabel)
         self.currentStackView.addArrangedSubview(self.currentWeatherConditionLabel)
         self.currentStackView.addArrangedSubview(self.currentWeatherDescriptionStackView)
-//        self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentWeatherDescriptionLabel)
         self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentMinMaxTemperatureLabel)
         self.hourlyWeatherStackView.addArrangedSubview(self.hourlyWeatherWrappingView)
         self.hourlyWeatherWrappingView.addArrangedSubview(self.hourlyWeatherCollectionView)
@@ -189,14 +184,15 @@ class WeatherViewController: UIViewController {
         self.currentWeatherImageView.snp.makeConstraints {
             $0.width.height.equalTo(120)
         }
-        self.degreeLabel.snp.makeConstraints {
-            $0.leading.equalTo(self.currentTemperatureLabel.snp.trailing)
-            $0.top.equalTo(self.currentTemperatureLabel.snp.top)
-        }
 
         self.hourlyWeatherCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
             $0.height.equalTo(800)
+        }
+
+        self.isCurrentImage.snp.makeConstraints {
+            $0.trailing.equalTo(self.locationLabel.snp.leading).offset(-3)
+            $0.centerY.equalTo(self.locationLabel).offset(-0.5)
         }
     }
 
@@ -212,49 +208,50 @@ class WeatherViewController: UIViewController {
     }
 
     private func bindingOutput(for output: WeatherViewModel.Output) {
+        output.locationAddress
+            .drive(self.locationLabel.rx.text)
+            .disposed(by: self.disposeBag)
+
+        output.isCurrentLocation
+            .map { !$0 }
+            .drive(self.isCurrentImage.rx.isHidden)
+            .disposed(by: self.disposeBag)
+
         output.currentTemperatureLabelText
-            .asDriver(onErrorJustReturn: "")
             .drive(self.currentTemperatureLabel.rx.text)
             .disposed(by: self.disposeBag)
-        output.hourlyWeathers
-            .subscribe(onNext: {
+
+        output.hourlyWeatherItem
+            .drive(onNext: {
                 let identifer = self.snapshot.itemIdentifiers(inSection: .hourly)
                 self.snapshot.deleteItems(identifer)
                 self.snapshot.appendItems($0.map { WeatherItem.hourly($0)}, toSection: .hourly)
                 self.weatherDataSource?.apply(self.snapshot)
             })
-        output.dailyWeather
-            .subscribe(onNext: {
+            .disposed(by: self.disposeBag)
+
+        output.dailyWeatherItem
+            .drive(onNext: {
                 let identifer = self.snapshot.itemIdentifiers(inSection: .daily)
                 self.snapshot.deleteItems(identifer)
                 self.snapshot.appendItems($0.map { WeatherItem.daily($0)}, toSection: .daily)
                 self.weatherDataSource?.apply(self.snapshot)
             })
-
-//        output.dailyWeather
-//            .compactMap { $0.first }
-//            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { item in
-//                self.currentMinMaxTemperatureLabel.text = "최고 \(item.maximumTemperature)° / 최저 \(item.minimunTemperature)°"
-//            })
-//            .disposed(by: self.disposeBag)
-
-        output.currentWeatherCondition
-            .map { $0.rawValue }
-            .bind(to: self.currentWeatherConditionLabel.rx.text)
             .disposed(by: self.disposeBag)
 
         output.currentWeatherCondition
-            .subscribe(onNext: { item in
-                DispatchQueue.main.async {
-                    self.currentWeatherImageView.setImage(by: item)
-                }
-            })
+            .drive(self.currentWeatherConditionLabel.rx.text)
             .disposed(by: self.disposeBag)
 
-        output.location
-            .map { $0.address.fullAddress }
-            .bind(to: self.locationLabel.rx.text)
+        output.currentWeatherConditionImageURL
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { string, type in
+                self.currentWeatherImageView.setImage(by: string, type: type)}
+            )
+            .disposed(by: self.disposeBag)
+
+        output.minMaxTemperature
+            .drive(self.currentMinMaxTemperatureLabel.rx.text)
             .disposed(by: self.disposeBag)
     }
 
@@ -267,8 +264,12 @@ class WeatherViewController: UIViewController {
             DailyWeaterCollectionViewCell.self,
             forCellWithReuseIdentifier: "daily"
         )
-
-        self.hourlyWeatherCollectionView.register(HourlyCollectionReusableView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
+        
+        self.hourlyWeatherCollectionView.register(
+            HourlyCollectionReusableView.self,
+            forSupplementaryViewOfKind: "header",
+            withReuseIdentifier: "header"
+        )
 
         self.snapshot.appendSections([WeatherSection.hourly, WeatherSection.daily])
 
@@ -354,14 +355,14 @@ extension WeatherViewController {
                     withReuseIdentifier: "daily",
                     for: indexPath
                 ) as? DailyWeaterCollectionViewCell
-                cell?.configureContent(with: dailyWeather, indexPath: indexPath.row)
+                cell?.configureContent(with: dailyWeather, index: indexPath.row)
                 return cell
             case .hourly(let hourlyWeather):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "hourly",
                     for: indexPath
                 ) as? HourlyWeatherCollectionViewCell
-                cell?.configure(with: hourlyWeather, indexPath: indexPath.row)
+                cell?.configure(with: hourlyWeather)
                 return cell
             }
         }

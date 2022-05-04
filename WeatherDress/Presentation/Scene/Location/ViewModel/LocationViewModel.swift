@@ -48,12 +48,12 @@ class LocationViewModel {
             .flatMap {
                 self.useCase.fetchLocations()
             }
-            .debug()
 
         let weathers = locations
             .flatMap {
                 Observable.zip($0.map { self.weatherUseCase.fetchCurrentWeather(from: $0) })
             }
+            .share()
 
         let searchResult = input.searchBarText
             .flatMap { string in

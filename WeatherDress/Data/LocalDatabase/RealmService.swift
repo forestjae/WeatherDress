@@ -95,5 +95,6 @@ private extension LocationInfo {
             thirdRegion: address.thirdRegion,
             fourthRegion: address.fourthRegion
         )
+        self.isCurrent = false
     }
 }

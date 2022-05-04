@@ -12,6 +12,7 @@ struct LocationInfo: Hashable {
     let longtitude: Double
     let latitude: Double
     let address: Address
+    let isCurrent: Bool
 
     struct Address: Hashable {
         let fullAddress: String
@@ -21,11 +22,18 @@ struct LocationInfo: Hashable {
         let fourthRegion: String?
     }
 
-    init(identifer: UUID = UUID(), longtitude: Double, latitude: Double, address: Address) {
+    init(
+        identifer: UUID = UUID(),
+        longtitude: Double,
+        latitude: Double,
+        address: Address,
+        isCurrent: Bool = false
+    ) {
         self.identifier = identifer
         self.longtitude = longtitude
         self.latitude = latitude
         self.address = address
+        self.isCurrent = isCurrent
     }
 }
 
@@ -43,7 +51,9 @@ extension LocationInfo {
             firstRegion: searchedAddressSet.address.region1DepthName,
             secondRegion: searchedAddressSet.address.region2DepthName,
             thirdRegion: searchedAddressSet.address.region3DepthName,
-            fourthRegion: nil)
+            fourthRegion: nil
+        )
+        self.isCurrent = false
     }
 }
 

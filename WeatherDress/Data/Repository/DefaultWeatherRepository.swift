@@ -7,21 +7,60 @@
 
 import Foundation
 import RxSwift
-import RxRelay
 
 final class DefaultWeatherRepository: WeatherRepository {
     let apiService: WeatherService
+    let cacheService: WeatherCacheService
+
     private let disposeBag = DisposeBag()
 
     init(apiService: WeatherService) {
         self.apiService = apiService
+        self.cacheService = WeatherCacheService.shared
     }
 
-    func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather> {
+    func fetchCurrentWeather(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<CurrentWeather> {
+        let ultraShortNowcast: Observable<UltraShortNowcastWeatherItem>
+        if let usnCache = self.cacheService.fetchUltraShortNowcast(for: location, at: date) {
+            ultraShortNowcast = Observable.just(usnCache).share()
+        } else {
+            ultraShortNowcast = self.apiService
+                .fetchUltraShortNowcast(for: location, at: date - 40 * 60 - 1)
+                .do(onSuccess: {
+                    let key = self.cacheService.convertToKey(
+                        for: location,
+                        date: date,
+                        dateFormat: .ultraShortNowcastTime
+                    )
+                    self.cacheService.ultraShortNowcastCache
+                        .setObject(CacheValue($0), forKey: key)
+                })
+                .asObservable()
+        }
+        let ultraShortForecast: Observable<UltraShortForecastWeatherList>
+        if let usfCache = self.cacheService.fetchUltraShortForecast(for: location, at: date) {
+            ultraShortForecast = Observable.just(usfCache).share()
+        } else {
+            ultraShortForecast = self.apiService
+                .fetchUltraShortForecast(for: location, at: date - 45 * 60 - 1)
+                .do(onSuccess: {
+                    let key = self.cacheService.convertToKey(
+                        for: location,
+                        date: date,
+                        dateFormat: .ultraShortForecastTime
+                    )
+                    self.cacheService.ultraShortForecastCache
+                        .setObject(CacheValue($0), forKey: key)
+                })
+                .asObservable()
+        }
+
         return Observable.combineLatest(
-            self.apiService.fetchUltraShortNowcast(for: location).asObservable(),
-            self.apiService.fetchUltraShortForecast(for: location)
-                .compactMap { $0.forecastList.first }.asObservable()
+            ultraShortNowcast,
+            ultraShortForecast.compactMap { $0.forecastList.first }
         )
             .map { ultraShortNowcast, ultraShortForecast in
                 CurrentWeather(
@@ -31,23 +70,66 @@ final class DefaultWeatherRepository: WeatherRepository {
             }.asObservable()
     }
 
-    func fetchHourlyWeathers(from location: LocationInfo) -> Observable<[HourlyWeather]> {
-        return Observable.combineLatest(
-            self.apiService.fetchUltraShortForecast(for: location)
-                .map { $0.forecastList.map { HourlyWeather(ultraShortForecast: $0) } }
-                .asObservable(),
-            self.apiService.fetchShortForecast(for: location)
-                .map { $0.forecastList.map { HourlyWeather(shortForecast: $0) } }
+    func fetchHourlyWeathers(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<[HourlyWeather]> {
+        let ultraShortForecast: Observable<UltraShortForecastWeatherList>
+        let shortForecast: Observable<ShortForecastWeatherList>
+
+        if let usfCache = self.cacheService.fetchUltraShortForecast(for: location, at: date) {
+            ultraShortForecast = Observable.just(usfCache).share()
+        } else {
+            ultraShortForecast = self.apiService.fetchUltraShortForecast(
+                for: location,
+                at: date - 45 * 60 - 1
+            )
+            .asObservable()
+        }
+
+        if let sfCache = self.cacheService.fetchShortForecast(for: location, at: date) {
+            shortForecast = Observable.just(sfCache).share()
+        } else {
+            shortForecast = self.apiService.fetchShortForecast(for: location, at: date - 2 * 3600)
                 .asObservable()
+        }
+
+        return Observable.combineLatest(
+            ultraShortForecast
+                .map { $0.forecastList.map { HourlyWeather(ultraShortForecast: $0) } }
+            ,
+            shortForecast
+                .map { $0.forecastList.map { HourlyWeather(shortForecast: $0) } }
         ).map { ustList, stList in
             ustList + stList.filter { !ustList.map { $0.date }.contains($0.date) }
         }.map { $0.sorted { $0.date < $1.date } }
     }
 
-    func fetchDailyWeathers(from location: LocationInfo) -> Observable<[DailyWeather]> {
-        return Observable.zip(
-            self.apiService.fetchMidWeatherForecast(for: location).asObservable(),
-            self.apiService.fetchMidTemperatureForecast(for: location).asObservable())
+    func fetchDailyWeathers(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<[DailyWeather]> {
+        let midWeatherForecast: Observable<[MidForecastWeatherItem]>
+        let midTemperatureForecast: Observable<[MidForecastTemperatureItem]>
+
+        if let mwfCache = self.cacheService.fetchMidWeatherForecast(for: location, at: date) {
+            midWeatherForecast = Observable.just(mwfCache).share()
+        } else {
+            midWeatherForecast = self.apiService.fetchMidWeatherForecast(
+                for: location, at: date - 3600 * 6 - 1
+            )
+                .asObservable()
+        }
+
+        if let mtfCache = self.cacheService.fetchMidTemperatureForecast(for: location, at: date) {
+            midTemperatureForecast = Observable.just(mtfCache).share()
+        } else {
+            midTemperatureForecast = self.apiService.fetchMidTemperatureForecast(
+                for: location, at: date - 3600 * 6 - 1
+            )
+                .asObservable()
+        }
+        return Observable.zip(midWeatherForecast, midTemperatureForecast)
             .map { weather, temperature in
                 zip(weather, temperature)
                     .map { weather, temperature in

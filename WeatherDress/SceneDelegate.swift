@@ -29,7 +29,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         self.appCoordinator = AppFlowCoordinator(window: window)
-        self.appCoordinator?.start()
+        guard let appCoordinator = appCoordinator else {
+            return
+        }
+
+        LocationManager.shared.authorizationStatus()
+            .flatMap { status -> Observable<Void> in
+                switch status {
+                case .authorizedAlways, .authorizedWhenInUse:
+                    return appCoordinator.start()
+                default:
+                    return Observable.never()
+                }
+            }
             .subscribe()
             .disposed(by: self.disposeBag)
     }

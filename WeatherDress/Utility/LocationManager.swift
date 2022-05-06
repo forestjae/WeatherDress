@@ -19,6 +19,7 @@ final class LocationManager: NSObject {
         return manager
     }()
     private var locationPublisher = PublishSubject<CLLocation>()
+    private var authorizationPublisher = PublishSubject<CLAuthorizationStatus>()
 
     override init() {
         super.init()
@@ -32,6 +33,10 @@ final class LocationManager: NSObject {
 
         self.manager.startUpdatingLocation()
         return self.locationPublisher
+    }
+
+    func authorizationStatus() -> Observable<CLAuthorizationStatus> {
+        return self.authorizationPublisher
     }
 }
 
@@ -47,6 +52,7 @@ extension LocationManager: CLLocationManagerDelegate {
         default:
             self.locationPublisher.onError(LocationError.unexpected)
         }
+        self.authorizationPublisher.onNext(status)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

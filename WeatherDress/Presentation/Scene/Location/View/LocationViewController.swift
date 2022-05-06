@@ -10,17 +10,19 @@ import SnapKit
 import RxSwift
 
 class LocationViewController: UIViewController {
-    let disposeBag = DisposeBag()
-
-    var locationDataSource: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?
-    var snapshot = NSDiffableDataSourceSnapshot<LocationSection, LocationItem>()
     var viewModel: LocationViewModel?
-    let deletedAction = PublishSubject<LocationInfo>()
+
+    private let disposeBag = DisposeBag()
+    private var dataSourcee: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?
+    private var snapshot = NSDiffableDataSourceSnapshot<LocationSection, LocationItem>()
+    private let deletedAction = PublishSubject<LocationInfo>()
+
     private var locationCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
+
     private var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: LocationSearchResultViewController())
         controller.hidesNavigationBarDuringPresentation = true
@@ -129,7 +131,10 @@ class LocationViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         self.locationCollectionView = collectionView
         collectionView.backgroundColor = .clear
-        self.locationCollectionView.register(LocationCollectionViewCell.self, forCellWithReuseIdentifier: "location")
+        self.locationCollectionView.register(
+            LocationCollectionViewCell.self,
+            forCellWithReuseIdentifier: "location"
+        )
         self.snapshot.appendSections([LocationSection.location])
     }
 
@@ -162,12 +167,6 @@ class LocationViewController: UIViewController {
         case location(LocationInfo, CurrentWeather)
     }
 
-}
-
-extension LocationViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "삭제"
-    }
 }
 
 extension LocationViewController {

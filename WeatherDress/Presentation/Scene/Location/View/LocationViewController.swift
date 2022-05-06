@@ -142,10 +142,11 @@ class LocationViewController: UIViewController {
       return Observable.create { [weak self] observable in
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
-            observable.onNext(.ok(location))
+            observable.onNext(.accept(location))
+            observable.onCompleted()
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .default, handler: { _ in
-            observable.onNext(.cancel)
+            observable.onCompleted()
         }))
         self?.present(alert, animated: true, completion: nil)
         return Disposables.create {
@@ -155,8 +156,7 @@ class LocationViewController: UIViewController {
     }
 
     enum ActionType {
-        case ok(LocationInfo)
-        case cancel
+        case accept(LocationInfo)
     }
 
     enum LocationSection: Int {

@@ -17,7 +17,8 @@ final class WeatherService {
     }
 
     func fetchUltraShortNowcast(
-        for location: LocationInfo
+        for location: LocationInfo,
+        at date: Date
     ) -> Single<UltraShortNowcastWeatherItem> {
         let converted = GridConverting.convertGRID_GPS(
             mode: .toGrid,
@@ -26,7 +27,7 @@ final class WeatherService {
         )
         return Single.create { single in
             let request = UltraShortNowcastRequest(
-                baseDate: Date() - 40 * 60 - 1,
+                baseDate: date,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
@@ -51,7 +52,8 @@ final class WeatherService {
     }
 
     func fetchUltraShortForecast(
-        for location: LocationInfo
+        for location: LocationInfo,
+        at date: Date
     ) -> Single<UltraShortForecastWeatherList> {
         let converted = GridConverting.convertGRID_GPS(
             mode: .toGrid,
@@ -60,7 +62,7 @@ final class WeatherService {
         )
         return Single.create { single in
             let request = UltraShortForecastRequest(
-                baseDate: Date() - 45 * 60 - 1,
+                baseDate: date,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
@@ -79,7 +81,10 @@ final class WeatherService {
         }
     }
 
-    func fetchShortForecast(for location: LocationInfo) -> Single<ShortForecastWeatherList> {
+    func fetchShortForecast(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Single<ShortForecastWeatherList> {
         let converted = GridConverting.convertGRID_GPS(
             mode: .toGrid,
             xComponent: location.longtitude,
@@ -87,7 +92,7 @@ final class WeatherService {
         )
         return Single.create { single in
             let request = ShortForecastRequest(
-                baseDate: Date() - 2 * 3600,
+                baseDate: date,
                 xAxisNumber: converted.xGrid,
                 yAxisNumber: converted.yGRid,
                 serviceKey: self.serviceKey
@@ -106,11 +111,15 @@ final class WeatherService {
         }
     }
 
-    func fetchMidWeatherForecast(for location: LocationInfo) -> Single<[MidForecastWeatherItem]> {
+    func fetchMidWeatherForecast(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Single<[MidForecastWeatherItem]> {
         let address = location.address.fullAddress
         let weatherCode = RegionCodeConverting.shared.convert(from: address, to: .weather) ?? ""
         return Single.create { single in
             let request = MidWeatherForecastRequest(
+                baseDate: date,
                 regionIdentification: weatherCode,
                 serviceKey: self.serviceKey
             )
@@ -132,11 +141,15 @@ final class WeatherService {
         }
     }
 
-    func fetchMidTemperatureForecast(for location: LocationInfo) -> Single<[MidForecastTemperatureItem]> {
+    func fetchMidTemperatureForecast(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Single<[MidForecastTemperatureItem]> {
         let address = location.address.fullAddress
         let temperatureCode = RegionCodeConverting.shared.convert(from: address, to: .temperature) ?? ""
         return Single.create { single in
             let request = MidTemperatureForecastRequest(
+                baseDate: date,
                 regionIdentification: temperatureCode,
                 serviceKey: self.serviceKey
             )

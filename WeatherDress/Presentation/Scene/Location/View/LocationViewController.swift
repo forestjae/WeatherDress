@@ -80,50 +80,93 @@ class LocationViewController: UIViewController {
     }
 
     private func binding() {
-        guard let searchTableViewController = self.searchController.searchResultsController as? LocationSearchResultViewController else {
+        guard let searchTableViewController = self.searchController
+                .searchResultsController as? LocationSearchResultViewController else {
             return
         }
+
         let searchQuery = self.searchController.searchBar.rx.text.orEmpty.asObservable()
-        let newLocationCreatedOK = searchTableViewController.tableView.rx.modelSelected(LocationInfo.self).asObservable()
+        let newLocationCreatedOK = searchTableViewController.tableView.rx
+            .modelSelected(LocationInfo.self)
+            .asObservable()
             .flatMap { location in
                 self.alert(title: "새로운 도시를 추가하시겠습니까?", location: location)
             }
 
+        let locationCreatedButtonOK = newLocationCreatedOK
+            .map { result -> LocationInfo in
+                switch result {
+                case .accept(let locationInfo):
+                    return locationInfo
+                }
+            }
+
         let input = LocationViewModel.Input(
-            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
-            locationListCellSelected: self.locationCollectionView.rx.itemSelected.map { $0.row }.asObservable(),
+            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+                .map { _ in },
+            locationListCellSelected: self.locationCollectionView.rx
+                .itemSelected.map { $0.row }
+                .asObservable(),
+            listCellDidDeleted: self.deletedAction.asObservable(),
+            acceptedToCreateLocation: locationCreatedButtonOK,
             searchBarText: searchQuery,
-            searchResultCellDidTap: searchTableViewController.tableView.rx.modelSelected(LocationInfo.self).asObservable(),
-            listCellDidDeleted: self.deletedAction.asObservable().debug(),
-            createLocationAlertDidAccepted: newLocationCreatedOK
+            searchResultCellDidTap: searchTableViewController.tableView.rx
+                .modelSelected(LocationInfo.self)
+                .asObservable()
         )
         guard let output = self.viewModel?.transform(input: input, disposeBag: self.disposeBag) else {
             return
         }
-        Observable.combineLatest(output.locations, output.weathers.startWith([]))
-            .subscribe(onNext: { locations, weathers in
+
+        Observable.combineLatest(output.locations, output.weathers)
+            .subscribe(onNext: { [weak self] locations, weathers in
+                guard let self = self else {
+                    return
+                }
+
                 let zip = zip(locations, weathers)
+                print(zip)
                 let identifer = self.snapshot.itemIdentifiers(inSection: .location)
                 self.snapshot.deleteItems(identifer)
-                self.snapshot.appendItems(zip.map { LocationItem.location($0.0, $0.1)}, toSection: .location)
-                self.locationDataSource?.apply(self.snapshot)
+                self.snapshot.appendItems(
+                    zip.map { LocationItem.location($0.0, $0.1)},
+                    toSection: .location
+                )
+                self.dataSourcee?.apply(self.snapshot)
             })
             .disposed(by: self.disposeBag)
 
         output.searchedLocations
-            .drive(searchTableViewController.tableView.rx.items(cellIdentifier: "cell", cellType: LocationSearchResultTableViewCell.self)) {
-                index, item, cell in
-                cell.configure(with: item.address.fullAddress, indexPath: index, searchQuery: self.searchController.searchBar.text)
+            .drive(searchTableViewController.tableView.rx.items(
+                cellIdentifier: "cell",
+                cellType: LocationSearchResultTableViewCell.self
+            )) { _, item, cell in
+                cell.configure(
+                    with: item.address.fullAddress,
+                    searchQuery: self.searchController.searchBar.text
+                )
             }
+            .disposed(by: self.disposeBag)
+
+        output.locationDidDeleted
+            .subscribe()
+            .disposed(by: self.disposeBag)
+
+        output.newLocationCreated
+            .subscribe()
             .disposed(by: self.disposeBag)
     }
 
     private func configureSearchedTableView() {
-        guard let searchTableViewController = self.searchController.searchResultsController as? LocationSearchResultViewController else {
+        guard let searchTableViewController = self.searchController
+                .searchResultsController as? LocationSearchResultViewController else {
             return
         }
-        self.locationDataSource = dataSource()
-        searchTableViewController.tableView.register(LocationSearchResultTableViewCell.self, forCellReuseIdentifier: "cell")
+        self.dataSourcee = dataSource()
+        searchTableViewController.tableView.register(
+            LocationSearchResultTableViewCell.self,
+            forCellReuseIdentifier: "cell"
+        )
     }
 
     private func configureTableView() {

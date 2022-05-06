@@ -187,37 +187,44 @@ extension LocationViewController {
         }
     }
 
-    private func trailingSwipeActionConfigurationForListCellItem(_ item: LocationItem) -> UISwipeActionsConfiguration? {
-        let deletedAction = UIContextualAction(style: .destructive, title: nil) { [weak self] action, view, completion in
+    private func trailingSwipeActionConfigurationForListCellItem(
+        _ item: LocationItem
+    ) -> UISwipeActionsConfiguration? {
+        let deletedAction = UIContextualAction(
+            style: .destructive,
+            title: nil
+        ) { [weak self] _, _, completion in
             switch item {
-            case .location(let locationInfo, let currentWeather):
+            case .location(let locationInfo, _):
                 self?.deletedAction.onNext(locationInfo)
             }
             completion(true)
         }
+
         deletedAction.image = UIImage(systemName: "trash.fill")
         deletedAction.backgroundColor = UIColor.deepSky
         return UISwipeActionsConfiguration(actions: [deletedAction])
     }
 
     private func createLayout() -> UICollectionViewLayout {
-
         let layout = UICollectionViewCompositionalLayout { _, layoutEnvironment in
             var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 
             configuration.backgroundColor = .clear
             configuration.showsSeparators = false
             configuration.trailingSwipeActionsConfigurationProvider = { [weak self] (indexPath) in
-                guard let item = self?.locationDataSource?.itemIdentifier(for: indexPath) else {
+                guard let item = self?.dataSourcee?.itemIdentifier(for: indexPath) else {
                     return nil
                 }
                 return self?.trailingSwipeActionConfigurationForListCellItem(item)
             }
-            let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+            let section = NSCollectionLayoutSection.list(
+                using: configuration, layoutEnvironment: layoutEnvironment
+            )
             section.interGroupSpacing = 10
             return section
         }
-        
+
         return layout
     }
 }

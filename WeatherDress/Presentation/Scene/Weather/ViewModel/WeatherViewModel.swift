@@ -50,20 +50,23 @@ final class WeatherViewModel {
             .asDriver(onErrorJustReturn: false)
 
         let currentWeather = self.locationInfo
-            .flatMap {
-                self.useCase.fetchCurrentWeather(from: $0)
+            .withUnretained(self)
+            .flatMap { viewModel, locationInfo in
+                viewModel.useCase.fetchCurrentWeather(from: locationInfo)
             }
             .share()
 
-        let hourlyWeathers = locationInfo
-            .flatMap {
-                self.useCase.fetchHourlWeatehr(from: $0)
+        let hourlyWeathers = self.locationInfo
+            .withUnretained(self)
+            .flatMap { viewModel, locationInfo in
+                self.useCase.fetchHourlWeatehr(from: locationInfo)
             }
             .share()
 
         let dailyWeathers = locationInfo
-            .flatMap {
-                self.useCase.fetchDailyWeather(from: $0)
+            .withUnretained(self)
+            .flatMap { viewModel, locationInfo in
+                viewModel.useCase.fetchDailyWeather(from: locationInfo)
             }
             .share()
 

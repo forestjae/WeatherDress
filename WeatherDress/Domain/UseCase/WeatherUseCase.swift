@@ -16,14 +16,14 @@ final class WeatherUseCase {
     }
 
     func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather> {
-        return self.repository.fetchCurrentWeather(from: location)
+        return self.repository.fetchCurrentWeather(for: location, at: Date())
     }
 
     func fetchHourlWeatehr(from location: LocationInfo) -> Observable<[HourlyWeather]> {
-        return self.repository.fetchHourlyWeathers(from: location)
+        return self.repository.fetchHourlyWeathers(for: location, at: Date())
     }
 
     func fetchDailyWeather(from location: LocationInfo) -> Observable<[DailyWeather]> {
-        return self.repository.fetchDailyWeathers(from: location)
+        return self.repository.fetchDailyWeathers(for: location, at: Date())
     }
 }

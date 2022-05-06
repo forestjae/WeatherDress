@@ -9,7 +9,18 @@ import Foundation
 import RxSwift
 
 protocol WeatherRepository {
-    func fetchCurrentWeather(from location: LocationInfo) -> Observable<CurrentWeather>
-    func fetchHourlyWeathers(from location: LocationInfo) -> Observable<[HourlyWeather]>
-    func fetchDailyWeathers(from location: LocationInfo) -> Observable<[DailyWeather]>
+    func fetchCurrentWeather(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<CurrentWeather>
+
+    func fetchHourlyWeathers(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<[HourlyWeather]>
+
+    func fetchDailyWeathers(
+        for location: LocationInfo,
+        at date: Date
+    ) -> Observable<[DailyWeather]>
 }

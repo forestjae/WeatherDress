@@ -282,59 +282,44 @@ class WeatherViewController: UIViewController {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         configuration.interSectionSpacing = 10
 
-        let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, layoutEnvironment in
-            guard let sectionLayoutKind = WeatherSection(rawValue: sectionIndex) else {
-                return nil
-            }
+        let layout = UICollectionViewCompositionalLayout(
+            sectionProvider: { sectionIndex, _ in
+                guard let sectionLayoutKind = WeatherSection(rawValue: sectionIndex) else {
+                    return nil
+                }
 
-            switch sectionLayoutKind {
-            case .hourly:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
-                let groupHeight = NSCollectionLayoutDimension.absolute(100)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: groupHeight)
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+                let item = NSCollectionLayoutItem(layoutSize: sectionLayoutKind.itemSize)
+                item.contentInsets = sectionLayoutKind.itemInset
+
+                let groupSize = sectionLayoutKind.groupSize
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitem: item,
+                    count: 1
+                )
                 let section = NSCollectionLayoutSection(group: group)
-                let titleSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .estimated(34))
+                let titleSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(34)
+                )
                 let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
                     layoutSize: titleSize,
                     elementKind: "header",
-                    alignment: .top)
+                    alignment: .top
+                )
                 section.boundarySupplementaryItems = [titleSupplementary]
-                section.orthogonalScrollingBehavior = .continuous
+                section.orthogonalScrollingBehavior = sectionLayoutKind.orthogonalBehavior
                 let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "background")
-
+                    elementKind: "background"
+                )
 
                 section.decorationItems = [sectionBackgroundDecoration]
                 return section
-            case .daily:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
-                let groupHeight = NSCollectionLayoutDimension.absolute(45)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-                let section = NSCollectionLayoutSection(group: group)
-                let titleSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .estimated(34))
-                let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: titleSize,
-                    elementKind: "header",
-                    alignment: .top)
-                section.boundarySupplementaryItems = [titleSupplementary]
-                let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "background")
-                section.decorationItems = [sectionBackgroundDecoration]
-                return section
-            }
-        }, configuration: configuration)
+            },
+            configuration: configuration
+        )
 
-        layout.register(
-            HourlyBackgroundView.self,
-            forDecorationViewOfKind: "background")
+        layout.register(HourlyBackgroundView.self, forDecorationViewOfKind: "background")
 
         return layout
     }
@@ -348,6 +333,52 @@ enum WeatherItem: Hashable {
 enum WeatherSection: Int {
     case hourly
     case daily
+
+    var itemSize: NSCollectionLayoutSize {
+        switch self {
+        case .hourly:
+            return NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.2),
+                heightDimension: .fractionalHeight(1.0)
+            )
+        case .daily:
+            return NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.2),
+                heightDimension: .fractionalHeight(1.0)
+            )
+        }
+    }
+
+    var itemInset: NSDirectionalEdgeInsets {
+        switch self {
+        case .hourly, .daily:
+            return NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+        }
+    }
+
+    var groupSize: NSCollectionLayoutSize {
+        switch self {
+        case .hourly:
+            return NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.2),
+                heightDimension: .absolute(100)
+            )
+        case .daily:
+            return NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(45)
+            )
+        }
+    }
+
+    var orthogonalBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
+        switch self {
+        case .hourly:
+            return .continuous
+        case .daily:
+            return .none
+        }
+    }
 }
 
 extension WeatherViewController {

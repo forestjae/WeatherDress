@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class LocationListCoordinator: Coordinator<LocationListDismissAction> {
-    
+
     private let parentViewController: UIViewController
 
     init(parentViewController: UIViewController) {
@@ -22,13 +22,17 @@ class LocationListCoordinator: Coordinator<LocationListDismissAction> {
         let locationListViewModel = LocationViewModel(
             useCase: LocationUseCase(
                 repository: sharedRepo
-            ), weatherUseCase: WeatherUseCase(
+            ),
+            weatherUseCase: WeatherUseCase(
                 repository: DefaultWeatherRepository(
                     apiService: WeatherService(apiProvider: DefaultAPIProvider())))
-            , coordinator: self
+            ,
+            coordinator: self
         )
         locationListViewController.viewModel = locationListViewModel
-        let navigationController = UINavigationController(rootViewController: locationListViewController)
+        let navigationController = UINavigationController(
+            rootViewController: locationListViewController
+        )
         navigationController.modalTransitionStyle = .crossDissolve
         navigationController.modalPresentationStyle = .fullScreen
         self.parentViewController.present(navigationController, animated: true, completion: nil)
@@ -37,7 +41,6 @@ class LocationListCoordinator: Coordinator<LocationListDismissAction> {
             .map { LocationListDismissAction.cellDidTap(index: $0) }
 
         return locationResult
-            .take(1)
             .do(onNext: { _ in
                 locationListViewController.dismiss(animated: true, completion: nil)
             })

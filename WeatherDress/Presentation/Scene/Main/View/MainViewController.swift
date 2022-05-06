@@ -126,6 +126,12 @@ class MainViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(to: self.pageControl.rx.numberOfPages)
             .disposed(by: self.disposeBag)
+
+        output.currentIndex
+            .subscribe(onNext: {
+                self.setCurrentPageViewController(at: $0)
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 

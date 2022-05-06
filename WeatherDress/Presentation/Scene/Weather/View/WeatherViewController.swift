@@ -222,7 +222,11 @@ class WeatherViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.hourlyWeatherItem
-            .drive(onNext: {
+            .drive(onNext: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 let identifer = self.snapshot.itemIdentifiers(inSection: .hourly)
                 self.snapshot.deleteItems(identifer)
                 self.snapshot.appendItems($0.map { WeatherItem.hourly($0)}, toSection: .hourly)
@@ -231,7 +235,11 @@ class WeatherViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.dailyWeatherItem
-            .drive(onNext: {
+            .drive(onNext: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 let identifer = self.snapshot.itemIdentifiers(inSection: .daily)
                 self.snapshot.deleteItems(identifer)
                 self.snapshot.appendItems($0.map { WeatherItem.daily($0)}, toSection: .daily)
@@ -245,8 +253,8 @@ class WeatherViewController: UIViewController {
 
         output.currentWeatherConditionImageURL
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { string, type in
-                self.currentWeatherImageView.setImage(by: string, type: type)}
+            .subscribe(onNext: { [weak self] imageURL, type in
+                self?.currentWeatherImageView.setImage(by: imageURL, type: type)}
             )
             .disposed(by: self.disposeBag)
 

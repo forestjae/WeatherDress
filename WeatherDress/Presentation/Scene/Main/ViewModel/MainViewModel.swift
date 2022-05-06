@@ -11,15 +11,15 @@ import RxDataSources
 
 final class MainViewModel {
 
-    var coordinator: PageSceneCoordinator?
+    let coordinator: PageSceneCoordinator
 
     private let disposeBag = DisposeBag()
     private let useCase: LocationUseCase
-    private(set) var locations = PublishSubject<[LocationInfo]>()
     private(set) var locationButtonDidTap = PublishSubject<Void>()
 
-    init(useCase: LocationUseCase) {
+    init(useCase: LocationUseCase, coordinator: PageSceneCoordinator) {
         self.useCase = useCase
+        self.coordinator = coordinator
     }
 
     struct Input {
@@ -29,28 +29,31 @@ final class MainViewModel {
 
     struct Output {
         let locations: Observable<[LocationInfo]>
+        let currentIndex: Observable<Int>
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
         let locations = input.viewWillAppear
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.useCase.fetchLocations()
+            }
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { [weak self] locations in
+                self?.coordinator.setChildViewController(with: locations)
+            })
+
+        let currentIndex = input.locationButtonDidTap
+            .compactMap {
+                self.coordinator
+            }
             .flatMap {
-                self.useCase.fetchLocations()
+                $0.coordinateToLocationList()
             }
 
-        locations
-            .subscribe(onNext: {
-                self.locations.onNext($0)
-            })
-            .disposed(by: self.disposeBag)
-
-        input.locationButtonDidTap
-            .subscribe(onNext: {
-                self.locationButtonDidTap.onNext($0)
-            })
-            .disposed(by: self.disposeBag)
-
         return Output(
-            locations: self.locations
+            locations: locations,
+            currentIndex: currentIndex
         )
     }
 }

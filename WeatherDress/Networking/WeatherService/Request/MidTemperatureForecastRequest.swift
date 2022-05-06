@@ -13,7 +13,7 @@ struct MidTemperatureForecastRequest: MidForecastRequestable {
     let path: String = "getMidTa"
     let headers: [String : String]? = nil
     let method: HTTPMethod = .get
-    let baseDate = Date() - 3600 * 6 - 1
+    let baseDate: Date // = Date() - 3600 * 6 - 1
     let dataType = "JSON"
     let regionIdentification: String
 

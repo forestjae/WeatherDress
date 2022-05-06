@@ -16,7 +16,6 @@ class LocationViewModel {
     private let weatherUseCase: WeatherUseCase
     private let coordinator: LocationListCoordinator
     private(set) var locationListCellDidTap = PublishSubject<Int>()
-    private(set) var locationListCellDidDeletedAt = PublishSubject<Int>()
 
     init(
         useCase: LocationUseCase,
@@ -31,16 +30,18 @@ class LocationViewModel {
     struct Input {
         let viewWillAppear: Observable<Void>
         let locationListCellSelected: Observable<Int>
+        let listCellDidDeleted: Observable<LocationInfo>
+        let acceptedToCreateLocation: Observable<LocationInfo>
         let searchBarText: Observable<String>
         let searchResultCellDidTap: Observable<LocationInfo>
-        let listCellDidDeleted: Observable<LocationInfo>
-        let createLocationAlertDidAccepted: Observable<LocationViewController.ActionType>
     }
 
     struct Output {
         let locations: Observable<[LocationInfo]>
         let weathers: Observable<[CurrentWeather]>
         let searchedLocations: Driver<[LocationInfo]>
+        let locationDidDeleted: Observable<Void>
+        let newLocationCreated: Observable<Void>
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
@@ -48,6 +49,7 @@ class LocationViewModel {
             .flatMap {
                 self.useCase.fetchLocations()
             }
+            .share()
 
         let weathers = locations
             .flatMap {
@@ -65,32 +67,24 @@ class LocationViewModel {
             .subscribe(self.locationListCellDidTap)
             .disposed(by: self.disposeBag)
 
-        input.listCellDidDeleted
-            .subscribe(onNext: {
+        let locationDidDeleted = input.listCellDidDeleted
+            .flatMap {
                 self.useCase.deleteLocation(location: $0)
-                    .subscribe(onCompleted: {
-                        print("성공")
-                    })
-            })
-            .disposed(by: self.disposeBag)
-
-        input.createLocationAlertDidAccepted
-            .subscribe(onNext: { result in
-                switch result {
-                case .ok(let locationInfo):
-                    self.useCase.createLocation(location: locationInfo)
-                        .subscribe({ _ in
-                            print("성공")
-                        })
-                case .cancel:
-                    print("실패")
-                }
             }
-            )
+            .map { _ in }
 
-        return Output(locations: locations,
-                      weathers: weathers,
-                      searchedLocations: searchResult
+        let newLocationCreated = input.acceptedToCreateLocation
+            .flatMap {
+                self.useCase.createLocation(location: $0)
+            }
+            .map { _ in }
+
+        return Output(
+            locations: locations,
+            weathers: weathers,
+            searchedLocations: searchResult,
+            locationDidDeleted: locationDidDeleted,
+            newLocationCreated: newLocationCreated
         )
     }
 }

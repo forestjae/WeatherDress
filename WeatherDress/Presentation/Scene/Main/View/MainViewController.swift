@@ -194,8 +194,8 @@ extension MainViewController: UIPageViewControllerDelegate {
         previousViewControllers: [UIViewController],
         transitionCompleted completed: Bool
     ) {
-        if let vc = pageViewController.viewControllers?.first {
-            pageControl.currentPage = vc.view.tag
+        if let viewController = pageViewController.viewControllers?.first {
+            pageControl.currentPage = viewController.view.tag
         }
     }
 }

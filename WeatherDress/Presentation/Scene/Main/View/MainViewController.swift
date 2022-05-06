@@ -52,15 +52,15 @@ class MainViewController: UIViewController {
     }
 
     func setCurrentPageViewController(at index: Int) {
-        self.pageViewController.dataSource = nil
-        self.pageViewController.dataSource = self
         self.pageViewController.setViewControllers(
             [self.orderedViewControllers[index]],
             direction: .forward,
             animated: true
         )
         self.pageControl.currentPage = index
-        self.pageViewController.didMove(toParent: self)
+        self.pageViewController.dataSource = nil
+        self.pageViewController.dataSource = self
+//        self.pageViewController.didMove(toParent: self)
     }
 
     private func configureHierarchy() {

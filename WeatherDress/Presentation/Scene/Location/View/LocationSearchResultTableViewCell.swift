@@ -27,7 +27,7 @@ class LocationSearchResultTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with string: String, indexPath: Int, searchQuery: String?) {
+    func configure(with string: String, searchQuery: String?) {
         guard let searchQuery = searchQuery else {
             return
         }

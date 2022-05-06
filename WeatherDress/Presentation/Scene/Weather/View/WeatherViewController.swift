@@ -17,11 +17,6 @@ private enum Design {
     static let mainFontColor: UIColor = .white
 }
 
-enum WeatherItem: Hashable {
-    case hourly(HourlyWeatherItemViewModel)
-    case daily(DailyWeatherItemViewModel)
-}
-
 class WeatherViewController: UIViewController {
 
     var viewModel: WeatherViewModel?
@@ -272,7 +267,6 @@ class WeatherViewController: UIViewController {
             DailyWeaterCollectionViewCell.self,
             forCellWithReuseIdentifier: "daily"
         )
-        
         self.hourlyWeatherCollectionView.register(
             HourlyCollectionReusableView.self,
             forSupplementaryViewOfKind: "header",
@@ -280,8 +274,7 @@ class WeatherViewController: UIViewController {
         )
 
         self.snapshot.appendSections([WeatherSection.hourly, WeatherSection.daily])
-
-        self.weatherDataSource = dataSource()
+        self.weatherDataSource = self.dataSource()
         self.provideSupplementaryViewForWeatherCollectionView()
     }
 
@@ -347,6 +340,11 @@ class WeatherViewController: UIViewController {
     }
 }
 
+enum WeatherItem: Hashable {
+    case hourly(HourlyWeatherItemViewModel)
+    case daily(DailyWeatherItemViewModel)
+}
+
 enum WeatherSection: Int {
     case hourly
     case daily
@@ -377,7 +375,7 @@ extension WeatherViewController {
     }
 
     private func provideSupplementaryViewForWeatherCollectionView() {
-        self.weatherDataSource?.supplementaryViewProvider = { (view, kind, indexPath) in
+        self.weatherDataSource?.supplementaryViewProvider = { (_, _, indexPath) in
             guard let header = self.hourlyWeatherCollectionView.dequeueReusableSupplementaryView(
                 ofKind: "header",
                 withReuseIdentifier: "header",

@@ -17,7 +17,7 @@ struct UltraShortNowcastWeatherItem {
         var dict = [UltraShortNowcastWeatherComponent: String]()
         items.forEach { item in
             let category = item.category
-            let value = item.obsrValue
+            let value = item.observedValue
             guard let component = UltraShortNowcastWeatherComponent(rawValue: category) else {
                 return
             }

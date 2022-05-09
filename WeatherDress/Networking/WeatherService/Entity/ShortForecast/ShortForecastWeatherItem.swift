@@ -15,7 +15,7 @@ struct ShortForecastWeatherList {
         var set = Set<String>()
 
         items.forEach { item in
-            set.insert(item.fcstDate + " " + item.fcstTime)
+            set.insert(item.forecastDate + " " + item.forecastTime)
         }
 
         let baseDateString = "\(items[0].baseDate) \(items[0].baseTime)"
@@ -32,10 +32,10 @@ struct ShortForecastWeatherList {
             let forecastTime = components[1]
             var dict = [ShortForecastWeatherComponent: String]()
             let filtered = items
-                .filter { $0.fcstDate == forecastDate && $0.fcstTime == forecastTime }
+                .filter { $0.forecastDate == forecastDate && $0.forecastTime == forecastTime }
             filtered.forEach { component in
                 let category = component.category
-                let value = component.fcstValue
+                let value = component.forecastValue
                 guard let component = ShortForecastWeatherComponent(rawValue: category) else {
                     return
                 }
@@ -67,14 +67,14 @@ struct ShortForecastWeatherItem {
     let dailyMaximumTemperature: Double?
     let windSpeed: Double
 
-    init?(date: Date, baseDate: Date, items: [ShortForecastWeatherComponentItem]) {
+    init?(date: Date, baseDate: Date, items: [UltraShortForecastWeatherComponentItem]) {
         self.forecastDate = date
         self.baseDate = baseDate
 
         var dict = [ShortForecastWeatherComponent: String]()
         items.forEach { item in
             let category = item.category
-            let value = item.fcstValue
+            let value = item.forecastValue
             guard let component = ShortForecastWeatherComponent(rawValue: category) else {
                 return
             }

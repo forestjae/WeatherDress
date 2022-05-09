@@ -10,29 +10,38 @@ import Foundation
 struct UltraShortNowcastWeatherResponse: APIResponse {
     let response: ResponseResult
 
-    struct ResponseResult: Codable {
+    struct ResponseResult: Decodable {
         let header: Header
         let body: Body?
     }
 
-    struct Body: Codable {
+    struct Body: Decodable {
         let dataType: String
         let items: Items
         let pageNo, numOfRows, totalCount: Int
     }
 
-    struct Items: Codable {
+    struct Items: Decodable {
         let item: [UltraShortNowcastWeatherComponentItem]
     }
 
-    struct Header: Codable {
+    struct Header: Decodable {
         let resultCode, resultMsg: String
     }
 }
 
-struct UltraShortNowcastWeatherComponentItem: Codable {
-    let baseDate, baseTime: String
+struct UltraShortNowcastWeatherComponentItem: Decodable {
+    let baseDate: String
+    let baseTime: String
     let category: String
-    let numberOfX, numberOfY: Int
-    let obsrValue: String
+    let observedValue: String
+    let numberOfX: Int
+    let numberOfY: Int
+
+    enum CodingKeys: String, CodingKey {
+        case baseDate, baseTime, category
+        case observedValue = "obsrValue"
+        case numberOfX = "nx"
+        case numberOfY = "ny"
+    }
 }

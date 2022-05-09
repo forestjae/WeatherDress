@@ -18,7 +18,7 @@ class LocationListCoordinator: Coordinator<LocationListDismissAction> {
     }
 
     override func start() -> Observable<LocationListDismissAction> {
-        guard let database = RealmService() else {
+        guard let database = RealmService.shared else {
             return Observable.never()
         }
         let locationListViewController = LocationViewController()

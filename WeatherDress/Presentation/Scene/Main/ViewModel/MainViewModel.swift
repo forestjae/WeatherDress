@@ -7,7 +7,7 @@
 
 import Foundation
 import RxSwift
-import RxDataSources
+import RxCocoa
 
 final class MainViewModel {
 
@@ -28,28 +28,25 @@ final class MainViewModel {
     }
 
     struct Output {
-        let locations: Observable<[LocationInfo]>
-        let currentIndex: Observable<Int>
+        let locations: Driver<[LocationInfo]>
+        let currentIndex: Driver<Int>
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        let locations = input.viewWillAppear
-            .withUnretained(self)
-            .flatMap { viewModel, _ in
-                viewModel.useCase.fetchLocations()
-            }
+        let locations = self.useCase.fetchLocations()
+            .share()
             .observe(on: MainScheduler.instance)
             .do(onNext: { [weak self] locations in
                 self?.coordinator.setChildViewController(with: locations)
             })
+            .asDriver(onErrorJustReturn: [])
 
         let currentIndex = input.locationButtonDidTap
-            .compactMap {
-                self.coordinator
+            .withUnretained(self.coordinator)
+            .flatMap { coordinator, _ in
+                coordinator.coordinateToLocationList()
             }
-            .flatMap {
-                $0.coordinateToLocationList()
-            }
+            .asDriver(onErrorJustReturn: 0)
 
         return Output(
             locations: locations,

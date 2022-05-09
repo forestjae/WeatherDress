@@ -22,9 +22,10 @@ class PageSceneCoordinator: Coordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
-        guard let database = RealmService() else {
+        guard let database = RealmService.shared else {
             return Observable.never()
         }
+
         let viewModel = MainViewModel(
             useCase: LocationUseCase(
                 repository: DefaultLocationRepository(

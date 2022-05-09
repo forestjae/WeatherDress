@@ -46,20 +46,25 @@ class LocationViewModel {
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
         let locations = input.viewWillAppear
-            .flatMap {
-                self.useCase.fetchLocations()
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.useCase.fetchLocations()
             }
             .share()
 
         let weathers = locations
-            .flatMap {
-                Observable.zip($0.map { self.weatherUseCase.fetchCurrentWeather(from: $0) })
+            .withUnretained(self)
+            .flatMap { viewModel, locations in
+                Observable.zip(
+                    locations.map { viewModel.weatherUseCase.fetchCurrentWeather(from: $0) }
+                )
             }
             .share()
 
         let searchResult = input.searchBarText
-            .flatMap { string in
-                self.useCase.search(for: string)
+            .withUnretained(self)
+            .flatMap { viewModel, query in
+                viewModel.useCase.search(for: query)
             }
             .asDriver(onErrorJustReturn: [])
 
@@ -68,14 +73,16 @@ class LocationViewModel {
             .disposed(by: self.disposeBag)
 
         let locationDidDeleted = input.listCellDidDeleted
-            .flatMap {
-                self.useCase.deleteLocation(location: $0)
+            .withUnretained(self)
+            .flatMap { viewModel, location in
+                viewModel.useCase.deleteLocation(location: location)
             }
             .map { _ in }
 
         let newLocationCreated = input.acceptedToCreateLocation
-            .flatMap {
-                self.useCase.createLocation(location: $0)
+            .withUnretained(self)
+            .flatMap { viewModel, location in
+                viewModel.useCase.createLocation(location: location)
             }
             .map { _ in }
 

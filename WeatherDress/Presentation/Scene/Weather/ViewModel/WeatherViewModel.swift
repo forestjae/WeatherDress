@@ -59,7 +59,7 @@ final class WeatherViewModel {
         let hourlyWeathers = self.locationInfo
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
-                self.useCase.fetchHourlWeatehr(from: locationInfo)
+                viewModel.useCase.fetchHourlWeatehr(from: locationInfo)
             }
             .share()
 

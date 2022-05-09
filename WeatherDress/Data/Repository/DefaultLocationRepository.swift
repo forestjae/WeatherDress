@@ -15,7 +15,6 @@ final class DefaultLocationRepository: LocationRepository {
     private let dataBase: LocalDatabaseService
     private let favoriteLocations: BehaviorSubject<[LocationInfo]>
     private let currentLocation: BehaviorSubject<LocationInfo?>
-    //private let currentLocation: Observable<CLLocation>
 
     init(apiService: GeoSearchService, database: LocalDatabaseService) {
         self.apiService = apiService
@@ -28,8 +27,8 @@ final class DefaultLocationRepository: LocationRepository {
                 xCoordinate: $0.coordinate.longitude,
                 yCoordinate: $0.coordinate.latitude
                 )}
-            .subscribe(onNext: {
-                self.currentLocation.onNext($0)
+            .subscribe(onNext: { [weak self] in
+                self?.currentLocation.onNext($0)
             })
     }
 

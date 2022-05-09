@@ -18,10 +18,17 @@ class LocationListCoordinator: Coordinator<LocationListDismissAction> {
     }
 
     override func start() -> Observable<LocationListDismissAction> {
+        guard let database = RealmService() else {
+            return Observable.never()
+        }
         let locationListViewController = LocationViewController()
         let locationListViewModel = LocationViewModel(
             useCase: LocationUseCase(
-                repository: sharedRepo
+                repository: DefaultLocationRepository(
+                    apiService: GeoSearchService(
+                        apiProvider: DefaultAPIProvider()
+                    ),
+                    database: database)
             ),
             weatherUseCase: WeatherUseCase(
                 repository: DefaultWeatherRepository(

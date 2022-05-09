@@ -30,8 +30,9 @@ final class LocationManager: NSObject {
         guard CLLocationManager.locationServicesEnabled() else {
             return .error(LocationError.disabledService)
         }
-
+        self.locationPublisher = PublishSubject<CLLocation>()
         self.manager.startUpdatingLocation()
+
         return self.locationPublisher
     }
 
@@ -56,9 +57,12 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.manager.stopUpdatingLocation()
+
         guard let last = locations.last else { return }
 
         self.locationPublisher.onNext(last)
+        self.locationPublisher.onCompleted()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

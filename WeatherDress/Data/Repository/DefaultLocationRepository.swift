@@ -62,5 +62,3 @@ final class DefaultLocationRepository: LocationRepository {
         return self.apiService.searchAddress(by: query).asObservable()
     }
 }
-
-let sharedRepo = DefaultLocationRepository(apiService: GeoSearchService(apiProvider: DefaultAPIProvider()), database: RealmService()!)

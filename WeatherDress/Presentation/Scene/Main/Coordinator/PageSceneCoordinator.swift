@@ -22,8 +22,19 @@ class PageSceneCoordinator: Coordinator<Void> {
     }
 
     override func start() -> Observable<Void> {
+        guard let database = RealmService() else {
+            return Observable.never()
+        }
         let viewModel = MainViewModel(
-            useCase: LocationUseCase(repository: sharedRepo), coordinator: self)
+            useCase: LocationUseCase(
+                repository: DefaultLocationRepository(
+                    apiService: GeoSearchService(
+                        apiProvider: DefaultAPIProvider()
+                    ),
+                    database: database)
+            ),
+            coordinator: self
+        )
         self.mainViewController.viewModel = viewModel
         self.navigationController.setViewControllers([self.mainViewController], animated: true)
 

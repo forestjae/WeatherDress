@@ -9,11 +9,6 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-enum RealmError: Error {
-    case createFailure
-    case deleteFailure
-}
-
 class RealmManager {
     static let shared = RealmManager()
     let realm: Realm

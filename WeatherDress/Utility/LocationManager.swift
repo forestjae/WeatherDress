@@ -10,7 +10,7 @@ import CoreLocation
 import RxSwift
 
 final class LocationManager: NSObject {
-    
+
     static let shared = LocationManager()
     private var manager: CLLocationManager = {
         let manager = CLLocationManager()

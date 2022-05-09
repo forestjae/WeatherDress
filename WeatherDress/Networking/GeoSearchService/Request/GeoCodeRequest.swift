@@ -12,7 +12,7 @@ struct GeocodeRequest: GeoSerachRequestable {
 
     let path: String = "geo/coord2regioncode.json"
     let method: HTTPMethod = .get
-    let headers: [String : String]? = ["Authorization": "KakaoAK \(Bundle.main.kakaoApiKey)"]
+    let headers: [String: String]? = ["Authorization": "KakaoAK \(Bundle.main.kakaoApiKey)"]
     let xCoordinate: Double
     let yCoordinate: Double
 

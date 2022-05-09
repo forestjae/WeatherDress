@@ -33,5 +33,5 @@ struct ShortForecastWeatherResponse: APIResponse {
 struct ShortForecastWeatherComponentItem: Codable {
     let baseDate, baseTime, category, fcstDate: String
     let fcstTime, fcstValue: String
-    let nx, ny: Int
+    let numberOfX, numberOfY: Int
 }

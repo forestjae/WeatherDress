@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum CacheError: Error {
     case notCached
 }

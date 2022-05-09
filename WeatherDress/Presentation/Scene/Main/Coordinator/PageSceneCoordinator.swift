@@ -60,10 +60,10 @@ class PageSceneCoordinator: Coordinator<Void> {
         let childCount = self.mainViewController.orderedViewControllers.count
         if  childCount == 0 {
             self.mainViewController.orderedViewControllers = locations.enumerated()
-                .map { index, lc in
-                    let vc = self.makeWeatherViewController(with: lc)
-                    vc.view.tag = index
-                    return vc
+                .map { index, location in
+                    let viewController = self.makeWeatherViewController(with: location)
+                    viewController.view.tag = index
+                    return viewController
                 }
 
             self.mainViewController.setCurrentPageViewController(at: 0)
@@ -71,15 +71,15 @@ class PageSceneCoordinator: Coordinator<Void> {
             guard let last = locations.last else {
                 return
             }
-            let vc = self.makeWeatherViewController(with: last)
-            vc.view.tag = locations.count - 1
 
-            self.mainViewController.orderedViewControllers.append(vc)
+            let viewController = self.makeWeatherViewController(with: last)
+            viewController.view.tag = locations.count - 1
+            self.mainViewController.orderedViewControllers.append(viewController)
             self.mainViewController.setCurrentPageViewController(at: 0)
         } else if childCount > locations.count {
             zip(self.mainViewController.orderedViewControllers, locations)
-            .forEach { vc, location in
-                vc.viewModel?.setLocationInfo(location)
+            .forEach { viewController, location in
+                viewController.viewModel?.setLocationInfo(location)
             }
 
             self.mainViewController.orderedViewControllers.remove(at: locations.count)

@@ -28,7 +28,10 @@ class LocationViewController: UIViewController {
         controller.hidesNavigationBarDuringPresentation = true
         controller.obscuresBackgroundDuringPresentation = true
         controller.searchBar.barStyle = .black
-        controller.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "위치를 입력해주세요", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        controller.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "위치를 입력해주세요",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
+        )
         controller.searchBar.searchTextField.tintColor = .white
         controller.searchBar.searchTextField.backgroundColor = UIColor.darkSky
         controller.searchBar.setValue("취소", forKey: "cancelButtonText")

@@ -8,10 +8,12 @@
 import Foundation
 
 struct GridConverting {
+
     enum Mode {
         case toGrid
         case toCoordinate
     }
+
     static func convertGRID_GPS(
         mode: Mode,
         xComponent: Double,

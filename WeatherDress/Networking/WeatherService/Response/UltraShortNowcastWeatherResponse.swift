@@ -33,6 +33,6 @@ struct UltraShortNowcastWeatherResponse: APIResponse {
 struct UltraShortNowcastWeatherComponentItem: Codable {
     let baseDate, baseTime: String
     let category: String
-    let nx, ny: Int
+    let numberOfX, numberOfY: Int
     let obsrValue: String
 }

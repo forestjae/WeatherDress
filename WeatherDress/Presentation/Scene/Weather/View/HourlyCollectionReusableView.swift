@@ -9,14 +9,13 @@ import UIKit
 import SnapKit
 
 private enum Design {
-    static let mainFont: UIFont = .systemFont(ofSize: 16, weight: .bold).metrics(for: .body)
-    static let mainFontColor: UIColor = .white
+    static let mainFont: UIFont = .systemFont(ofSize: 14, weight: .bold).metrics(for: .body)
+    static let mainFontColor: UIColor = .cold
 }
 
 class HourlyCollectionReusableView: UICollectionReusableView {
     private let hourlyWeatherTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "시간대별 날씨"
         label.font = Design.mainFont
         label.textColor = Design.mainFontColor
         label.textAlignment = .left
@@ -26,16 +25,16 @@ class HourlyCollectionReusableView: UICollectionReusableView {
     private let minTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "최저"
-        label.font = Design.mainFont
-        label.textColor = Design.mainFontColor
+        label.font = .systemFont(ofSize: 16, weight: .bold).metrics(for: .body)
+        label.textColor = .white
         return label
     }()
 
     private let maxTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "최고"
-        label.font = Design.mainFont
-        label.textColor = Design.mainFontColor
+        label.font = .systemFont(ofSize: 16, weight: .bold).metrics(for: .body)
+        label.textColor = .white
         label.textAlignment = .left
         return label
     }()
@@ -71,20 +70,29 @@ class HourlyCollectionReusableView: UICollectionReusableView {
 
         switch section {
         case .hourly:
-            self.hourlyWeatherTitleLabel.text = "시간별 날씨"
+            self.hourlyWeatherTitleLabel.attributedText = "시간별 예보".attach(
+                with: "clock.circle.fill",
+                pointSize: 14,
+                tintColor: .cold
+            )
+
             self.maxTitleLabel.isHidden = true
             self.minTitleLabel.isHidden = true
         case .daily:
-            self.hourlyWeatherTitleLabel.text = "일별 날씨"
+            self.hourlyWeatherTitleLabel.attributedText = "일별 예보".attach(
+                with: "calendar",
+                pointSize: 14,
+                tintColor: .cold
+            )
 
             self.minTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(self).offset(10)
-                $0.trailing.equalTo(self).offset(-58)
+                $0.trailing.equalTo(self).offset(-60)
             }
 
             self.maxTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(self).offset(10)
-                $0.trailing.equalTo(self).offset(-18)
+                $0.trailing.equalTo(self).offset(-16)
             }
         }
     }

@@ -44,11 +44,11 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.binding()
+        self.configureController()
         self.configureSubviews()
         self.configureHierarchy()
         self.configureConstraint()
-        self.view.backgroundColor = UIColor.lightSky
+        self.binding()
     }
 
     func setCurrentPageViewController(at index: Int) {
@@ -60,7 +60,32 @@ class MainViewController: UIViewController {
         self.pageControl.currentPage = index
         self.pageViewController.dataSource = nil
         self.pageViewController.dataSource = self
-//        self.pageViewController.didMove(toParent: self)
+    }
+
+    private func configureController() {
+        self.view.backgroundColor = UIColor.lightSky
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.view.bounds
+
+        let colors: [CGColor] = [
+            UIColor.deepSky.cgColor,
+            UIColor.deepSky.cgColor,
+            UIColor.lightSky.cgColor,
+            UIColor.lightSky.cgColor,
+            UIColor.lightSky.cgColor,
+            UIColor.skyWhite.cgColor,
+            UIColor.skyWhite.cgColor
+        ]
+        gradientLayer.colors = colors
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        self.view.layer.addSublayer(gradientLayer)
+    }
+
+    private func configureSubviews() {
+        self.configureToolbar()
+        self.configurePageControl()
+        self.configurePageViewController()
     }
 
     private func configureHierarchy() {
@@ -78,36 +103,6 @@ class MainViewController: UIViewController {
         self.toolBar.snp.makeConstraints {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             $0.width.equalTo(self.view)
-        }
-    }
-
-    private func configureSubviews() {
-        self.configureToolbar()
-        self.configurePageControl()
-        self.configurePageViewController()
-    }
-
-    private func configurePageViewController() {
-        self.pageViewController.dataSource = self
-        self.pageViewController.delegate = self
-    }
-
-    private func configureToolbar() {
-        self.toolBar.barTintColor = UIColor.moderateSky
-        self.toolBar.backgroundColor = .white
-        self.toolBar.isHidden = false
-        self.toolBar.items = [
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: self.pageControl),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            self.listBarButtonItem
-        ]
-    }
-
-    private func configurePageControl() {
-        self.pageControl.numberOfPages = 1
-        if #available(iOS 14.0, *) {
-            self.pageControl.setIndicatorImage(UIImage(systemName: "location.fill"), forPage: 0)
         }
     }
 
@@ -132,6 +127,30 @@ class MainViewController: UIViewController {
                 self.setCurrentPageViewController(at: $0)
             })
             .disposed(by: self.disposeBag)
+    }
+
+    private func configurePageViewController() {
+        self.pageViewController.dataSource = self
+        self.pageViewController.delegate = self
+    }
+
+    private func configureToolbar() {
+        self.toolBar.barTintColor = UIColor.moderateSky
+        self.toolBar.backgroundColor = .white
+        self.toolBar.isHidden = false
+        self.toolBar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(customView: self.pageControl),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            self.listBarButtonItem
+        ]
+    }
+
+    private func configurePageControl() {
+        self.pageControl.numberOfPages = 1
+        if #available(iOS 14.0, *) {
+            self.pageControl.setIndicatorImage(UIImage(systemName: "location.fill"), forPage: 0)
+        }
     }
 }
 

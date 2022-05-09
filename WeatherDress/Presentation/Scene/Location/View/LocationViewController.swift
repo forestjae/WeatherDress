@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import RxCocoa
 
 class LocationViewController: UIViewController {
     var viewModel: LocationViewModel?
@@ -88,18 +89,24 @@ class LocationViewController: UIViewController {
             return
         }
 
-        let searchQuery = self.searchController.searchBar.rx.text.orEmpty.asObservable()
-        let newLocationCreatedOK = searchTableViewController.tableView.rx
+        let searchQuery = BehaviorRelay(value: "")
+        _ = self.searchController.searchBar.rx.text.orEmpty
+            .subscribe(onNext: {
+                searchQuery.accept($0)
+            })
+
+        let newLocationCreationRequest = searchTableViewController.tableView.rx
             .modelSelected(LocationInfo.self)
             .asObservable()
             .flatMap { location in
                 self.alert(title: "새로운 도시를 추가하시겠습니까?", location: location)
             }
 
-        let locationCreatedButtonOK = newLocationCreatedOK
+        let locationCreatedButtonOK = newLocationCreationRequest
             .map { result -> LocationInfo in
                 switch result {
                 case .accept(let locationInfo):
+                    self.searchController.searchBar.text = ""
                     return locationInfo
                 }
             }
@@ -189,14 +196,13 @@ class LocationViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
             observable.onNext(.accept(location))
             observable.onCompleted()
+            self?.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .default, handler: { _ in
             observable.onCompleted()
         }))
         self?.present(alert, animated: true, completion: nil)
-        return Disposables.create {
-          self?.dismiss(animated: true, completion: nil)
-        }
+        return Disposables.create()
       }
     }
 
@@ -244,7 +250,6 @@ extension LocationViewController {
             }
             completion(true)
         }
-
         deletedAction.image = UIImage(systemName: "trash.fill")
         deletedAction.backgroundColor = UIColor.deepSky
         return UISwipeActionsConfiguration(actions: [deletedAction])

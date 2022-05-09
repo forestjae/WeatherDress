@@ -32,7 +32,7 @@ class LocationViewModel {
         let locationListCellSelected: Observable<Int>
         let listCellDidDeleted: Observable<LocationInfo>
         let acceptedToCreateLocation: Observable<LocationInfo>
-        let searchBarText: Observable<String>
+        let searchBarText: BehaviorRelay<String>
         let searchResultCellDidTap: Observable<LocationInfo>
     }
 

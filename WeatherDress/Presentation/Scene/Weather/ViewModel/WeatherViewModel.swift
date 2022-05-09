@@ -90,7 +90,7 @@ final class WeatherViewModel {
         let hourlyWeatherItemViewModel = Observable.combineLatest(currentWeather, hourlyWeathers)
             .map { currentWeather, hourlyWeathers in
                 [HourlyWeather(currentWeather: currentWeather)] + hourlyWeathers
-                    .filter { $0.date > Date() - 3600 }
+                    .filter { $0.date > Date() }
             }
             .map {
                 $0.enumerated().map { index, weather in

@@ -20,7 +20,7 @@ extension UIColor {
 }
 
 extension UIColor {
-
+    static let skyWhite = UIColor(red: 96 + 15, green: 144 + 23, blue: 206 + 33)
     static let lightSky = UIColor(red: 96, green: 144, blue: 206)
     static let moderateSky = UIColor(red: 67, green: 122, blue: 210)
     static let deepSky = UIColor(red: 67, green: 122, blue: 196)

@@ -13,9 +13,9 @@ import RxCocoa
 class LocationViewController: UIViewController {
     var viewModel: LocationViewModel?
 
-    private let disposeBag = DisposeBag()
     private var dataSource: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?
     private var snapshot = NSDiffableDataSourceSnapshot<LocationSection, LocationItem>()
+    private let disposeBag = DisposeBag()
     private let deletedAction = PublishSubject<LocationInfo>()
 
     private var locationCollectionView: UICollectionView = {
@@ -102,7 +102,7 @@ class LocationViewController: UIViewController {
                 self.alert(title: "새로운 도시를 추가하시겠습니까?", location: location)
             }
 
-        let locationCreatedButtonOK = newLocationCreationRequest
+        let locationCreationAccepted = newLocationCreationRequest
             .map { result -> LocationInfo in
                 switch result {
                 case .accept(let locationInfo):
@@ -114,11 +114,11 @@ class LocationViewController: UIViewController {
         let input = LocationViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
                 .map { _ in },
-            locationListCellSelected: self.locationCollectionView.rx
-                .itemSelected.map { $0.row }
+            locationListCellSelected: self.locationCollectionView.rx.itemSelected
+                .map { $0.row }
                 .asObservable(),
             listCellDidDeleted: self.deletedAction.asObservable(),
-            acceptedToCreateLocation: locationCreatedButtonOK,
+            acceptedToCreateLocation: locationCreationAccepted,
             searchBarText: searchQuery,
             searchResultCellDidTap: searchTableViewController.tableView.rx
                 .modelSelected(LocationInfo.self)

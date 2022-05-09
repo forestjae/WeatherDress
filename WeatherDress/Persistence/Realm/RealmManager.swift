@@ -7,11 +7,10 @@
 
 import Foundation
 import RealmSwift
-import RxSwift
 
 class RealmManager {
     static let shared = RealmManager()
-    let realm: Realm
+    private let realm: Realm
 
     init?() {
         guard let realm = try? Realm() else { return nil }

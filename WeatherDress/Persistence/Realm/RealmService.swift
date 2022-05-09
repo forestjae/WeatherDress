@@ -10,26 +10,30 @@ import RxSwift
 import RealmSwift
 
 class RealmService: LocalDatabaseService {
-    let manager: RealmManager
+    static let shared = RealmService()
+    private let manager: RealmManager
+    private let locations = BehaviorSubject<[LocationInfo]>(value: [])
 
     init?() {
         guard let manager = RealmManager.shared else {
             return nil
         }
         self.manager = manager
-    }
-
-    func fetch() -> [LocationInfo] {
         let result = self.manager.fetch(object: StorableLocationInfo.self)
         let locations = result.compactMap { LocationInfo($0) } as [LocationInfo]
-        return locations
+        self.locations.onNext(locations)
+    }
+
+    func fetch() -> Observable<[LocationInfo]> {
+        return self.locations
     }
 
     func create(_ location: LocationInfo) -> Completable {
         return Completable.create { completable in
             self.manager.create(location.storable()) { result in
                 switch result {
-                case .success:
+                case .success(let locations):
+                    self.reload()
                     completable(.completed)
                 case .failure(let error):
                     completable(.error(error))
@@ -49,6 +53,7 @@ class RealmService: LocalDatabaseService {
             self.manager.delete(predicate) { result in
                 switch result {
                 case .success:
+                    self.reload()
                     completable(.completed)
                 case .failure(let error):
                     completable(.error(error))
@@ -56,6 +61,12 @@ class RealmService: LocalDatabaseService {
             }
             return Disposables.create()
         }
+    }
+
+    private func reload() {
+        let result = self.manager.fetch(object: StorableLocationInfo.self)
+        let locations = result.compactMap { LocationInfo($0) } as [LocationInfo]
+        self.locations.onNext(locations)
     }
 }
 

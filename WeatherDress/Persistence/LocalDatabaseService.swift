@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol LocalDatabaseService {
-    func fetch() -> [LocationInfo]
+    func fetch() -> Observable<[LocationInfo]>
     func create(_ location: LocationInfo) -> Completable
     func delete(_ location: LocationInfo) -> Completable
 }

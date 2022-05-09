@@ -11,7 +11,7 @@ class HourlyBackgroundView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.deepSky
+        self.backgroundColor = UIColor.deepSky.withAlphaComponent(0.7)
         self.layer.cornerRadius = 10
     }
 

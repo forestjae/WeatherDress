@@ -13,7 +13,7 @@ class LocationViewController: UIViewController {
     var viewModel: LocationViewModel?
 
     private let disposeBag = DisposeBag()
-    private var dataSourcee: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?
+    private var dataSource: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?
     private var snapshot = NSDiffableDataSourceSnapshot<LocationSection, LocationItem>()
     private let deletedAction = PublishSubject<LocationInfo>()
 
@@ -125,14 +125,13 @@ class LocationViewController: UIViewController {
                 }
 
                 let zip = zip(locations, weathers)
-                print(zip)
                 let identifer = self.snapshot.itemIdentifiers(inSection: .location)
                 self.snapshot.deleteItems(identifer)
                 self.snapshot.appendItems(
                     zip.map { LocationItem.location($0.0, $0.1)},
                     toSection: .location
                 )
-                self.dataSourcee?.apply(self.snapshot)
+                self.dataSource?.apply(self.snapshot)
             })
             .disposed(by: self.disposeBag)
 
@@ -162,7 +161,7 @@ class LocationViewController: UIViewController {
                 .searchResultsController as? LocationSearchResultViewController else {
             return
         }
-        self.dataSourcee = dataSource()
+        self.dataSource = self.makeDataSource()
         searchTableViewController.tableView.register(
             LocationSearchResultTableViewCell.self,
             forCellReuseIdentifier: "cell"
@@ -213,7 +212,7 @@ class LocationViewController: UIViewController {
 }
 
 extension LocationViewController {
-    func dataSource() -> UICollectionViewDiffableDataSource<LocationSection, LocationItem> {
+    func makeDataSource() -> UICollectionViewDiffableDataSource<LocationSection, LocationItem> {
         return UICollectionViewDiffableDataSource<LocationSection, LocationItem>(
             collectionView: self.locationCollectionView
         ) { collectionView, indexPath, itemIdentifier in
@@ -255,7 +254,7 @@ extension LocationViewController {
             configuration.backgroundColor = .clear
             configuration.showsSeparators = false
             configuration.trailingSwipeActionsConfigurationProvider = { [weak self] (indexPath) in
-                guard let item = self?.dataSourcee?.itemIdentifier(for: indexPath) else {
+                guard let item = self?.dataSource?.itemIdentifier(for: indexPath) else {
                     return nil
                 }
                 return self?.trailingSwipeActionConfigurationForListCellItem(item)

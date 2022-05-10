@@ -15,7 +15,6 @@ final class MainViewModel {
 
     private let disposeBag = DisposeBag()
     private let useCase: LocationUseCase
-    private(set) var locationButtonDidTap = PublishSubject<Void>()
 
     init(useCase: LocationUseCase, coordinator: PageSceneCoordinator) {
         self.useCase = useCase

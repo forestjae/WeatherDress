@@ -60,6 +60,16 @@
                ReferencedContainer = "container:WeatherDress.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "33D96A9B282C034F009C549C"
+               BuildableName = "WeatherDressUseCaseTests.xctest"
+               BlueprintName = "WeatherDressUseCaseTests"
+               ReferencedContainer = "container:WeatherDress.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -148,6 +148,12 @@
 		33FF45792828C80E008054CB /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF45782828C80E008054CB /* String+Extension.swift */; };
 		33FF457B282905C8008054CB /* UltraShortNowcastRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364A29928214E3D00328A97 /* UltraShortNowcastRequest.swift */; };
 		33FF458228290BFC008054CB /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458128290BFC008054CB /* RealmError.swift */; };
+		33FF4586282A35CB008054CB /* Clothes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4585282A35CB008054CB /* Clothes.swift */; };
+		33FF458A282A9B97008054CB /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4589282A9B97008054CB /* Gender.swift */; };
+		33FF458C282A9BC2008054CB /* ClothesType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458B282A9BC2008054CB /* ClothesType.swift */; };
+		33FF458E282ABB2E008054CB /* TemperatureGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458D282ABB2E008054CB /* TemperatureGrade.swift */; };
+		33FF4590282ADA6D008054CB /* ClothesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458F282ADA6D008054CB /* ClothesUseCase.swift */; };
+		33FF4592282ADB1B008054CB /* ClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4591282ADB1B008054CB /* ClothesRepository.swift */; };
 		41B85C1C7CA38885D1F1EE0F /* Pods_WeatherDress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B7AFD4AA172E9E270FA89 /* Pods_WeatherDress.framework */; };
 		BCB931D483E732A86CE4B45F /* Pods_APINetworkingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEB871FFD4D1E8BEE0E4D67 /* Pods_APINetworkingTests.framework */; };
 		EC07D3D4A2D9A3C445DE9ADD /* Pods_WeatherDress_WeatherDressUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D53848C356609BB2F8C5971A /* Pods_WeatherDress_WeatherDressUITests.framework */; };
@@ -288,6 +294,12 @@
 		33A1EFE7280514300031ACED /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
 		33FF45782828C80E008054CB /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		33FF458128290BFC008054CB /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
+		33FF4585282A35CB008054CB /* Clothes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothes.swift; sourceTree = "<group>"; };
+		33FF4589282A9B97008054CB /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
+		33FF458B282A9BC2008054CB /* ClothesType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesType.swift; sourceTree = "<group>"; };
+		33FF458D282ABB2E008054CB /* TemperatureGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureGrade.swift; sourceTree = "<group>"; };
+		33FF458F282ADA6D008054CB /* ClothesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesUseCase.swift; sourceTree = "<group>"; };
+		33FF4591282ADB1B008054CB /* ClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesRepository.swift; sourceTree = "<group>"; };
 		4DCB2E0A4A62D744DA9D99A3 /* Pods-APINetworkingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APINetworkingTests.release.xcconfig"; path = "Target Support Files/Pods-APINetworkingTests/Pods-APINetworkingTests.release.xcconfig"; sourceTree = "<group>"; };
 		6F4802498C5BD3DA6784316D /* Pods-WeatherDress-WeatherDressUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherDress-WeatherDressUITests.debug.xcconfig"; path = "Target Support Files/Pods-WeatherDress-WeatherDressUITests/Pods-WeatherDress-WeatherDressUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7A275B483B628928F6715169 /* Pods-WeatherDress.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherDress.debug.xcconfig"; path = "Target Support Files/Pods-WeatherDress/Pods-WeatherDress.debug.xcconfig"; sourceTree = "<group>"; };
@@ -548,6 +560,7 @@
 			children = (
 				337ECA0C27FC744D00EC2D00 /* WeatherUseCase.swift */,
 				33A1EF6A27FEB6720031ACED /* LocationUseCase.swift */,
+				33FF458F282ADA6D008054CB /* ClothesUseCase.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -557,6 +570,7 @@
 			children = (
 				337ECA0F27FC758F00EC2D00 /* WeatherRepository.swift */,
 				33A1EF7527FF42390031ACED /* LocationRepository.swift */,
+				33FF4591282ADB1B008054CB /* ClothesRepository.swift */,
 			);
 			path = RepositoryInterface;
 			sourceTree = "<group>";
@@ -579,6 +593,10 @@
 				337ECA2B27FD3C7C00EC2D00 /* DailyWeather.swift */,
 				33A1EF8928027BEA0031ACED /* WeatherCondition.swift */,
 				33A1EF6027FE93550031ACED /* LocationInfo.swift */,
+				33FF4585282A35CB008054CB /* Clothes.swift */,
+				33FF458D282ABB2E008054CB /* TemperatureGrade.swift */,
+				33FF4589282A9B97008054CB /* Gender.swift */,
+				33FF458B282A9BC2008054CB /* ClothesType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1225,6 +1243,7 @@
 				33A1EF5D27FE8F190031ACED /* AddressSearchResponse.swift in Sources */,
 				33A1EFD1280331360031ACED /* LocationSearchResultViewController.swift in Sources */,
 				337ECA2427FC9AAB00EC2D00 /* MainViewModel.swift in Sources */,
+				33FF458C282A9BC2008054CB /* ClothesType.swift in Sources */,
 				333BBA4E27FDECAD004561DA /* GeoSearchRequestable.swift in Sources */,
 				3381DDDC27F20C66007FBCAE /* WeatherViewController.swift in Sources */,
 				33A1EF8A28027BEA0031ACED /* WeatherCondition.swift in Sources */,
@@ -1234,8 +1253,10 @@
 				3364A29128214E0800328A97 /* ShortForecastWeatherItem.swift in Sources */,
 				33A1EF7227FF358A0031ACED /* RegionCodeConverting.swift in Sources */,
 				33A1EFCF280330C90031ACED /* LocationViewController.swift in Sources */,
+				33FF4592282ADB1B008054CB /* ClothesRepository.swift in Sources */,
 				337EC9D327FC2DAD00EC2D00 /* HTTPMethod.swift in Sources */,
 				3364A2AA282157A700328A97 /* CurrentWeather+Mapping.swift in Sources */,
+				33FF4586282A35CB008054CB /* Clothes.swift in Sources */,
 				3364A22C281E883800328A97 /* LocationCollectionViewCell.swift in Sources */,
 				337EC9BE27FB637300EC2D00 /* ShortForecastWeatherResponse.swift in Sources */,
 				33A1EF6D27FEE5460031ACED /* MidForecastTemperatureResponse.swift in Sources */,
@@ -1249,6 +1270,7 @@
 				33A1EF6B27FEB6720031ACED /* LocationUseCase.swift in Sources */,
 				33A1EF6F27FEE5940031ACED /* MidForecastWeatherResponse.swift in Sources */,
 				337EC9C627FC013900EC2D00 /* WeatherForecastAPIInfo.swift in Sources */,
+				33FF458E282ABB2E008054CB /* TemperatureGrade.swift in Sources */,
 				33A1EF7427FF42040031ACED /* DefaultLocationRepository.swift in Sources */,
 				337ECA2A27FD3C6E00EC2D00 /* HourlyWeather.swift in Sources */,
 				3364A29028214E0800328A97 /* ShortForecastWeatherComponent.swift in Sources */,
@@ -1275,6 +1297,7 @@
 				338820E2281B8800007E4D2D /* DailyWeatherCollectionViewCell.swift in Sources */,
 				3364A29E28214E3D00328A97 /* MidTemperatureForecastRequest.swift in Sources */,
 				337721AB28257A1C00CD0B31 /* CacheError.swift in Sources */,
+				33FF458A282A9B97008054CB /* Gender.swift in Sources */,
 				3381DE2227F32577007FBCAE /* ShortForecastRequest.swift in Sources */,
 				337ECA3527FD712E00EC2D00 /* UltraShortForecastWeatherResponse.swift in Sources */,
 				337EC9B327FACADB00EC2D00 /* UltraShortNowcastWeatherResponse.swift in Sources */,
@@ -1290,6 +1313,7 @@
 				3365BEAD280AFBF400E0A57D /* LocationListCoordinator.swift in Sources */,
 				3364A29328214E0800328A97 /* UltraShortForecastWeatherComponent.swift in Sources */,
 				33A1EFDB280407790031ACED /* LocalDatabaseService.swift in Sources */,
+				33FF4590282ADA6D008054CB /* ClothesUseCase.swift in Sources */,
 				337EC9E027FC2E3A00EC2D00 /* ShortForecastRequestable.swift in Sources */,
 				3364A2AC282158BA00328A97 /* HourlyWeather+Mapping.swift in Sources */,
 				337ECA0327FC6C7C00EC2D00 /* WeatherDress+Bundle.swift in Sources */,

@@ -6,30 +6,24 @@
 //
 
 import XCTest
+import RxSwift
+import RxTest
+import Nimble
+import RxNimble
 
 class ClothesUseCaseTests: XCTestCase {
+    var bag: DisposeBag!
+    var scheduler: TestScheduler!
+    var repository: ClothesRepository!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        self.bag = DisposeBag()
+        self.scheduler = TestScheduler(initialClock: 0)
+        self.repository = MockClothesRepository()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func fetchClothes() {
+        let clothes = self.repository.fetchCurrentRecommendedClothing(for: 0...10)
+        expect(clothes).first.to(equal([]))
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

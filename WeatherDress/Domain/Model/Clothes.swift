@@ -7,14 +7,16 @@
 
 import Foundation
 
-struct Clothes {
+struct Clothes: Equatable, Decodable {
     let type: ClothesType
     let name: String
     let gender: Gender
-    let upperTemperature: Double
-    let lowerTemperature: Double
+    let maxTemperature: Double
+    let minTemperature: Double
+}
 
+extension Clothes {
     var temperatureRange: ClosedRange<Double> {
-        return lowerTemperature...upperTemperature
+        return minTemperature...maxTemperature
     }
 }

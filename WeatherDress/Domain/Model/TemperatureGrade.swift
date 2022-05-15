@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TemperatureGrade {
+enum TemperatureGrade: Decodable {
     case bitterCold
     case freezingCold
     case veryCold
@@ -36,7 +36,7 @@ enum TemperatureGrade {
         case .moderate:
             return 17.0..<20.0
         case .warmth:
-            return 20.0..<22.0
+            return 20.0..<23.0
         case .heat:
             return 23.0..<28.0
         case .intenseHeat:

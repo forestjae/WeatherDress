@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ClothesType {
+enum ClothesType: String, Decodable {
     case outer
     case top
     case bottoms

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Gender {
+enum Gender: String, Decodable {
     case male
     case female
     case unisex

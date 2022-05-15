@@ -25,7 +25,7 @@ class ClothesUseCase {
                   return Observable.error(ClothesUseCaseError.wrongTemperature)
               }
 
-        return self.repository.fetchCurrentRecommendedCloting(for: minTemperature...maxTemperature)
+        return self.repository.fetchCurrentRecommendedClothing(for: minTemperature...maxTemperature)
     }
 }
 

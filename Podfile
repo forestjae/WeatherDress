@@ -7,7 +7,7 @@ target 'WeatherDress' do
 
   # Pods for WeatherDress
 
-  pod 'RxSwift' 
+  pod 'RxSwift'
   pod 'SwiftLint'
   pod 'SnapKit'  
   pod 'RxDataSources', '~> 5.0'
@@ -18,6 +18,12 @@ target 'WeatherDress' do
     inherit! :search_paths
    
   pod 'RxSwift' 
+  end
+
+  target 'WeatherDressUseCaseTests' do
+  pod 'RxSwift'
+  pod 'RxTest'
+  pod 'RxNimble', subspecs: ['RxBlocking', 'RxTest']
   end
 
   target 'WeatherDressUITests' do

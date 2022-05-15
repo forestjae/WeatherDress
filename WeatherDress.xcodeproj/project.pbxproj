@@ -117,6 +117,7 @@
 		33F3F35C282E704C009AE8F2 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A1EF8928027BEA0031ACED /* WeatherCondition.swift */; };
 		33F3F35E282E70CB009AE8F2 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA2927FD3C6E00EC2D00 /* HourlyWeather.swift */; };
 		33F3F361282E7108009AE8F2 /* HourlyWeather+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F3F360282E7108009AE8F2 /* HourlyWeather+Extension.swift */; };
+		33F3F36C283121A5009AE8F2 /* DefaultClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F3F36B283121A5009AE8F2 /* DefaultClothesRepository.swift */; };
 		33FF45792828C80E008054CB /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF45782828C80E008054CB /* String+Extension.swift */; };
 		33FF458228290BFC008054CB /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458128290BFC008054CB /* RealmError.swift */; };
 		33FF4586282A35CB008054CB /* Clothes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4585282A35CB008054CB /* Clothes.swift */; };
@@ -265,6 +266,7 @@
 		33D96A9E282C034F009C549C /* ClothesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesUseCaseTests.swift; sourceTree = "<group>"; };
 		33D96AA6282C0840009C549C /* MockClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockClothesRepository.swift; sourceTree = "<group>"; };
 		33F3F360282E7108009AE8F2 /* HourlyWeather+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HourlyWeather+Extension.swift"; sourceTree = "<group>"; };
+		33F3F36B283121A5009AE8F2 /* DefaultClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultClothesRepository.swift; sourceTree = "<group>"; };
 		33FF45782828C80E008054CB /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		33FF458128290BFC008054CB /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
 		33FF4585282A35CB008054CB /* Clothes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothes.swift; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				3364A2A82821579700328A97 /* Mapping */,
 				337ECA1527FC765D00EC2D00 /* DefaultWeatherRepository.swift */,
 				33A1EF7327FF42040031ACED /* DefaultLocationRepository.swift */,
+				33F3F36B283121A5009AE8F2 /* DefaultClothesRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1255,6 +1258,7 @@
 				333BBA5627FDF6A4004561DA /* GeoCodeRequest.swift in Sources */,
 				33A1EF6B27FEB6720031ACED /* LocationUseCase.swift in Sources */,
 				33A1EF6F27FEE5940031ACED /* MidForecastWeatherResponse.swift in Sources */,
+				33F3F36C283121A5009AE8F2 /* DefaultClothesRepository.swift in Sources */,
 				337EC9C627FC013900EC2D00 /* WeatherForecastAPIInfo.swift in Sources */,
 				33FF458E282ABB2E008054CB /* TemperatureGrade.swift in Sources */,
 				33A1EF7427FF42040031ACED /* DefaultLocationRepository.swift in Sources */,

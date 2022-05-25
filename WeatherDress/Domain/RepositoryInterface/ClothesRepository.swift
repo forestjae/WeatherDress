@@ -9,5 +9,7 @@ import Foundation
 import RxSwift
 
 protocol ClothesRepository {
-    func fetchCurrentRecommendedClothing(for range: ClosedRange<Double>) -> Observable<[Clothes]>
+    func fetchCurrentRecommendedClothing(
+        for range: ClosedRange<Double>, in gender: Gender
+    ) -> Observable<[Clothes]>
 }

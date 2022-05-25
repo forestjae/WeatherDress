@@ -1,0 +1,68 @@
+/* 
+  Localizable.strings
+  WeatherDress
+
+  Created by Lee Seung-Jae on 2022/05/20.
+  
+*/
+
+"Anorak" = "아노락";
+"Blazer" = "블레이져";
+"Blouse" = "블라우스";
+"BomberJacket" = "Ma-1";
+"Cardigan" = "가디건";
+"CottonJacket" = "면자켓";
+"CottonPants" = "면바지";
+"CottonSkirt" = "면스커트";
+"Croptop" = "크롭탑";
+"DenimJacket" = "데님자켓";
+"DenimSkirt" = "데님스커트";
+"Dress" = "원피스";
+"FieldJacket" = "야상";
+"FleeceHoody" = "기모후디";
+"FleeceJacket" = "플리스자켓";
+"FleeceLeggings" = "기모레깅스";
+"FleeceSweatshirt" = "기모맨투맨";
+"Gloves" = "장갑";
+"Heattech" = "발열내의";
+"Hoody" = "후디";
+"Jeans" = "청바지";
+"JoggerPants" = "조거팬츠";
+"Jumpsuit" = "점프수트";
+"Knit" = "니트";
+"LeatherJacket" = "가죽자켓";
+"LeatherSkirt" = "가죽스커트";
+"Leggings" = "레깅스";
+"LinenShirt" = "린넨셔츠";
+"LongPaddedJacket" = "롱패딩";
+"LongSleeveBlouse" = "긴팔블라우스";
+"LongSleeveTShirt" = "긴팔티셔츠";
+"Muffler" = "머플러";
+"PaddedJacket" = "패딩";
+"PoloShirts" = "폴로셔츠";
+"Shirt" = "셔츠";
+"ShortPants" = "반바지";
+"ShortSleeveDress" = "반팔원피스";
+"ShortSleeveJacket" = "반팔자켓";
+"ShortSleeveKnit" = "반팔니트";
+"Slacks" = "슬랙스";
+"Sleeveless" = "민소매";
+"SleevelessDress" = "민소매원피스";
+"Stockings" = "스타킹";
+"StrawHat" = "밀짚모자";
+"Sweater" = "스웨터";
+"Sweatshirt" = "맨투맨";
+"ThickCardigan" = "두꺼운가디건";
+"ThickCoat" = "모직코트";
+"FleeceSlacks" = "기모슬랙스";
+"ThinCardigan" = "얇은가디건";
+"ThinKnit" = "얇은니트";
+"ThinSlacks" = "얇은슬랙스";
+"TrenchCoat" = "트렌치코트";
+"Tshirts" = "티셔츠";
+"Turtleneck" = "폴라티";
+"VelvetSkirt" = "벨벳스커트";
+"WindBreaker" = "바람막이";
+"WinterHat" = "군밤장수모자";
+"WoolHat" = "비니";
+"WoolSkirt" = "모직스커트";

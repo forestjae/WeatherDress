@@ -22,10 +22,17 @@ class DefaultClothesRepository: ClothesRepository {
         }
     }
 
-    func fetchCurrentRecommendedClothing(for range: ClosedRange<Double>) -> Observable<[Clothes]> {
-        let filtered = self.clothes.filter { clothes in
-            clothes.temperatureRange ~= range
+    func fetchCurrentRecommendedClothing(
+        for range: ClosedRange<Double>,
+        in gender: Gender
+    ) -> Observable<[Clothes]> {
+        let filteredByTemperature = self.clothes.filter { clothes in
+            range.overlaps(clothes.temperatureRange)
         }
-        return Observable.just(filtered)
+        let filteredByGender = filteredByTemperature.filter {
+            $0.gender == gender || $0.gender == .unisex
+        }
+
+        return Observable.just(filteredByGender)
     }
 }

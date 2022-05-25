@@ -8,6 +8,34 @@
 import Foundation
 
 extension DateFormatter {
+    static let yearMonthDay: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyMMdd"
+        return formatter
+    }()
+
+    static let yearMonthDayHour: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyMMddHH00"
+        return formatter
+    }()
+
+    static let leaveReturnTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "HH00"
+        return formatter
+    }()
+
+    static let hourlyTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "H시"
+        return formatter
+    }()
+
     static let dayOfWeekDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")

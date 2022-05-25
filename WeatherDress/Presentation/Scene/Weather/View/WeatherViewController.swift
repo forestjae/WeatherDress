@@ -21,7 +21,9 @@ class WeatherViewController: UIViewController {
 
     var viewModel: WeatherViewModel?
     var weatherDataSource: UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>?
+    var clotingDataSource: UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>?
     var snapshot = NSDiffableDataSourceSnapshot<WeatherSection, WeatherItem>()
+    var clotingSnapshot = NSDiffableDataSourceSnapshot<RecommendationSection, ClothesItemViewModel>()
 
     private let disposeBag = DisposeBag()
 
@@ -45,6 +47,13 @@ class WeatherViewController: UIViewController {
     private let hourlyWeatherCollectionView: UICollectionView = {
         let layout = createLayout()
 
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+
+    private let clotingCollectionView: UICollectionView = {
+        let layout = createClotingLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         return collectionView
@@ -144,6 +153,7 @@ class WeatherViewController: UIViewController {
         self.configureHierarchy()
         self.configureConstraint()
         self.configureCollectionView()
+        self.configureClotingCollectionView()
         self.binding()
     }
 
@@ -155,6 +165,7 @@ class WeatherViewController: UIViewController {
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(stackView)
         self.stackView.addArrangedSubview(self.currentStackView)
+        self.stackView.addArrangedSubview(self.clotingCollectionView)
         self.stackView.addArrangedSubview(self.hourlyWeatherStackView)
         self.currentStackView.addArrangedSubview(self.locationLabel)
         self.currentStackView.addSubview(self.isCurrentImage)
@@ -183,6 +194,11 @@ class WeatherViewController: UIViewController {
         self.hourlyWeatherCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
             $0.height.equalTo(800)
+        }
+
+        self.clotingCollectionView.snp.makeConstraints {
+            $0.width.equalTo(400)
+            $0.height.equalTo(400)
         }
 
         self.isCurrentImage.snp.makeConstraints {
@@ -278,6 +294,27 @@ class WeatherViewController: UIViewController {
         self.provideSupplementaryViewForWeatherCollectionView()
     }
 
+    private func configureClotingCollectionView() {
+        self.clotingCollectionView.register(
+            RecommendationCollectionCell.self,
+            forCellWithReuseIdentifier: "cloting"
+        )
+        self.clotingCollectionView.register(
+            RecommendationCollectionHeaderView.self,
+            forSupplementaryViewOfKind: "header",
+            withReuseIdentifier: "header"
+        )
+        self.clotingCollectionView.register(
+            RecommendationCollectionFooterView.self,
+            forSupplementaryViewOfKind: "footer",
+            withReuseIdentifier: "footer"
+        )
+
+        self.clotingSnapshot.appendSections([RecommendationSection.cloting])
+        self.clotingDataSource = self.dataSourceCloting()
+        self.provideSupplementaryViewForClotingCollectionView()
+    }
+
     static func createLayout() -> UICollectionViewLayout {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         configuration.interSectionSpacing = 10
@@ -323,11 +360,91 @@ class WeatherViewController: UIViewController {
 
         return layout
     }
+
+    static func createClotingLayout() -> UICollectionViewLayout {
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+        configuration.interSectionSpacing = 10
+
+        let layout = UICollectionViewCompositionalLayout(
+            sectionProvider: { sectionIndex, _ in
+                guard let sectionLayoutKind = RecommendationSection(rawValue: sectionIndex) else {
+                    return nil
+                }
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalHeight(1.0)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 5)
+
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(100)
+                )
+
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitem: item,
+                    count: 2
+                )
+                group.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 10)
+
+                let section = NSCollectionLayoutSection(group: group)
+
+
+                let titleSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(34)
+                )
+
+                let footerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(80)
+                )
+
+                let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: titleSize,
+                    elementKind: "header",
+                    alignment: .top
+                )
+
+                let descriptionSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: footerSize,
+                    elementKind: "footer",
+                    alignment: .bottom
+                )
+                section.boundarySupplementaryItems = [titleSupplementary, descriptionSupplementary]
+                let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "background"
+                )
+
+                section.decorationItems = [sectionBackgroundDecoration]
+                return section
+            },
+            configuration: configuration
+        )
+
+        layout.register(HourlyBackgroundView.self, forDecorationViewOfKind: "background")
+
+        return layout
+    }
 }
 
 enum WeatherItem: Hashable {
     case hourly(HourlyWeatherItemViewModel)
     case daily(DailyWeatherItemViewModel)
+}
+
+enum RecommendationSection: Int {
+    case cloting
+
+    var title: String {
+        switch self {
+        case .cloting:
+            return "오늘 기온에 딱인 아이템"
+        }
+    }
 }
 
 enum WeatherSection: Int {
@@ -417,6 +534,60 @@ extension WeatherViewController {
             let category = self.snapshot.sectionIdentifiers[indexPath.section]
             header.configure(for: category)
             return header
+        }
+    }
+
+    func dataSourceCloting() -> UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel> {
+        return UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>(
+            collectionView: self.clotingCollectionView
+        ) { collectionView, indexPath, itemIdentifier in
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cloting",
+                    for: indexPath
+                ) as? RecommendationCollectionCell
+                cell?.configureContent(with: itemIdentifier)
+                return cell
+        }
+    }
+
+    private func provideSupplementaryViewForClotingCollectionView() {
+        self.clotingDataSource?.supplementaryViewProvider = { (_, kind, indexPath) in
+            var supplementaryView: UICollectionReusableView
+            if kind == "header" {
+                let header = self.clotingCollectionView.dequeueReusableSupplementaryView(
+                    ofKind: "header",
+                    withReuseIdentifier: "header",
+                    for: indexPath
+                ) as? RecommendationCollectionHeaderView
+                let category = self.clotingSnapshot.sectionIdentifiers[indexPath.section]
+                header?.configure(for: category)
+                header?.allClotingButton.rx.tap
+                    .subscribe(self.allClotingButtonDidTap)
+                    .disposed(by: self.disposeBag)
+                return header
+            } else if kind == "footer" {
+                let footer = self.clotingCollectionView.dequeueReusableSupplementaryView(
+                    ofKind: "footer",
+                    withReuseIdentifier: "footer",
+                    for: indexPath
+                ) as? RecommendationCollectionFooterView
+                footer?.configure(for: "설명란입니다")
+                footer?.randomButton.rx.tap
+                    .subscribe(self.randomButtonDidTap)
+                    .disposed(by: self.disposeBag)
+                footer?.timeConfigurationButton.rx.tap
+                    .subscribe(self.timeConfigureButtonDidTap)
+                    .disposed(by: self.disposeBag)
+                self.leaveReturnTimeLabelText
+                    .subscribe(onNext: {
+                        footer?.timeDescriptionLabel.text = $0
+                    })
+                    .disposed(by: self.disposeBag)
+
+                return footer
+            } else {
+                return nil
+            }
         }
     }
 }

@@ -32,6 +32,9 @@ final class WeatherViewModel {
 
     struct Input {
         let viewWillAppear: Observable<Void>
+        let randomButtonTapped: Observable<Void>
+        let allClotingButtonTapped: Observable<Void>
+        let timeConfigurationButtonTapped: Observable<Void>
     }
 
     struct Output {
@@ -43,6 +46,10 @@ final class WeatherViewModel {
         let minMaxTemperature: Driver<String>
         let hourlyWeatherItem: Driver<[HourlyWeatherItemViewModel]>
         let dailyWeatherItem: Driver<[DailyWeatherItemViewModel]>
+        let allClotingItem: Observable<[ClothesItemViewModel]>
+        let recommendedClotingItem: Driver<[ClothesItemViewModel]>
+        let leaveReturnTitleText: Observable<String>
+        let allClothingViewDismiss: Observable<Void>
     }
 
     func setLocationInfo(_ location: LocationInfo) {

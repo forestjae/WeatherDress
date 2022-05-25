@@ -11,12 +11,21 @@ import RxCocoa
 
 final class WeatherViewModel {
 
-    private let disposeBag = DisposeBag()
+    private let coordinator: WeatherCoordinator
     private let useCase: WeatherUseCase
+    private let clothingUseCase: ClothesUseCase
+    private let userSettingUseCase: UserSetttingUseCase
     private let locationInfo: BehaviorSubject<LocationInfo>
 
-    init(useCase: WeatherUseCase, location: LocationInfo) {
+    init(coordinator: WeatherCoordinator,
+         useCase: WeatherUseCase,
+         clothingUseCase: ClothesUseCase,
+         location: LocationInfo
+    ) {
+        self.coordinator = coordinator
         self.useCase = useCase
+        self.clothingUseCase = clothingUseCase
+        self.userSettingUseCase = UserSetttingUseCase(repository: DefaultUserSettingRepository())
         let locationInfo = BehaviorSubject<LocationInfo>(value: location)
         self.locationInfo = locationInfo
     }

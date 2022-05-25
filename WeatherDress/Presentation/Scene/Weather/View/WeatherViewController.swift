@@ -26,6 +26,10 @@ class WeatherViewController: UIViewController {
     var clotingSnapshot = NSDiffableDataSourceSnapshot<RecommendationSection, ClothesItemViewModel>()
 
     private let disposeBag = DisposeBag()
+    private let allClotingButtonDidTap = PublishSubject<Void>()
+    private let randomButtonDidTap = PublishSubject<Void>()
+    private let timeConfigureButtonDidTap = PublishSubject<Void>()
+    private let leaveReturnTimeLabelText = BehaviorSubject<String>(value: "")
 
     private let hourlyWeatherStackView: UIStackView = {
         let stackView = UIStackView()
@@ -211,11 +215,15 @@ class WeatherViewController: UIViewController {
         guard let viewModel = self.viewModel else { return }
 
         let input = WeatherViewModel.Input(
-            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in }
+            viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+            randomButtonTapped: self.randomButtonDidTap.asObservable(),
+            allClotingButtonTapped: self.allClotingButtonDidTap.asObservable(),
+            timeConfigurationButtonTapped: self.timeConfigureButtonDidTap.asObservable()
         )
 
         let output = viewModel.transform(input: input, disposeBag: self.disposeBag)
         self.bindingOutput(for: output)
+
     }
 
     private func bindingOutput(for output: WeatherViewModel.Output) {
@@ -230,6 +238,18 @@ class WeatherViewController: UIViewController {
 
         output.currentTemperatureLabelText
             .drive(self.currentTemperatureLabel.rx.text)
+            .disposed(by: self.disposeBag)
+
+        output.recommendedClotingItem
+            .drive(onNext: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                let identifer = self.clotingSnapshot.itemIdentifiers(inSection: .cloting)
+                self.clotingSnapshot.deleteItems(identifer)
+                self.clotingSnapshot.appendItems($0, toSection: .cloting)
+                self.clotingDataSource?.apply(self.clotingSnapshot)
+            })
             .disposed(by: self.disposeBag)
 
         output.hourlyWeatherItem
@@ -271,6 +291,16 @@ class WeatherViewController: UIViewController {
 
         output.minMaxTemperature
             .drive(self.currentMinMaxTemperatureLabel.rx.text)
+            .disposed(by: self.disposeBag)
+
+        output.leaveReturnTitleText
+            .subscribe(onNext: {
+                self.leaveReturnTimeLabelText.onNext($0)
+            })
+            .disposed(by: self.disposeBag)
+
+        output.allClothingViewDismiss
+            .subscribe()
             .disposed(by: self.disposeBag)
     }
 

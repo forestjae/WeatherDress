@@ -22,7 +22,7 @@ class ClothesUseCaseTests: XCTestCase {
         self.repository = MockClothesRepository()
     }
 
-    func fetchClothes() {
+    func testClothes() {
         let clothes = self.repository.fetchCurrentRecommendedClothing(for: 0...10)
         expect(clothes).first.to(equal([]))
     }

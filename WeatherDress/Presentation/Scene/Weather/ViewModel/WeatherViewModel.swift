@@ -57,6 +57,37 @@ final class WeatherViewModel {
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
+        let initialLeaveTime = input.viewWillAppear
+            .flatMap { _ in self.userSettingUseCase.getUserLeaveTime() }
+            .compactMap { $0 }
+            .map { DateFormatter.yearMonthDay.string(from: Date()) + $0 }
+            .compactMap { DateFormatter.yearMonthDayHour.date(from: $0) }
+
+        let initialReturnTime = input.viewWillAppear
+            .flatMap { _ in self.userSettingUseCase.getUserReturnTime() }
+            .compactMap { $0 }
+            .map { DateFormatter.yearMonthDay.string(from: Date()) + $0 }
+            .compactMap { DateFormatter.yearMonthDayHour.date(from: $0) }
+            .debug()
+
+
+
+        let leaveReturnTimeConfigured = input.timeConfigurationButtonTapped
+                    .withLatestFrom(Observable.zip(initialLeaveTime, initialReturnTime))
+                    .withUnretained(self.coordinator)
+                    .flatMap { coordinator, leaveReturnTime in
+                        coordinator.coordinateToTimeConfiguration(for: leaveReturnTime)
+                    }
+                    .compactMap { result -> (Date, Date)? in
+                        switch result {
+                        case .accept(let leaveTime, let returnTime):
+                            return (leaveTime, returnTime)
+                        case .cancel:
+                            return nil
+                        }
+                    }
+                    .share()
+
         let locationAddress = self.locationInfo
             .map { $0.shortAddress() }
             .asDriver(onErrorJustReturn: "위치 정보가 없습니다")
@@ -64,7 +95,7 @@ final class WeatherViewModel {
         let isCurrentLocation = self.locationInfo
             .map { $0.isCurrent }
             .asDriver(onErrorJustReturn: false)
-
+        
         let currentWeather = self.locationInfo
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
@@ -115,6 +146,56 @@ final class WeatherViewModel {
             }
             .asDriver(onErrorJustReturn: [])
 
+
+
+        let leaveTime = Observable.merge(initialLeaveTime, leaveReturnTimeConfigured.map { $0.0 })
+            .share()
+            .debug()
+
+        let returnTime = Observable.merge(initialReturnTime, leaveReturnTimeConfigured.map { $0.1})
+            .share()
+
+        let userGender = self.userSettingUseCase.getUserGender()
+            .compactMap { $0 }
+
+        let hourlyWeatherItem = Observable.combineLatest(currentWeather, hourlyWeathers)
+            .map { currentWeather, hourlyWeathers in
+                [HourlyWeather(currentWeather: currentWeather)] + hourlyWeathers
+            }
+        
+        let allClothingItems = Observable.combineLatest(
+            hourlyWeatherItem,
+            userGender,
+            leaveTime,
+            returnTime
+        )
+            .flatMap { weathers, gender, leaveTime, returnTime in
+                self.clothingUseCase.fetchCurrentRecommendedCloting(
+                    for: weathers,
+                    in: gender,
+                    leaveTime: leaveTime,
+                    returnTime: returnTime
+                )
+            }
+            .map {
+                $0.map { ClothesItemViewModel($0) }
+            }
+            .share(replay: 1)
+
+        let touchedButton = Observable.combineLatest(
+            Observable.merge(input.viewWillAppear.take(1), input.randomButtonTapped),
+            allClothingItems
+        )
+
+        let recommendedClotingItemViewModel = touchedButton
+            .map { _, items in
+                ClothesType.allCases.compactMap { type in
+                    items.filter { $0.type == type }.randomElement()
+                }
+            }
+            .share()
+            .asDriver(onErrorJustReturn: [])
+
         let dailWeathersFromHourly = hourlyWeathers
             .map { $0.toDaily() }
 
@@ -136,6 +217,20 @@ final class WeatherViewModel {
             }
             .asDriver(onErrorJustReturn: "- / -")
 
+        let allClothingViewDismiss = input.allClotingButtonTapped
+            .withUnretained(self.coordinator)
+            .flatMap { coordinator, _ in
+                coordinator.coordinateToAllClothing(for: allClothingItems)
+            }
+
+        let leaveReturnTitleText = Observable.combineLatest(leaveTime, returnTime)
+            .map { leaveTime, returnTime in
+                (leaveTime.convert(to: .hourlyWeatherTime),
+                 returnTime.convert(to: .hourlyWeatherTime))
+            }
+            .map { "\($0.0) 외출 \($0.1) 복귀"}
+            .debug()
+
         return Output(
             locationAddress: locationAddress,
             isCurrentLocation: isCurrentLocation,
@@ -144,7 +239,11 @@ final class WeatherViewModel {
             currentWeatherCondition: currentWeatherCondition,
             minMaxTemperature: minMaxTemperature,
             hourlyWeatherItem: hourlyWeatherItemViewModel,
-            dailyWeatherItem: dailyWeatherItemViewModel
+            dailyWeatherItem: dailyWeatherItemViewModel,
+            allClotingItem: allClothingItems,
+            recommendedClotingItem: recommendedClotingItemViewModel,
+            leaveReturnTitleText: leaveReturnTitleText,
+            allClothingViewDismiss: allClothingViewDismiss
         )
     }
 }

@@ -89,7 +89,10 @@ class PageSceneCoordinator: Coordinator<Void> {
     }
 
     private func makeWeatherViewController(with location: LocationInfo) -> WeatherViewController {
+        let weatherViewController = WeatherViewController()
+        let weatherCoordinator = WeatherCoordinator(viewController: weatherViewController)
         let viewModel = WeatherViewModel(
+            coordinator: weatherCoordinator,
             useCase: WeatherUseCase(
                 repository: DefaultWeatherRepository(
                     apiService: WeatherService(
@@ -97,9 +100,10 @@ class PageSceneCoordinator: Coordinator<Void> {
                     )
                 )
             ),
+            clothingUseCase: ClothesUseCase(repository: DefaultClothesRepository()),
             location: location
         )
-        let weatherViewController = WeatherViewController()
+
         weatherViewController.viewModel = viewModel
         return weatherViewController
     }

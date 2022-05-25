@@ -17,15 +17,25 @@ class ClothesUseCase {
     }
 
     func fetchCurrentRecommendedCloting(
-        for hourlyWeathers: [HourlyWeather]
+        for hourlyWeathers: [HourlyWeather],
+        in gender: Gender,
+        leaveTime: Date,
+        returnTime: Date
     ) -> Observable<[Clothes]> {
-        let temperatures = hourlyWeathers.map { $0.temperature }
+        let temperatures = hourlyWeathers
+            .filter {
+                leaveTime <= $0.date && returnTime >= $0.date
+            }
+            .map { $0.temperature }
         guard let maxTemperature = temperatures.max(),
               let minTemperature = temperatures.min() else {
                   return Observable.error(ClothesUseCaseError.wrongTemperature)
               }
 
-        return self.repository.fetchCurrentRecommendedClothing(for: minTemperature...maxTemperature)
+        return self.repository.fetchCurrentRecommendedClothing(
+            for: minTemperature...maxTemperature,
+            in: gender
+        )
     }
 }
 

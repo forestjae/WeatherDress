@@ -11,4 +11,15 @@ enum Gender: String, Decodable {
     case male
     case female
     case unisex
+
+    var description: String {
+        switch self {
+        case .male:
+            return "남"
+        case .female:
+            return "여"
+        case .unisex:
+            return "혼성"
+        }
+    }
 }

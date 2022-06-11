@@ -15,6 +15,10 @@ class DefaultUserSettingRepository: UserSettingRepository {
         self.userDefault.set(gender.rawValue, forKey: "Gender")
     }
 
+    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitive) {
+        self.userDefault.set(temperatureSensitive.rawValue, forKey: "TemperatureSensitive")
+    }
+
     func setUserLeaveTime(for time: String) {
         self.userDefault.set(time, forKey: "LeaveTime")
     }
@@ -25,6 +29,10 @@ class DefaultUserSettingRepository: UserSettingRepository {
 
     func getUserGender() -> Observable<String?> {
         return self.userDefault.rx.observe(String.self, "Gender")
+    }
+
+    func getUserTemperatureSensitive() -> Observable<Int?> {
+        return self.userDefault.rx.observe(Int.self, "TemperatureSensitive")
     }
 
     func getUserLeaveTime() -> Observable<String?> {

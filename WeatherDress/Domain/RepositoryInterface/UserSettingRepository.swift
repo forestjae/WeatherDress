@@ -10,7 +10,7 @@ import RxSwift
 
 protocol UserSettingRepository {
     func setUserGender(for gender: Gender)
-    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitive)
+    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitiveness)
     func setUserLeaveTime(for time: String)
     func setUserReturnTime(for time: String)
     func getUserGender() -> Observable<String?>

@@ -15,7 +15,7 @@ class DefaultUserSettingRepository: UserSettingRepository {
         self.userDefault.set(gender.rawValue, forKey: "Gender")
     }
 
-    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitive) {
+    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitiveness) {
         self.userDefault.set(temperatureSensitive.rawValue, forKey: "TemperatureSensitive")
     }
 

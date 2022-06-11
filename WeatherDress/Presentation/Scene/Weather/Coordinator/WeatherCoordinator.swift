@@ -13,15 +13,7 @@ class WeatherCoordinator {
 
     init(viewController: WeatherViewController) {
         self.viewController = viewController
-    }
-
-    func coordinateToTimeConfiguration(
-        for leaveReturnTime: (Date, Date)
-    ) -> Observable<TimeConfigurationDismissAction> {
-        let timeConfigurationCoordinator = TimeConfigurationCoordinator(
-            parentViewController: self.viewController, for: leaveReturnTime
-        )
-        return timeConfigurationCoordinator.start()
+        self.viewController.navigationController?.isNavigationBarHidden = true
     }
 
     func coordinateToAllClothing(

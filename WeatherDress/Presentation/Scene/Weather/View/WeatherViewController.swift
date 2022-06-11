@@ -218,7 +218,7 @@ class WeatherViewController: UIViewController {
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             randomButtonTapped: self.randomButtonDidTap.asObservable(),
             allClotingButtonTapped: self.allClotingButtonDidTap.asObservable(),
-            timeConfigurationButtonTapped: self.timeConfigureButtonDidTap.asObservable()
+            timeConfigurationButtonTapped: self.timeConfigureButtonDidTap.asObservable(),
         )
 
         let output = viewModel.transform(input: input, disposeBag: self.disposeBag)
@@ -605,15 +605,6 @@ extension WeatherViewController {
                 footer?.randomButton.rx.tap
                     .subscribe(self.randomButtonDidTap)
                     .disposed(by: self.disposeBag)
-                footer?.timeConfigurationButton.rx.tap
-                    .subscribe(self.timeConfigureButtonDidTap)
-                    .disposed(by: self.disposeBag)
-                self.leaveReturnTimeLabelText
-                    .subscribe(onNext: {
-                        footer?.timeDescriptionLabel.text = $0
-                    })
-                    .disposed(by: self.disposeBag)
-
                 return footer
             } else {
                 return nil

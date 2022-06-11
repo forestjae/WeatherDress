@@ -20,6 +20,10 @@ class UserSetttingUseCase {
         self.repository.setUserGender(for: gender)
     }
 
+    func setUserTemperatureSensitive(for temperatureSensitive: TemperatureSensitive) {
+        self.repository.setUserTemperatureSensitive(for: temperatureSensitive)
+    }
+
     func setUserLeaveTime(for time: String) {
         self.repository.setUserLeaveTime(for: time)
     }
@@ -32,6 +36,12 @@ class UserSetttingUseCase {
         return self.repository.getUserGender()
             .compactMap { $0 }
             .map { Gender(rawValue: $0) }
+    }
+
+    func getUserTemperatureSensitive() -> Observable<TemperatureSensitive?> {
+        return self.repository.getUserTemperatureSensitive()
+            .compactMap { $0 }
+            .map { TemperatureSensitive(rawValue: $0)}
     }
 
     func getUserLeaveTime() -> Observable<String?> {

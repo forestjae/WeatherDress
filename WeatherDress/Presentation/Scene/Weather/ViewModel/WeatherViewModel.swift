@@ -72,21 +72,15 @@ final class WeatherViewModel {
 
 
 
-        let leaveReturnTimeConfigured = input.timeConfigurationButtonTapped
-                    .withLatestFrom(Observable.zip(initialLeaveTime, initialReturnTime))
-                    .withUnretained(self.coordinator)
-                    .flatMap { coordinator, leaveReturnTime in
-                        coordinator.coordinateToTimeConfiguration(for: leaveReturnTime)
-                    }
-                    .compactMap { result -> (Date, Date)? in
-                        switch result {
-                        case .accept(let leaveTime, let returnTime):
-                            return (leaveTime, returnTime)
-                        case .cancel:
-                            return nil
-                        }
-                    }
-                    .share()
+        let returnTimeConfigured = input.timeSliderUpperValueChnaged
+            .map { Int($0.rounded(.toNearestOrAwayFromZero)) }
+            .map { hour in
+                if hour > 9 {
+                    return String(hour)
+                }
+            }
+            }
+            .compactMap { str -> Date? in
 
         let locationAddress = self.locationInfo
             .map { $0.shortAddress() }

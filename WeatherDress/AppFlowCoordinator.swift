@@ -20,11 +20,28 @@ class AppFlowCoordinator: Coordinator<Void> {
         let navigationController = UINavigationController()
         navigationController.setNavigationBarHidden(true, animated: false)
 
-        let pageSceneCoordinator = PageSceneCoordinator(navigationController: navigationController)
-
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
+        if UserDefaults.standard.string(forKey: "Gender") == nil {
+            return self.initialSettingFlow(navigationController: navigationController)
+        }
+
+        return self.mainViewFlow(navigationController: navigationController)
+    }
+
+    private func mainViewFlow(navigationController: UINavigationController) -> Observable<Void> {
+        let pageSceneCoordinator = PageSceneCoordinator(navigationController: navigationController)
         return self.coordinate(to: pageSceneCoordinator)
+    }
+
+    private func initialSettingFlow(
+        navigationController: UINavigationController
+    ) -> Observable<Void> {
+        let initialSettingCoordinator = InitialSettingCoordinator(
+            parentViewController: navigationController
+        )
+
+        return self.coordinate(to: initialSettingCoordinator)
     }
 }

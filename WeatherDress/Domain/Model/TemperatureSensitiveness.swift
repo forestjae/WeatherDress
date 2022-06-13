@@ -8,7 +8,7 @@
 import Foundation
 
 enum TemperatureSensitiveness: Int {
-    case normal = 0
-    case sensitiveToHeat = 1
-    case sensitiveToCold = 2
+    case sensitiveToCold = 0
+    case normal = 1
+    case sensitiveToHeat = 2
 }

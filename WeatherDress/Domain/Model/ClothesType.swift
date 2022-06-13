@@ -22,7 +22,7 @@ enum ClothesType: String, Decodable, CaseIterable {
         case .bottoms:
             return "하의"
         case .accessory:
-            return "악세서리"
+            return "etc"
         }
     }
 }

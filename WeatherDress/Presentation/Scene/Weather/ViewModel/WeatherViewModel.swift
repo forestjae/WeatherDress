@@ -35,6 +35,8 @@ final class WeatherViewModel {
         let randomButtonTapped: Observable<Void>
         let allClotingButtonTapped: Observable<Void>
         let timeConfigurationButtonTapped: Observable<Void>
+        let timeSliderLowerValueChanged: Observable<Double>
+        let timeSliderUpperValueChnaged: Observable<Double>
     }
 
     struct Output {
@@ -50,6 +52,8 @@ final class WeatherViewModel {
         let recommendedClotingItem: Driver<[ClothesItemViewModel]>
         let leaveReturnTitleText: Observable<String>
         let allClothingViewDismiss: Observable<Void>
+        let initialLeaveTime: Observable<Double>
+        let initialReturnTIme: Observable<Double>
     }
 
     func setLocationInfo(_ location: LocationInfo) {
@@ -57,30 +61,57 @@ final class WeatherViewModel {
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        let initialLeaveTime = input.viewWillAppear
-            .flatMap { _ in self.userSettingUseCase.getUserLeaveTime() }
+        let initialLeaveTimeString = input.viewWillAppear
+            .take(1)
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.userSettingUseCase.getUserLeaveTime()
+            }
             .compactMap { $0 }
-            .map { DateFormatter.yearMonthDay.string(from: Date()) + $0 }
-            .compactMap { DateFormatter.yearMonthDayHour.date(from: $0) }
+            .share()
 
-        let initialReturnTime = input.viewWillAppear
-            .flatMap { _ in self.userSettingUseCase.getUserReturnTime() }
+        let initialLeaveTime = initialLeaveTimeString
+            .compactMap { $0.convertToDate() }
+
+        let initialLeaveTimeSliderVlaue = initialLeaveTimeString
+            .compactMap { string -> Double? in
+                guard let value = Double(String(string.prefix(2))) else {
+                    return nil
+                }
+                return value > 4.0 ? value : value + 24.0
+            }
+
+        let initialReturnTimeString = input.viewWillAppear
+            .take(1)
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.userSettingUseCase.getUserReturnTime()
+            }
             .compactMap { $0 }
-            .map { DateFormatter.yearMonthDay.string(from: Date()) + $0 }
-            .compactMap { DateFormatter.yearMonthDayHour.date(from: $0) }
-            .debug()
+            .share()
 
+        let initialReturnTime = initialReturnTimeString
+            .compactMap { $0.convertToDate() }
 
+        let initialReturnTimeSliderValue = initialReturnTimeString
+            .compactMap { string -> Double? in
+                guard let value = Double(String(string.prefix(2))) else {
+                    return nil
+                }
+                return value > 4.0 ? value : value + 24.0
+            }
+
+        let leaveTimeConfigured = input.timeSliderLowerValueChanged
+            .map { Int($0.rounded(.toNearestOrAwayFromZero)) }
+            .map { $0 > 23 ? $0 - 24 : $0 }
+            .map { $0.convertToFourDigit() }
+            .compactMap { $0.convertToDate() }
 
         let returnTimeConfigured = input.timeSliderUpperValueChnaged
             .map { Int($0.rounded(.toNearestOrAwayFromZero)) }
-            .map { hour in
-                if hour > 9 {
-                    return String(hour)
-                }
-            }
-            }
-            .compactMap { str -> Date? in
+            .map { $0 > 23 ? $0 - 24 : $0 }
+            .map { $0.convertToFourDigit() }
+            .compactMap { $0.convertToDate() }
 
         let locationAddress = self.locationInfo
             .map { $0.shortAddress() }
@@ -140,13 +171,12 @@ final class WeatherViewModel {
             }
             .asDriver(onErrorJustReturn: [])
 
-
-
-        let leaveTime = Observable.merge(initialLeaveTime, leaveReturnTimeConfigured.map { $0.0 })
+        let leaveTime = Observable.merge(initialLeaveTime, leaveTimeConfigured)
+            .distinctUntilChanged()
             .share()
-            .debug()
 
-        let returnTime = Observable.merge(initialReturnTime, leaveReturnTimeConfigured.map { $0.1})
+        let returnTime = Observable.merge(initialReturnTime, returnTimeConfigured)
+            .distinctUntilChanged()
             .share()
 
         let userGender = self.userSettingUseCase.getUserGender()
@@ -184,7 +214,7 @@ final class WeatherViewModel {
         let recommendedClotingItemViewModel = touchedButton
             .map { _, items in
                 ClothesType.allCases.compactMap { type in
-                    items.filter { $0.type == type }.randomElement()
+                    items.filter { $0.type == type }.randomElement() ?? ClothesItemViewModel(type: type)
                 }
             }
             .share()
@@ -223,7 +253,6 @@ final class WeatherViewModel {
                  returnTime.convert(to: .hourlyWeatherTime))
             }
             .map { "\($0.0) 외출 \($0.1) 복귀"}
-            .debug()
 
         return Output(
             locationAddress: locationAddress,
@@ -237,7 +266,9 @@ final class WeatherViewModel {
             allClotingItem: allClothingItems,
             recommendedClotingItem: recommendedClotingItemViewModel,
             leaveReturnTitleText: leaveReturnTitleText,
-            allClothingViewDismiss: allClothingViewDismiss
+            allClothingViewDismiss: allClothingViewDismiss,
+            initialLeaveTime: initialLeaveTimeSliderVlaue,
+            initialReturnTIme: initialReturnTimeSliderValue
         )
     }
 }

@@ -147,6 +147,14 @@ class WeatherViewController: UIViewController {
         return label
     }()
 
+    private let activityIndicator: AnimationView = {
+        let animationView = AnimationView(name: "BlueActivityIndicator")
+        animationView.play()
+        animationView.loopMode = .loop
+        animationView.backgroundBehavior = .pauseAndRestore
+        return animationView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureHierarchy()
@@ -171,10 +179,10 @@ class WeatherViewController: UIViewController {
         self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentMinMaxTemperatureLabel)
         self.hourlyWeatherStackView.addArrangedSubview(self.hourlyWeatherWrappingView)
         self.hourlyWeatherWrappingView.addArrangedSubview(self.hourlyWeatherCollectionView)
+        self.clotingCollectionView.addSubview(self.activityIndicator)
     }
 
     private func configureConstraint() {
-
         self.scrollView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -200,11 +208,16 @@ class WeatherViewController: UIViewController {
             $0.trailing.equalTo(self.locationLabel.snp.leading).offset(-3)
             $0.centerY.equalTo(self.locationLabel).offset(-0.5)
         }
+
+        self.activityIndicator.snp.makeConstraints {
+            $0.centerX.equalTo(self.clotingCollectionView)
+            $0.top.equalTo(self.clotingCollectionView).offset(50)
+            $0.width.height.equalTo(110)
+        }
     }
 
     private func binding() {
         guard let viewModel = self.viewModel else { return }
-
         let input = WeatherViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             randomButtonTapped: self.randomButtonDidTap.asObservable(),
@@ -303,6 +316,12 @@ class WeatherViewController: UIViewController {
             .subscribe()
             .disposed(by: self.disposeBag)
 
+        output.recommendedClotingItem.asObservable()
+            .subscribe(onNext: { _ in
+                self.activityIndicator.stop()
+                self.activityIndicator.isHidden = true
+            })
+            .disposed(by: self.disposeBag)
 
         output.initialLeaveTime
             .subscribe(onNext: {

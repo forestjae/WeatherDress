@@ -27,4 +27,5 @@ extension UIColor {
     static let deepSkyDim = UIColor(red: 68, green: 103, blue: 162)
     static let darkSky = UIColor(red: 34, green: 51, blue: 81)
     static let cold = UIColor(red: 136, green: 196, blue: 255)
+    static let deepDarkGray = UIColor(red: 55, green: 55, blue: 55)
 }

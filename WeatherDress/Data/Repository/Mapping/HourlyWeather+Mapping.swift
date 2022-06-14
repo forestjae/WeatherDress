@@ -42,10 +42,10 @@ extension HourlyWeather {
         case (.hazy, .none):
             return .cloudy
         case (.clear, .rain), (.clear, .shower), (.cloudy, .rain), (.cloudy, .shower),
-            (.hazy, .rain), (.hazy, .shower):
+            (.hazy, .rain), (.hazy, .shower), (.clear, .snowAndRain), (.cloudy, .snowAndRain),
+            (.hazy, .snowAndRain):
             return .rain
-        case (.clear, .snow), (.clear, .snowAndRain), (.cloudy, .snow), (.cloudy, .snowAndRain),
-            (.hazy, .snow), (.hazy, .snowAndRain):
+        case (.clear, .snow), (.cloudy, .snow), (.hazy, .snow):
             return .snow
         }
     }
@@ -62,12 +62,12 @@ extension HourlyWeather {
         case (.hazy, .none):
             return .cloudy
         case (.clear, .rain), (.clear, .raindrops), (.cloudy, .rain), (.cloudy, .raindrops),
-            (.hazy, .rain), (.hazy, .raindrops) :
+            (.hazy, .rain), (.hazy, .raindrops), (.clear, .snowAndRain), (.cloudy, .snowAndRain),
+            (.hazy, .raindropsAndSnowflakes), (.hazy, .snowAndRain),
+            (.cloudy, .raindropsAndSnowflakes), (.clear, .raindropsAndSnowflakes) :
             return .rain
-        case (.clear, .snow), (.clear, .snowAndRain), (.clear, .raindropsAndSnowflakes),
-            (.clear, .snowflakes), (.cloudy, .snow), (.cloudy, .snowAndRain),
-            (.cloudy, .raindropsAndSnowflakes), (.cloudy, .snowflakes), (.hazy, .snow),
-            (.hazy, .snowAndRain), (.hazy, .raindropsAndSnowflakes), (.hazy, .snowflakes):
+        case (.clear, .snow), (.clear, .snowflakes), (.cloudy, .snow), (.cloudy, .snowflakes),
+            (.hazy, .snow), (.hazy, .snowflakes):
             return .snow
         }
     }

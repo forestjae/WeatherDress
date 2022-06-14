@@ -76,12 +76,10 @@ class InitialSettingViewModel {
         let selectedGender = input.genderSegmentedIndex
             .asObservable()
             .compactMap { Gender(index: $0) }
-            .debug()
 
         let selectedTemperatureSensitive = input.temperatureSensitiveSegmentedIndex
             .asObservable()
             .compactMap { TemperatureSensitiveness(rawValue: $0) }
-            .debug()
 
         _ = acceptButtonDidTapped.withLatestFrom(selectedGender)
             .do(onNext: { [weak self] gender in

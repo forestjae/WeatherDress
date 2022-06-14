@@ -149,7 +149,6 @@ class UserSettingViewModel {
         let selectedTemperatureSensitive = input.temperatureSensitiveSegmentedIndex
             .asObservable()
             .compactMap { TemperatureSensitiveness(rawValue: $0) }
-            .debug()
 
         let setTemperatureSensitive = Observable.merge(
             initialTemperatureSensitive, selectedTemperatureSensitive

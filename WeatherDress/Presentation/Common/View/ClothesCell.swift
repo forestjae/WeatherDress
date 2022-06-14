@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 private enum Design {
-    static let mainFontColor: UIColor = .black
-    static let timeLabelFont: UIFont = .systemFont(ofSize: 15, weight: .semibold)
+    static let mainFontColor: UIColor = .deepDarkGray
+    static let timeLabelFont: UIFont = .systemFont(ofSize: 13, weight: .semibold)
         .metrics(for: .headline)
     static let temperatureLabelFont: UIFont = .systemFont(ofSize: 18, weight: .semibold)
         .metrics(for: .headline)
@@ -37,6 +37,11 @@ class ClothesCell: UICollectionViewCell {
 
     private let clothesImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        imageView.layer.shadowRadius = 4
+        imageView.layer.masksToBounds = false
+        imageView.layer.shadowOpacity = 0.3
         return imageView
     }()
 
@@ -52,7 +57,7 @@ class ClothesCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = .white.withAlphaComponent(0.5)
+        self.contentView.backgroundColor = .white.withAlphaComponent(0.95)
         self.contentView.layer.cornerRadius = 6
         self.contentView.layer.shadowColor = UIColor.black.cgColor
         self.contentView.layer.shadowOffset = CGSize(width: 2, height: 2)

@@ -16,17 +16,16 @@ private enum Design {
 class RecommendationCollectionFooterView: UICollectionReusableView {
     let randomButton: UIButton = {
         let button = UIButton()
-        button.setTitle("다시추천받기", for: .normal)
+        button.setImage(UIImage(systemName: "arrow.clockwise.circle.fill"), for: .normal)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 22), forImageIn: .normal)
+        button.tintColor = .white
         return button
     }()
 
     let clotingDescriptionLabel: UILabel = {
         let label = UILabel()
-        return label
-    }()
-
-    let timeDescriptionLabel: UILabel = {
-        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .bold).metrics(for: .title3)
+        label.textColor = .white
         return label
     }()
 
@@ -36,20 +35,11 @@ class RecommendationCollectionFooterView: UICollectionReusableView {
         return view
     }()
 
-    let timeConfigurationButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        button.tintColor = .white
-        return button
-    }()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(self.separatorView)
         self.addSubview(self.clotingDescriptionLabel)
         self.addSubview(self.randomButton)
-        self.addSubview(self.timeDescriptionLabel)
-        self.addSubview(self.timeConfigurationButton)
         self.configureConstraint()
     }
 
@@ -58,25 +48,17 @@ class RecommendationCollectionFooterView: UICollectionReusableView {
             $0.height.equalTo(0.4)
             $0.width.equalTo(self)
             $0.leading.equalTo(self)
-            $0.bottom.equalTo(self).offset(1)
+            $0.top.equalTo(self).offset(27)
         }
 
         self.randomButton.snp.makeConstraints {
             $0.top.equalTo(self)
-            $0.trailing.equalTo(self).offset(-10)
+            $0.trailing.equalTo(self).offset(-12)
         }
 
         self.clotingDescriptionLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(self).offset(10)
-        }
-
-        self.timeDescriptionLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(self)
-        }
-
-        self.timeConfigurationButton.snp.makeConstraints {
-            $0.leading.equalTo(self.timeDescriptionLabel.snp.trailing).offset(10)
-            $0.centerY.equalTo(self.timeDescriptionLabel)
+            $0.top.equalTo(self).offset(30)
+            $0.centerX.equalTo(self)
         }
     }
 

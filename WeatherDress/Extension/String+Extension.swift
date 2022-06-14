@@ -35,3 +35,18 @@ extension String {
         return fullString
     }
 }
+
+extension String {
+    func convertToDate() -> Date? {
+        guard let hour = Int(String(self.prefix(2))) else {
+            return nil
+        }
+        if hour > 4 {
+            let string = DateFormatter.yearMonthDay.string(from: Date()) + self
+            return DateFormatter.yearMonthDayHour.date(from: string)
+        } else {
+            let string = DateFormatter.yearMonthDay.string(from: Date() + 3600 * 24) + self
+            return DateFormatter.yearMonthDayHour.date(from: string)
+        }
+    }
+}

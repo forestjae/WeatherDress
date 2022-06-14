@@ -10,7 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Lottie
-import SwiftUI
 
 private enum Design {
     static let locationLabelFont: UIFont = .systemFont(ofSize: 23, weight: .semibold).metrics(for: .title3)
@@ -30,6 +29,10 @@ class WeatherViewController: UIViewController {
     private let randomButtonDidTap = PublishSubject<Void>()
     private let timeConfigureButtonDidTap = PublishSubject<Void>()
     private let leaveReturnTimeLabelText = BehaviorSubject<String>(value: "")
+    private let leaveTimeSliderValue = PublishSubject<Double>()
+    private let returnTimeSliderValue = PublishSubject<Double>()
+    private let initialLeaveTimeSliderValue = BehaviorSubject<Double>(value: 0.0)
+    private let initialReturnTimeSliderValue = BehaviorSubject<Double>(value: 24.0)
 
     private let hourlyWeatherStackView: UIStackView = {
         let stackView = UIStackView()
@@ -136,20 +139,20 @@ class WeatherViewController: UIViewController {
         return stackView
     }()
 
-//    let currentWeatherDescriptionLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "어제보다 1°높아요"
-//        label.font = .preferredFont(forTextStyle: .callout)
-//        label.textColor = Design.mainFontColor
-//        return label
-//    }()
-
     private let currentMinMaxTemperatureLabel: UILabel = {
         let label = UILabel()
         label.text = "- / -"
         label.textColor = Design.mainFontColor
         label.font = .preferredFont(forTextStyle: .body)
         return label
+    }()
+
+    private let activityIndicator: AnimationView = {
+        let animationView = AnimationView(name: "BlueActivityIndicator")
+        animationView.play()
+        animationView.loopMode = .loop
+        animationView.backgroundBehavior = .pauseAndRestore
+        return animationView
     }()
 
     override func viewDidLoad() {
@@ -161,12 +164,8 @@ class WeatherViewController: UIViewController {
         self.binding()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     private func configureHierarchy() {
-        self.view.addSubview(scrollView)
+        self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(stackView)
         self.stackView.addArrangedSubview(self.currentStackView)
         self.stackView.addArrangedSubview(self.clotingCollectionView)
@@ -180,10 +179,10 @@ class WeatherViewController: UIViewController {
         self.currentWeatherDescriptionStackView.addArrangedSubview(self.currentMinMaxTemperatureLabel)
         self.hourlyWeatherStackView.addArrangedSubview(self.hourlyWeatherWrappingView)
         self.hourlyWeatherWrappingView.addArrangedSubview(self.hourlyWeatherCollectionView)
+        self.clotingCollectionView.addSubview(self.activityIndicator)
     }
 
     private func configureConstraint() {
-
         self.scrollView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -197,36 +196,50 @@ class WeatherViewController: UIViewController {
 
         self.hourlyWeatherCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
-            $0.height.equalTo(800)
+            $0.height.equalTo(700)
         }
 
         self.clotingCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
-            $0.height.equalTo(400)
+            $0.height.equalTo(370)
         }
 
         self.isCurrentImage.snp.makeConstraints {
             $0.trailing.equalTo(self.locationLabel.snp.leading).offset(-3)
             $0.centerY.equalTo(self.locationLabel).offset(-0.5)
         }
+
+        self.activityIndicator.snp.makeConstraints {
+            $0.centerX.equalTo(self.clotingCollectionView)
+            $0.top.equalTo(self.clotingCollectionView).offset(50)
+            $0.width.height.equalTo(110)
+        }
     }
 
     private func binding() {
         guard let viewModel = self.viewModel else { return }
-
         let input = WeatherViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             randomButtonTapped: self.randomButtonDidTap.asObservable(),
             allClotingButtonTapped: self.allClotingButtonDidTap.asObservable(),
             timeConfigurationButtonTapped: self.timeConfigureButtonDidTap.asObservable(),
+            timeSliderLowerValueChanged: self.leaveTimeSliderValue,
+            timeSliderUpperValueChnaged: self.returnTimeSliderValue
         )
 
         let output = viewModel.transform(input: input, disposeBag: self.disposeBag)
         self.bindingOutput(for: output)
-
     }
 
     private func bindingOutput(for output: WeatherViewModel.Output) {
+        output.initialLeaveTime
+            .subscribe(self.leaveTimeSliderValue)
+            .disposed(by: self.disposeBag)
+
+        output.initialReturnTIme
+            .subscribe(self.returnTimeSliderValue)
+            .disposed(by: self.disposeBag)
+
         output.locationAddress
             .drive(self.locationLabel.rx.text)
             .disposed(by: self.disposeBag)
@@ -301,6 +314,25 @@ class WeatherViewController: UIViewController {
 
         output.allClothingViewDismiss
             .subscribe()
+            .disposed(by: self.disposeBag)
+
+        output.recommendedClotingItem.asObservable()
+            .subscribe(onNext: { _ in
+                self.activityIndicator.stop()
+                self.activityIndicator.isHidden = true
+            })
+            .disposed(by: self.disposeBag)
+
+        output.initialLeaveTime
+            .subscribe(onNext: {
+                self.initialLeaveTimeSliderValue.onNext($0)
+            })
+            .disposed(by: self.disposeBag)
+
+        output.initialReturnTIme
+            .subscribe(onNext: {
+                self.initialReturnTimeSliderValue.onNext($0)
+            })
             .disposed(by: self.disposeBag)
     }
 
@@ -425,7 +457,7 @@ class WeatherViewController: UIViewController {
 
                 let titleSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(34)
+                    heightDimension: .estimated(68)
                 )
 
                 let footerSize = NSCollectionLayoutSize(
@@ -582,7 +614,6 @@ extension WeatherViewController {
 
     private func provideSupplementaryViewForClotingCollectionView() {
         self.clotingDataSource?.supplementaryViewProvider = { (_, kind, indexPath) in
-            var supplementaryView: UICollectionReusableView
             if kind == "header" {
                 let header = self.clotingCollectionView.dequeueReusableSupplementaryView(
                     ofKind: "header",
@@ -594,6 +625,40 @@ extension WeatherViewController {
                 header?.allClotingButton.rx.tap
                     .subscribe(self.allClotingButtonDidTap)
                     .disposed(by: self.disposeBag)
+
+                Observable.combineLatest(self.leaveTimeSliderValue, self.returnTimeSliderValue)
+                    .subscribe(onNext: {
+                        let leaveHour = $0.0 < 24 ? $0.0 : $0.0 - 24
+                        let returnHour = $0.1 < 24 ? $0.1 : $0.1 - 24
+                        header?.leaveReturnTimeLabel.text =
+                        String(Int(leaveHour)) + "시 - " + String(Int(returnHour)) + "시"
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                self.initialLeaveTimeSliderValue
+                    .subscribe(onNext: {
+                        header?.slider.lower = $0
+                    })
+                    .disposed(by: self.disposeBag)
+                self.initialReturnTimeSliderValue
+                    .subscribe(onNext: {
+                        header?.slider.upper = $0
+                    })
+                    .disposed(by: self.disposeBag)
+
+                header?.slider.rx.lower
+                    .subscribe(onNext: {
+                        self.leaveTimeSliderValue.onNext($0)
+
+                    })
+                    .disposed(by: self.disposeBag)
+
+                header?.slider.rx.upper
+                    .subscribe(onNext: {
+                        self.returnTimeSliderValue.onNext($0)
+                    })
+                    .disposed(by: self.disposeBag)
+
                 return header
             } else if kind == "footer" {
                 let footer = self.clotingCollectionView.dequeueReusableSupplementaryView(

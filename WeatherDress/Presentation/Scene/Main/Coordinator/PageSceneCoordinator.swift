@@ -18,7 +18,6 @@ class PageSceneCoordinator: Coordinator<Void> {
         self.navigationController = navigationController
         let mainViewController = MainViewController()
         self.mainViewController = mainViewController
-
     }
 
     override func start() -> Observable<Void> {
@@ -57,34 +56,75 @@ class PageSceneCoordinator: Coordinator<Void> {
             }
     }
 
-    func setChildViewController(with locations: [LocationInfo]) {
+    func coordinateToUserSetting() -> Observable<Void> {
+        return self.coordinate(
+            to: UserSettingCoordinator(
+                parentViewController: self.navigationController
+            )
+        )
+    }
+
+    func setCurrentLocationWeatherViewController(with location: LocationInfo, isVisible: Bool) {
+        let viewController = self.makeWeatherViewController(with: location)
+
+        viewController.view.tag = 0
+        if isVisible {
+            self.mainViewController.orderedViewControllers[0] = viewController
+        } else {
+            self.mainViewController.orderedViewControllers.forEach { $0.view.tag += 1 }
+            self.mainViewController.orderedViewControllers.insert(viewController, at: 0)
+        }
+        self.mainViewController.setCurrentPageViewController(at: 0)
+    }
+
+    func deleteCurrentLocationWeatherViewController() {
+        let currentOrdered = self.mainViewController.orderedViewControllers.enumerated()
+            .filter { index, _ in index != 0 }
+            .map { $0.1 }
+        self.mainViewController.orderedViewControllers = currentOrdered
+        self.mainViewController.orderedViewControllers.forEach { $0.view.tag -= 1 }
+        self.mainViewController.setCurrentPageViewController(at: 0)
+    }
+
+    func setChildViewController(with locations: [LocationInfo], isCurrentVisible: Bool) {
         let childCount = self.mainViewController.orderedViewControllers.count
-        if  childCount == 0 {
-            self.mainViewController.orderedViewControllers = locations.enumerated()
+        let targetCount = isCurrentVisible ? locations.count + 1 : locations.count
+
+        if (childCount == 1 && isCurrentVisible) || childCount == 0 {
+            if locations.count == 0 {
+                return
+            }
+            self.mainViewController.orderedViewControllers.append(contentsOf: locations.enumerated()
                 .map { index, location in
                     let viewController = self.makeWeatherViewController(with: location)
-                    viewController.view.tag = index
+                    viewController.view.tag = index + targetCount - locations.count
                     return viewController
-                }
-
+                })
             self.mainViewController.setCurrentPageViewController(at: 0)
-        } else if childCount < locations.count {
+        } else if childCount < targetCount {
             guard let last = locations.last else {
                 return
             }
-
             let viewController = self.makeWeatherViewController(with: last)
-            viewController.view.tag = locations.count - 1
+            viewController.view.tag = targetCount - 1
             self.mainViewController.orderedViewControllers.append(viewController)
             self.mainViewController.setCurrentPageViewController(at: 0)
-        } else if childCount > locations.count {
-            zip(self.mainViewController.orderedViewControllers, locations)
-            .forEach { viewController, location in
+        } else if childCount > targetCount {
+            let favoriteViewController: [WeatherViewController]
+            if isCurrentVisible {
+                favoriteViewController = Array(self.mainViewController.orderedViewControllers.dropFirst())
+            } else {
+                favoriteViewController = self.mainViewController.orderedViewControllers
+            }
+
+            zip(favoriteViewController, locations).forEach { viewController, location in
                 viewController.viewModel?.setLocationInfo(location)
             }
 
-            self.mainViewController.orderedViewControllers.remove(at: locations.count)
-            self.mainViewController.setCurrentPageViewController(at: 0)
+            self.mainViewController.orderedViewControllers.remove(at: targetCount)
+            if self.mainViewController.orderedViewControllers.count > 0 {
+                self.mainViewController.setCurrentPageViewController(at: 0)
+            }
         }
     }
 

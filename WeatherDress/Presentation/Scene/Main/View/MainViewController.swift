@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
         return pageViewController
     }()
 
-    private lazy var listBarButtonItem: UIBarButtonItem = {
+    private let listBarButtonItem: UIBarButtonItem = {
         let barButtomItem = UIBarButtonItem(
             image: UIImage(systemName: "list.bullet"),
             style: .plain,
@@ -40,6 +40,25 @@ class MainViewController: UIViewController {
         )
         barButtomItem.tintColor = .white
         return barButtomItem
+    }()
+
+    private let configuratingBarButtonItem: UIBarButtonItem = {
+        let barButtomItem = UIBarButtonItem(
+            image: UIImage(systemName: "gearshape.fill"),
+            style: .plain,
+            target: self,
+            action: nil
+        )
+        barButtomItem.tintColor = .white
+        return barButtomItem
+    }()
+
+    private let noLocationAvailableLabel: UILabel = {
+        let label = UILabel()
+        label.text = "현재 표시 가능한 지역정보가 없습니다. 위치 권한을 변경하시거나 오른쪽 아래 버튼을 통해 새로운 지역을 추가해 주세요."
+        label.numberOfLines = 0
+        label.isHidden = true
+        return label
     }()
 
     override func viewDidLoad() {
@@ -55,7 +74,7 @@ class MainViewController: UIViewController {
         self.pageViewController.setViewControllers(
             [self.orderedViewControllers[index]],
             direction: .forward,
-            animated: true
+            animated: false
         )
         self.pageControl.currentPage = index
         self.pageViewController.dataSource = nil
@@ -92,6 +111,7 @@ class MainViewController: UIViewController {
         self.addChild(self.pageViewController)
         self.view.addSubview(self.pageViewController.view)
         self.view.addSubview(self.toolBar)
+        self.view.addSubview(self.noLocationAvailableLabel)
     }
 
     private func configureConstraint() {
@@ -104,6 +124,10 @@ class MainViewController: UIViewController {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             $0.width.equalTo(self.view)
         }
+
+        self.noLocationAvailableLabel.snp.makeConstraints {
+            $0.center.equalTo(self.view.safeAreaLayoutGuide)
+        }
     }
 
     private func binding() {
@@ -112,12 +136,17 @@ class MainViewController: UIViewController {
         let input = MainViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear(_:)))
                 .map { _ in },
-            locationButtonDidTap: self.listBarButtonItem.rx.tap.asObservable()
+            locationButtonDidTap: self.listBarButtonItem.rx.tap.asObservable(),
+            configurationButtonDidTap: self.configuratingBarButtonItem.rx.tap.asObservable()
         )
+
         let output = viewModel.transform(input: input, disposeBag: self.disposeBag)
 
+        output.currentLocation
+            .subscribe()
+            .disposed(by: self.disposeBag)
+
         output.locations
-            .map { $0.count }
             .drive(self.pageControl.rx.numberOfPages)
             .disposed(by: self.disposeBag)
 
@@ -125,6 +154,14 @@ class MainViewController: UIViewController {
             .drive(onNext: {
                 self.setCurrentPageViewController(at: $0)
             })
+            .disposed(by: self.disposeBag)
+
+        output.currentLocationAvailable
+            .drive(self.pageControl.rx.currentLocationAvailable)
+            .disposed(by: self.disposeBag)
+
+        output.anyLocationAvailable
+            .drive(self.noLocationAvailableLabel.rx.isHidden)
             .disposed(by: self.disposeBag)
     }
 
@@ -138,6 +175,7 @@ class MainViewController: UIViewController {
         self.toolBar.backgroundColor = .white
         self.toolBar.isHidden = false
         self.toolBar.items = [
+            self.configuratingBarButtonItem,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(customView: self.pageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
@@ -147,9 +185,6 @@ class MainViewController: UIViewController {
 
     private func configurePageControl() {
         self.pageControl.numberOfPages = 1
-        if #available(iOS 14.0, *) {
-            self.pageControl.setIndicatorImage(UIImage(systemName: "location.fill"), forPage: 0)
-        }
     }
 }
 

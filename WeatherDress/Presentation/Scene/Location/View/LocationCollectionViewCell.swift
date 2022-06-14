@@ -56,7 +56,7 @@ extension LocationCollectionViewCell {
     func configure(with locationInfo: LocationInfo, indexPath: Int, weather: CurrentWeather) {
         var content = UIListContentConfiguration.cell()
 
-        if indexPath == 0 {
+        if locationInfo.isCurrent {
             content.text = "나의 위치"
             self.locationDescriptionLabel.isHidden = false
             self.locationDescriptionLabel.text = locationInfo.shortAddress()

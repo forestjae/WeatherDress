@@ -40,6 +40,16 @@ class ClothesCell: UICollectionViewCell {
         return imageView
     }()
 
+    private let emptyDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.isHidden = false
+        label.textColor = .darkGray
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.contentView.backgroundColor = .white.withAlphaComponent(0.5)
@@ -58,8 +68,22 @@ class ClothesCell: UICollectionViewCell {
     }
 
     func configureContent(with viewModel: ClothesItemViewModel) {
-        self.nameLabel.text = viewModel.name.localized
-        self.clothesImageView.image = UIImage(named: viewModel.name)
+        if let name = viewModel.name {
+            self.nameLabel.text = name.localized
+            self.clothesImageView.image = UIImage(named: name)
+            self.emptyDescriptionLabel.isHidden = true
+            self.clothesImageView.isHidden = false
+            self.nameLabel.isHidden = false
+        } else {
+            self.emptyDescriptionLabel.isHidden = false
+            self.emptyDescriptionLabel.attributedText = viewModel.discription.attach(
+                with: "exclamationmark.circle",
+                pointSize: 13,
+                tintColor: .darkGray
+            )
+            self.clothesImageView.isHidden = true
+            self.nameLabel.isHidden = true
+        }
     }
 
     func configureConstraint() {
@@ -75,5 +99,6 @@ class ClothesCell: UICollectionViewCell {
         self.contentView.addSubview(self.stackView)
         self.stackView.addArrangedSubview(self.nameLabel)
         self.stackView.addArrangedSubview(self.clothesImageView)
+        self.stackView.addArrangedSubview(self.emptyDescriptionLabel)
     }
 }

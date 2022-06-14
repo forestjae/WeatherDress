@@ -265,6 +265,12 @@ extension LocationViewController {
                 guard let item = self?.dataSource?.itemIdentifier(for: indexPath) else {
                     return nil
                 }
+                if case let .location(locationInfo, _) = item {
+                    if locationInfo.isCurrent {
+                        return nil
+                    }
+                }
+
                 return self?.trailingSwipeActionConfigurationForListCellItem(item)
             }
             let section = NSCollectionLayoutSection.list(

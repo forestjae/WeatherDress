@@ -87,13 +87,8 @@ class MainViewController: UIViewController {
         gradientLayer.frame = self.view.bounds
 
         let colors: [CGColor] = [
-            UIColor.deepSky.cgColor,
-            UIColor.deepSky.cgColor,
-            UIColor.lightSky.cgColor,
-            UIColor.lightSky.cgColor,
-            UIColor.lightSky.cgColor,
-            UIColor.skyWhite.cgColor,
-            UIColor.skyWhite.cgColor
+            UIColor.init(red: 48/255, green: 97/255, blue: 213/255, alpha: 1.0).cgColor,
+            UIColor.init(red: 95/255, green: 189/255, blue: 240/255, alpha: 1.0).cgColor
         ]
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
@@ -127,6 +122,7 @@ class MainViewController: UIViewController {
 
         self.noLocationAvailableLabel.snp.makeConstraints {
             $0.center.equalTo(self.view.safeAreaLayoutGuide)
+            $0.width.equalTo(self.view.safeAreaLayoutGuide).dividedBy(1.3)
         }
     }
 

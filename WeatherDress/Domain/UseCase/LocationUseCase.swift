@@ -15,13 +15,13 @@ final class LocationUseCase {
         self.repository = repository
     }
 
-    func fetchLocations() -> Observable<[LocationInfo]> {
-        return Observable.combineLatest(
-            self.repository.fetchCurrentLocation(),
-            self.repository.fetchFavoriteLocations()
-        )
-        .debug()
-        .map { [$0] + $1 }
+    func fetchCurrentLocations() -> Observable<LocationInfo> {
+        self.repository.fetchCurrentLocation()
+    }
+
+    func fetchFavoriteLocations() -> Observable<[LocationInfo]> {
+
+        self.repository.fetchFavoriteLocations()
     }
 
     func deleteLocation(location: LocationInfo) -> Completable {

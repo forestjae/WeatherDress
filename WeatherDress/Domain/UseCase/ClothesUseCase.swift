@@ -20,20 +20,25 @@ class ClothesUseCase {
         for hourlyWeathers: [HourlyWeather],
         in gender: Gender,
         leaveTime: Date,
-        returnTime: Date
+        returnTime: Date,
+        temperatureSensitiveness: TemperatureSensitiveness
     ) -> Observable<[Clothes]> {
         let temperatures = hourlyWeathers
             .filter {
                 leaveTime <= $0.date && returnTime >= $0.date
             }
             .map { $0.temperature }
+        
         guard let maxTemperature = temperatures.max(),
               let minTemperature = temperatures.min() else {
                   return Observable.error(ClothesUseCaseError.wrongTemperature)
               }
 
+        let revisedMaxTemperature = maxTemperature + temperatureSensitiveness.temperatureToRevise
+        let revisedMinTemperature = minTemperature + temperatureSensitiveness.temperatureToRevise
+
         return self.repository.fetchCurrentRecommendedClothing(
-            for: minTemperature...maxTemperature,
+            for: revisedMinTemperature...revisedMaxTemperature,
             in: gender
         )
     }

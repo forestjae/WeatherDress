@@ -182,6 +182,9 @@ final class WeatherViewModel {
         let userGender = self.userSettingUseCase.getUserGender()
             .compactMap { $0 }
 
+        let userTemperatureSensitiveness = self.userSettingUseCase.getUserTemperatureSensitive()
+            .compactMap { $0 }
+
         let hourlyWeatherItem = Observable.combineLatest(currentWeather, hourlyWeathers)
             .map { currentWeather, hourlyWeathers in
                 [HourlyWeather(currentWeather: currentWeather)] + hourlyWeathers
@@ -190,15 +193,17 @@ final class WeatherViewModel {
         let allClothingItems = Observable.combineLatest(
             hourlyWeatherItem,
             userGender,
+            userTemperatureSensitiveness,
             leaveTime,
             returnTime
         )
-            .flatMap { weathers, gender, leaveTime, returnTime in
+            .flatMap { weathers, gender, userTemperatureSensitiveness, leaveTime, returnTime in
                 self.clothingUseCase.fetchCurrentRecommendedCloting(
                     for: weathers,
                     in: gender,
                     leaveTime: leaveTime,
-                    returnTime: returnTime
+                    returnTime: returnTime,
+                    temperatureSensitiveness: userTemperatureSensitiveness
                 )
             }
             .map {

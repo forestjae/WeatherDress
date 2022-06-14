@@ -7,11 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331A0D7A285374B80078471F /* TimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A0D79285374B80078471F /* TimeLabel.swift */; };
+		331A0D7C285473820078471F /* SettingSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A0D7B285473820078471F /* SettingSegmentedControl.swift */; };
+		331A0D80285594EC0078471F /* UIPageControl+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A0D7F285594EC0078471F /* UIPageControl+Rx.swift */; };
 		333BBA4427FD819F004561DA /* HourlyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BBA4327FD819F004561DA /* HourlyWeatherCollectionViewCell.swift */; };
 		333BBA4A27FDE861004561DA /* GeoSearchAPIInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BBA4927FDE861004561DA /* GeoSearchAPIInfo.swift */; };
 		333BBA4C27FDEC4B004561DA /* AddressSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BBA4B27FDEC4B004561DA /* AddressSearchRequest.swift */; };
 		333BBA4E27FDECAD004561DA /* GeoSearchRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BBA4D27FDECAD004561DA /* GeoSearchRequestable.swift */; };
 		333BBA5627FDF6A4004561DA /* GeoCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333BBA5527FDF6A4004561DA /* GeoCodeRequest.swift */; };
+		33482E6F28525F4A004C16D8 /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33482E6E28525F4A004C16D8 /* RangeSlider.swift */; };
+		33482E7128532640004C16D8 /* RangeSlider+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33482E7028532640004C16D8 /* RangeSlider+Rx.swift */; };
 		335CABD1283735430079FC77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 335CABD3283735430079FC77 /* Localizable.strings */; };
 		335CABD6283763740079FC77 /* ModalDimmedBackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335CABD5283763740079FC77 /* ModalDimmedBackViewController.swift */; };
 		335CABDB28380FAB0079FC77 /* AllClothingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335CABDA28380FAB0079FC77 /* AllClothingViewController.swift */; };
@@ -81,16 +86,20 @@
 		3381DE1E27F32364007FBCAE /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DE1D27F32364007FBCAE /* APIRequest.swift */; };
 		3381DE2227F32577007FBCAE /* ShortForecastRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3381DE2127F32577007FBCAE /* ShortForecastRequest.swift */; };
 		33870D87283C75C0009BDE83 /* RecommendationCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D86283C75C0009BDE83 /* RecommendationCollectionHeaderView.swift */; };
-		33870D8A283CACCD009BDE83 /* TimeConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D89283CACCD009BDE83 /* TimeConfigurationViewController.swift */; };
-		33870D8C283CACEB009BDE83 /* TimeConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D8B283CACEB009BDE83 /* TimeConfigurationViewModel.swift */; };
 		33870D90283D01BE009BDE83 /* UserSettingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D8F283D01BE009BDE83 /* UserSettingUseCase.swift */; };
 		33870D92283D03D5009BDE83 /* UserSettingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D91283D03D5009BDE83 /* UserSettingRepository.swift */; };
 		33870D94283D04ED009BDE83 /* DefaultUserSettingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D93283D04ED009BDE83 /* DefaultUserSettingRepository.swift */; };
-		33870D97283D3237009BDE83 /* TimeConfigurationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D96283D3237009BDE83 /* TimeConfigurationCoordinator.swift */; };
 		33870D9A283D40FC009BDE83 /* WeatherCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D99283D40FC009BDE83 /* WeatherCoordinator.swift */; };
 		33870D9C283E4B93009BDE83 /* AllClothingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870D9B283E4B93009BDE83 /* AllClothingCoordinator.swift */; };
 		33870DA4283E4DC8009BDE83 /* ClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DA3283E4DC8009BDE83 /* ClothesCell.swift */; };
 		33870DA6283E5001009BDE83 /* RecommendationCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DA5283E5001009BDE83 /* RecommendationCollectionCell.swift */; };
+		33870DAD283E6B5C009BDE83 /* UserSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DAC283E6B5C009BDE83 /* UserSettingCoordinator.swift */; };
+		33870DAF283E6B76009BDE83 /* UserSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DAE283E6B76009BDE83 /* UserSettingViewController.swift */; };
+		33870DB1283E6B86009BDE83 /* UserSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DB0283E6B86009BDE83 /* UserSettingViewModel.swift */; };
+		33870DBB283E7103009BDE83 /* TemperatureSensitiveness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DBA283E7103009BDE83 /* TemperatureSensitiveness.swift */; };
+		33870DC3283F414E009BDE83 /* InitialSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DC2283F3F47009BDE83 /* InitialSettingViewModel.swift */; };
+		33870DC4283F4150009BDE83 /* InitialSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DBE283F3F47009BDE83 /* InitialSettingCoordinator.swift */; };
+		33870DC5283F4152009BDE83 /* InitialSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33870DC0283F3F47009BDE83 /* InitialSettingViewController.swift */; };
 		338820DC281AE0C4007E4D2D /* Font+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338820DB281AE0C4007E4D2D /* Font+Extension.swift */; };
 		338820DE281AE978007E4D2D /* HourlyCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338820DD281AE978007E4D2D /* HourlyCollectionReusableView.swift */; };
 		338820E2281B8800007E4D2D /* DailyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338820E1281B8800007E4D2D /* DailyWeatherCollectionViewCell.swift */; };
@@ -129,6 +138,8 @@
 		33D96AAA282C9A20009C549C /* ClothesType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458B282A9BC2008054CB /* ClothesType.swift */; };
 		33D96AAB282C9A20009C549C /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4589282A9B97008054CB /* Gender.swift */; };
 		33D96AAC282C9A20009C549C /* Clothes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF4585282A35CB008054CB /* Clothes.swift */; };
+		33DEB5042856FA5000C8279D /* CLLocationCoordinate2D+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DEB5032856FA5000C8279D /* CLLocationCoordinate2D+Extension.swift */; };
+		33DEB50828574BC900C8279D /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DEB50728574BC900C8279D /* Int+Extension.swift */; };
 		33F3F358282E6FCD009AE8F2 /* ClothesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FF458F282ADA6D008054CB /* ClothesUseCase.swift */; };
 		33F3F35C282E704C009AE8F2 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A1EF8928027BEA0031ACED /* WeatherCondition.swift */; };
 		33F3F35E282E70CB009AE8F2 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337ECA2927FD3C6E00EC2D00 /* HourlyWeather.swift */; };
@@ -178,11 +189,16 @@
 		01D8DEBEAB33D1750B71E305 /* Pods-APINetworkingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APINetworkingTests.debug.xcconfig"; path = "Target Support Files/Pods-APINetworkingTests/Pods-APINetworkingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0A9B7AFD4AA172E9E270FA89 /* Pods_WeatherDress.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherDress.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22371198E4927797975CCFE8 /* Pods-WeatherDress-WeatherDressUseCaseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherDress-WeatherDressUseCaseTests.release.xcconfig"; path = "Target Support Files/Pods-WeatherDress-WeatherDressUseCaseTests/Pods-WeatherDress-WeatherDressUseCaseTests.release.xcconfig"; sourceTree = "<group>"; };
+		331A0D79285374B80078471F /* TimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabel.swift; sourceTree = "<group>"; };
+		331A0D7B285473820078471F /* SettingSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSegmentedControl.swift; sourceTree = "<group>"; };
+		331A0D7F285594EC0078471F /* UIPageControl+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageControl+Rx.swift"; sourceTree = "<group>"; };
 		333BBA4327FD819F004561DA /* HourlyWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
 		333BBA4927FDE861004561DA /* GeoSearchAPIInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoSearchAPIInfo.swift; sourceTree = "<group>"; };
 		333BBA4B27FDEC4B004561DA /* AddressSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchRequest.swift; sourceTree = "<group>"; };
 		333BBA4D27FDECAD004561DA /* GeoSearchRequestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoSearchRequestable.swift; sourceTree = "<group>"; };
 		333BBA5527FDF6A4004561DA /* GeoCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCodeRequest.swift; sourceTree = "<group>"; };
+		33482E6E28525F4A004C16D8 /* RangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
+		33482E7028532640004C16D8 /* RangeSlider+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RangeSlider+Rx.swift"; sourceTree = "<group>"; };
 		335CABD2283735430079FC77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		335CABD42837356D0079FC77 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		335CABD5283763740079FC77 /* ModalDimmedBackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalDimmedBackViewController.swift; sourceTree = "<group>"; };
@@ -257,16 +273,20 @@
 		3381DE1D27F32364007FBCAE /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		3381DE2127F32577007FBCAE /* ShortForecastRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortForecastRequest.swift; sourceTree = "<group>"; };
 		33870D86283C75C0009BDE83 /* RecommendationCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationCollectionHeaderView.swift; sourceTree = "<group>"; };
-		33870D89283CACCD009BDE83 /* TimeConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConfigurationViewController.swift; sourceTree = "<group>"; };
-		33870D8B283CACEB009BDE83 /* TimeConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConfigurationViewModel.swift; sourceTree = "<group>"; };
 		33870D8F283D01BE009BDE83 /* UserSettingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingUseCase.swift; sourceTree = "<group>"; };
 		33870D91283D03D5009BDE83 /* UserSettingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingRepository.swift; sourceTree = "<group>"; };
 		33870D93283D04ED009BDE83 /* DefaultUserSettingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserSettingRepository.swift; sourceTree = "<group>"; };
-		33870D96283D3237009BDE83 /* TimeConfigurationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConfigurationCoordinator.swift; sourceTree = "<group>"; };
 		33870D99283D40FC009BDE83 /* WeatherCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoordinator.swift; sourceTree = "<group>"; };
 		33870D9B283E4B93009BDE83 /* AllClothingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllClothingCoordinator.swift; sourceTree = "<group>"; };
 		33870DA3283E4DC8009BDE83 /* ClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCell.swift; sourceTree = "<group>"; };
 		33870DA5283E5001009BDE83 /* RecommendationCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationCollectionCell.swift; sourceTree = "<group>"; };
+		33870DAC283E6B5C009BDE83 /* UserSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingCoordinator.swift; sourceTree = "<group>"; };
+		33870DAE283E6B76009BDE83 /* UserSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewController.swift; sourceTree = "<group>"; };
+		33870DB0283E6B86009BDE83 /* UserSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingViewModel.swift; sourceTree = "<group>"; };
+		33870DBA283E7103009BDE83 /* TemperatureSensitiveness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureSensitiveness.swift; sourceTree = "<group>"; };
+		33870DBE283F3F47009BDE83 /* InitialSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSettingCoordinator.swift; sourceTree = "<group>"; };
+		33870DC0283F3F47009BDE83 /* InitialSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSettingViewController.swift; sourceTree = "<group>"; };
+		33870DC2283F3F47009BDE83 /* InitialSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSettingViewModel.swift; sourceTree = "<group>"; };
 		338820DB281AE0C4007E4D2D /* Font+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extension.swift"; sourceTree = "<group>"; };
 		338820DD281AE978007E4D2D /* HourlyCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyCollectionReusableView.swift; sourceTree = "<group>"; };
 		338820E1281B8800007E4D2D /* DailyWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -301,6 +321,8 @@
 		33D96A9C282C034F009C549C /* WeatherDressUseCaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherDressUseCaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D96A9E282C034F009C549C /* ClothesUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesUseCaseTests.swift; sourceTree = "<group>"; };
 		33D96AA6282C0840009C549C /* MockClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockClothesRepository.swift; sourceTree = "<group>"; };
+		33DEB5032856FA5000C8279D /* CLLocationCoordinate2D+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extension.swift"; sourceTree = "<group>"; };
+		33DEB50728574BC900C8279D /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		33F3F360282E7108009AE8F2 /* HourlyWeather+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HourlyWeather+Extension.swift"; sourceTree = "<group>"; };
 		33F3F36B283121A5009AE8F2 /* DefaultClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultClothesRepository.swift; sourceTree = "<group>"; };
 		33F3F36D283126C8009AE8F2 /* ClothesItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesItemViewModel.swift; sourceTree = "<group>"; };
@@ -473,6 +495,7 @@
 				33870D86283C75C0009BDE83 /* RecommendationCollectionHeaderView.swift */,
 				335CABDC283810220079FC77 /* RecommendationCollectionFooterView.swift */,
 				33870DA5283E5001009BDE83 /* RecommendationCollectionCell.swift */,
+				33482E6E28525F4A004C16D8 /* RangeSlider.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -535,6 +558,10 @@
 				338820DB281AE0C4007E4D2D /* Font+Extension.swift */,
 				33FF45782828C80E008054CB /* String+Extension.swift */,
 				3364A22D281F71D000328A97 /* UIColor+Extension.swift */,
+				33DEB50728574BC900C8279D /* Int+Extension.swift */,
+				33DEB5032856FA5000C8279D /* CLLocationCoordinate2D+Extension.swift */,
+				33482E7028532640004C16D8 /* RangeSlider+Rx.swift */,
+				331A0D7F285594EC0078471F /* UIPageControl+Rx.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -633,6 +660,7 @@
 				33FF458D282ABB2E008054CB /* TemperatureGrade.swift */,
 				33FF4589282A9B97008054CB /* Gender.swift */,
 				33FF458B282A9BC2008054CB /* ClothesType.swift */,
+				33870DBA283E7103009BDE83 /* TemperatureSensitiveness.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -738,6 +766,7 @@
 		3381DE0927F20F1F007FBCAE /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3381DDE227F20C69007FBCAE /* LaunchScreen.storyboard */,
 				33A0DA672818E3FE0080DE81 /* Common */,
 				3381DE0A27F20F2E007FBCAE /* Scene */,
 			);
@@ -747,12 +776,12 @@
 		3381DE0A27F20F2E007FBCAE /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				33870D88283CAA6E009BDE83 /* TimeConfiguration */,
-				335CABDE283818F20079FC77 /* AllClothing */,
-				3381DDE227F20C69007FBCAE /* LaunchScreen.storyboard */,
+				33870DBC283F3F05009BDE83 /* InitialSetting */,
 				3381DE0B27F20F34007FBCAE /* Main */,
 				3364A2B72821A68700328A97 /* Weather */,
+				335CABDE283818F20079FC77 /* AllClothing */,
 				33A1EFCD28032D1E0031ACED /* Location */,
+				33870DA8283E6B1E009BDE83 /* UserSetting */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -810,24 +839,6 @@
 			path = Request;
 			sourceTree = "<group>";
 		};
-		33870D88283CAA6E009BDE83 /* TimeConfiguration */ = {
-			isa = PBXGroup;
-			children = (
-				33870D95283D3229009BDE83 /* Coordinator */,
-				33870D9F283E4BC1009BDE83 /* ViewModel */,
-				33870D9E283E4BB4009BDE83 /* View */,
-			);
-			path = TimeConfiguration;
-			sourceTree = "<group>";
-		};
-		33870D95283D3229009BDE83 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				33870D96283D3237009BDE83 /* TimeConfigurationCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		33870D98283D40F0009BDE83 /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
@@ -842,22 +853,6 @@
 				33870D9B283E4B93009BDE83 /* AllClothingCoordinator.swift */,
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		33870D9E283E4BB4009BDE83 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				33870D89283CACCD009BDE83 /* TimeConfigurationViewController.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		33870D9F283E4BC1009BDE83 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				33870D8B283CACEB009BDE83 /* TimeConfigurationViewModel.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		33870DA0283E4BF6009BDE83 /* ViewModel */ = {
@@ -883,6 +878,8 @@
 			children = (
 				33870DA3283E4DC8009BDE83 /* ClothesCell.swift */,
 				335CABD5283763740079FC77 /* ModalDimmedBackViewController.swift */,
+				331A0D79285374B80078471F /* TimeLabel.swift */,
+				331A0D7B285473820078471F /* SettingSegmentedControl.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -893,6 +890,74 @@
 				335CABD3283735430079FC77 /* Localizable.strings */,
 			);
 			path = Localizing;
+			sourceTree = "<group>";
+		};
+		33870DA8283E6B1E009BDE83 /* UserSetting */ = {
+			isa = PBXGroup;
+			children = (
+				33870DA9283E6B2E009BDE83 /* Coordinator */,
+				33870DAB283E6B35009BDE83 /* ViewModel */,
+				33870DAA283E6B32009BDE83 /* View */,
+			);
+			path = UserSetting;
+			sourceTree = "<group>";
+		};
+		33870DA9283E6B2E009BDE83 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				33870DAC283E6B5C009BDE83 /* UserSettingCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		33870DAA283E6B32009BDE83 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				33870DAE283E6B76009BDE83 /* UserSettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		33870DAB283E6B35009BDE83 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				33870DB0283E6B86009BDE83 /* UserSettingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		33870DBC283F3F05009BDE83 /* InitialSetting */ = {
+			isa = PBXGroup;
+			children = (
+				33870DBD283F3F47009BDE83 /* Coordinator */,
+				33870DC1283F3F47009BDE83 /* ViewModel */,
+				33870DBF283F3F47009BDE83 /* View */,
+			);
+			path = InitialSetting;
+			sourceTree = "<group>";
+		};
+		33870DBD283F3F47009BDE83 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				33870DBE283F3F47009BDE83 /* InitialSettingCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		33870DBF283F3F47009BDE83 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				33870DC0283F3F47009BDE83 /* InitialSettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		33870DC1283F3F47009BDE83 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				33870DC2283F3F47009BDE83 /* InitialSettingViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		33A0DA672818E3FE0080DE81 /* Common */ = {
@@ -1371,12 +1436,12 @@
 				33A1EF5B27FE8EBB0031ACED /* GeoSearchService.swift in Sources */,
 				33A0DA692818E4150080DE81 /* Coordinator.swift in Sources */,
 				33A1EFE42804522F0031ACED /* WeatherViewModel.swift in Sources */,
+				331A0D7A285374B80078471F /* TimeLabel.swift in Sources */,
 				333BBA4A27FDE861004561DA /* GeoSearchAPIInfo.swift in Sources */,
 				338820DE281AE978007E4D2D /* HourlyCollectionReusableView.swift in Sources */,
 				33882120281C37C8007E4D2D /* HourlyBackgroundView.swift in Sources */,
 				337ECA1927FC77E700EC2D00 /* APIProvider.swift in Sources */,
 				33F3F37028328100009AE8F2 /* AllClothingCollectionViewCell.swift in Sources */,
-				33870D8A283CACCD009BDE83 /* TimeConfigurationViewController.swift in Sources */,
 				33870DA4283E4DC8009BDE83 /* ClothesCell.swift in Sources */,
 				337EC9E327FC2E5000EC2D00 /* MidForecastRequestable.swift in Sources */,
 				3364A29628214E0800328A97 /* UltraShortNowcastWeatherComponent.swift in Sources */,
@@ -1388,7 +1453,6 @@
 				3381DDDC27F20C66007FBCAE /* WeatherViewController.swift in Sources */,
 				33870D94283D04ED009BDE83 /* DefaultUserSettingRepository.swift in Sources */,
 				33A1EF8A28027BEA0031ACED /* WeatherCondition.swift in Sources */,
-				33870D8C283CACEB009BDE83 /* TimeConfigurationViewModel.swift in Sources */,
 				337721A8282569C600CD0B31 /* WeatherCacheService.swift in Sources */,
 				33FF458228290BFC008054CB /* RealmError.swift in Sources */,
 				337EC9DC27FC2E1100EC2D00 /* NetworkingError.swift in Sources */,
@@ -1398,6 +1462,7 @@
 				33A1EFCF280330C90031ACED /* LocationViewController.swift in Sources */,
 				33FF4592282ADB1B008054CB /* ClothesRepository.swift in Sources */,
 				337EC9D327FC2DAD00EC2D00 /* HTTPMethod.swift in Sources */,
+				33870DC4283F4150009BDE83 /* InitialSettingCoordinator.swift in Sources */,
 				3364A2AA282157A700328A97 /* CurrentWeather+Mapping.swift in Sources */,
 				33FF4586282A35CB008054CB /* Clothes.swift in Sources */,
 				3364A22C281E883800328A97 /* LocationCollectionViewCell.swift in Sources */,
@@ -1413,6 +1478,7 @@
 				33A1EF6B27FEB6720031ACED /* LocationUseCase.swift in Sources */,
 				33A1EF6F27FEE5940031ACED /* MidForecastWeatherResponse.swift in Sources */,
 				33F3F36C283121A5009AE8F2 /* DefaultClothesRepository.swift in Sources */,
+				33870DB1283E6B86009BDE83 /* UserSettingViewModel.swift in Sources */,
 				337EC9C627FC013900EC2D00 /* WeatherForecastAPIInfo.swift in Sources */,
 				33FF458E282ABB2E008054CB /* TemperatureGrade.swift in Sources */,
 				33A1EF7427FF42040031ACED /* DefaultLocationRepository.swift in Sources */,
@@ -1420,7 +1486,6 @@
 				3364A29028214E0800328A97 /* ShortForecastWeatherComponent.swift in Sources */,
 				33F3F36E283126C8009AE8F2 /* ClothesItemViewModel.swift in Sources */,
 				3381DDD827F20C66007FBCAE /* AppDelegate.swift in Sources */,
-				33870D97283D3237009BDE83 /* TimeConfigurationCoordinator.swift in Sources */,
 				33A1EFE6280513930031ACED /* PageSceneCoordinator.swift in Sources */,
 				3364A29528214E0800328A97 /* UltraShortNowcastRainfall.swift in Sources */,
 				33A1EFE228041FE60031ACED /* StorableLocationInfo.swift in Sources */,
@@ -1430,23 +1495,31 @@
 				335CABDD283810220079FC77 /* RecommendationCollectionFooterView.swift in Sources */,
 				33870DA6283E5001009BDE83 /* RecommendationCollectionCell.swift in Sources */,
 				337ECA1027FC758F00EC2D00 /* WeatherRepository.swift in Sources */,
+				33870DAF283E6B76009BDE83 /* UserSettingViewController.swift in Sources */,
+				33DEB5042856FA5000C8279D /* CLLocationCoordinate2D+Extension.swift in Sources */,
+				33482E6F28525F4A004C16D8 /* RangeSlider.swift in Sources */,
 				3364A29728214E0800328A97 /* UltraShortNowcastWeatherItem.swift in Sources */,
 				3364A2B0282160C100328A97 /* RoughWeatherCondition.swift in Sources */,
 				33870D92283D03D5009BDE83 /* UserSettingRepository.swift in Sources */,
+				33870DBB283E7103009BDE83 /* TemperatureSensitiveness.swift in Sources */,
 				3364A2B42821A0B900328A97 /* Double+Extension.swift in Sources */,
 				3364A22E281F71D000328A97 /* UIColor+Extension.swift in Sources */,
 				33A1EF6927FEB0990031ACED /* LocationManager.swift in Sources */,
 				33870D90283D01BE009BDE83 /* UserSettingUseCase.swift in Sources */,
 				33F3F361282E7108009AE8F2 /* HourlyWeather+Extension.swift in Sources */,
+				331A0D7C285473820078471F /* SettingSegmentedControl.swift in Sources */,
 				33870D9C283E4B93009BDE83 /* AllClothingCoordinator.swift in Sources */,
 				3364A2B62821A66700328A97 /* DailyWeatherItemViewModel.swift in Sources */,
 				3364A28E28214E0800328A97 /* ShortForecastRainFall.swift in Sources */,
 				3364A29828214E0800328A97 /* MidForecastWeatherItem.swift in Sources */,
 				3364A28F28214E0800328A97 /* SkyCondition.swift in Sources */,
 				335CABD6283763740079FC77 /* ModalDimmedBackViewController.swift in Sources */,
+				33870DC5283F4152009BDE83 /* InitialSettingViewController.swift in Sources */,
+				33DEB50828574BC900C8279D /* Int+Extension.swift in Sources */,
 				33870D9A283D40FC009BDE83 /* WeatherCoordinator.swift in Sources */,
 				3364A29D28214E3D00328A97 /* UltraShortNowcastRequest.swift in Sources */,
 				337ECA0D27FC744D00EC2D00 /* WeatherUseCase.swift in Sources */,
+				33870DC3283F414E009BDE83 /* InitialSettingViewModel.swift in Sources */,
 				33A1EF8C2802F87C0031ACED /* CurrentWeatherImageView.swift in Sources */,
 				33A1EFCC28030FDC0031ACED /* MainViewController.swift in Sources */,
 				338820E2281B8800007E4D2D /* DailyWeatherCollectionViewCell.swift in Sources */,
@@ -1455,7 +1528,9 @@
 				33FF458A282A9B97008054CB /* Gender.swift in Sources */,
 				335CABE0283819070079FC77 /* AllClothingViewModel.swift in Sources */,
 				3381DE2227F32577007FBCAE /* ShortForecastRequest.swift in Sources */,
+				33482E7128532640004C16D8 /* RangeSlider+Rx.swift in Sources */,
 				337ECA3527FD712E00EC2D00 /* UltraShortForecastWeatherResponse.swift in Sources */,
+				33870DAD283E6B5C009BDE83 /* UserSettingCoordinator.swift in Sources */,
 				337EC9B327FACADB00EC2D00 /* UltraShortNowcastWeatherResponse.swift in Sources */,
 				338820DC281AE0C4007E4D2D /* Font+Extension.swift in Sources */,
 				3364A29228214E0800328A97 /* MidForecastTemperatureItem.swift in Sources */,
@@ -1465,6 +1540,7 @@
 				337EC9CD27FC21A600EC2D00 /* Date+Extension.swift in Sources */,
 				33A1EF7727FF42390031ACED /* LocationRepository.swift in Sources */,
 				3381DDDA27F20C66007FBCAE /* SceneDelegate.swift in Sources */,
+				331A0D80285594EC0078471F /* UIPageControl+Rx.swift in Sources */,
 				333BBA4427FD819F004561DA /* HourlyWeatherCollectionViewCell.swift in Sources */,
 				33F3F37228328134009AE8F2 /* AllClotingCollectionHeaderView.swift in Sources */,
 				3365BEAD280AFBF400E0A57D /* LocationListCoordinator.swift in Sources */,
@@ -1685,8 +1761,13 @@
 				DEVELOPMENT_TEAM = TLS95R65C2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherDress/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "오늘뭐입지?";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1713,8 +1794,13 @@
 				DEVELOPMENT_TEAM = TLS95R65C2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherDress/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "오늘뭐입지?";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨정보 표시를 위해 사용됩니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -26,13 +26,14 @@ class RecommendationCollectionHeaderView: UICollectionReusableView {
         label.font = Design.mainFont
         label.textColor = Design.mainFontColor
         label.textAlignment = .left
+        label.attributedText = "".attach(with: "location", pointSize: 10, tintColor: .cold)
         return label
     }()
 
     let allClotingButton: UIButton = {
         let button = UIButton()
         button.setTitle("전체보기", for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold).metrics(for: .callout)
         return button
     }()
 
@@ -66,7 +67,7 @@ class RecommendationCollectionHeaderView: UICollectionReusableView {
         }
 
         self.allClotingButton.snp.makeConstraints {
-            $0.top.equalTo(self)
+            $0.centerY.equalTo(self.clotingTypeTitleLabel)
             $0.trailing.equalTo(self).offset(-10)
         }
 

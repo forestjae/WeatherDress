@@ -201,7 +201,7 @@ class WeatherViewController: UIViewController {
 
         self.clotingCollectionView.snp.makeConstraints {
             $0.width.equalTo(400)
-            $0.height.equalTo(370)
+            $0.height.equalTo(300)
         }
 
         self.isCurrentImage.snp.makeConstraints {
@@ -462,7 +462,7 @@ class WeatherViewController: UIViewController {
 
                 let footerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(80)
+                    heightDimension: .estimated(30.0)
                 )
 
                 let titleSupplementary = NSCollectionLayoutBoundarySupplementaryItem(
@@ -666,7 +666,7 @@ extension WeatherViewController {
                     withReuseIdentifier: "footer",
                     for: indexPath
                 ) as? RecommendationCollectionFooterView
-                footer?.configure(for: "설명란입니다")
+                footer?.configure(for: "")
                 footer?.randomButton.rx.tap
                     .subscribe(self.randomButtonDidTap)
                     .disposed(by: self.disposeBag)

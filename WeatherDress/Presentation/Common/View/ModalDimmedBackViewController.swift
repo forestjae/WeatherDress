@@ -12,13 +12,13 @@ class ModalDimmedBackViewController: UIViewController {
     let cancelButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .white
         return button
     }()
 
     let bottomSheetView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .lightSky
         view.layer.cornerRadius = 27
         view.clipsToBounds = true
         return view

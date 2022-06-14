@@ -37,16 +37,24 @@ class AllClothingViewController: ModalDimmedBackViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.alignment = .leading
+        stackView.alignment = .fill
         stackView.spacing = 10
-        stackView.backgroundColor = .white
+
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: 5,
+            bottom: 0,
+            trailing: 5
+        )
+        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "오늘의 추천 아이템 전체보기"
-        label.textColor = .black
+        label.text = " 오늘의 추천 아이템 전체보기"
+        label.font = .systemFont(ofSize: 16, weight: .semibold).metrics(for: .body)
+        label.textColor = .white
         return label
     }()
 
@@ -55,16 +63,24 @@ class AllClothingViewController: ModalDimmedBackViewController {
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
         return collectionView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.stackView)
-        
+        self.configureHierarchy()
+        self.configureConstraint()
+        self.configureCollectionView()
+        self.binding()
+    }
+
+    private func configureHierarchy() {
         self.stackView.addArrangedSubview(self.titleLabel)
         self.stackView.addArrangedSubview(self.clotingCollectionView)
+    }
+
+    private func configureConstraint() {
         self.bottomSheetView.snp.makeConstraints {
             $0.top.equalTo(self.view).offset(100)
             $0.leading.trailing.equalTo(self.view)
@@ -75,11 +91,30 @@ class AllClothingViewController: ModalDimmedBackViewController {
             $0.bottom.equalTo(self.bottomSheetView).offset(-30)
             $0.leading.trailing.equalTo(self.bottomSheetView)
         }
-        self.clotingCollectionView.snp.makeConstraints {
-            $0.width.equalTo(self.stackView)
-        }
-        self.configureCollectionView()
-        self.binding()
+    }
+
+    private func configureCollectionView() {
+        self.clotingCollectionView.register(
+            AllClothingCollectionViewCell.self,
+            forCellWithReuseIdentifier: "cloting"
+        )
+        self.clotingCollectionView.register(
+            AllClotingCollectionHeaderView.self,
+            forSupplementaryViewOfKind: "header",
+            withReuseIdentifier: "header"
+        )
+
+        self.clotingSnapshot.appendSections(
+            [
+            ClotingSection.outer,
+            ClotingSection.top,
+            ClotingSection.bottoms,
+            ClotingSection.accessory
+            ]
+        )
+
+        self.clotingDataSource = self.dataSourceCloting()
+        self.provideSupplementaryViewForClotingCollectionView()
     }
 
     func binding() {
@@ -141,30 +176,6 @@ class AllClothingViewController: ModalDimmedBackViewController {
                 self.clotingDataSource?.apply(self.clotingSnapshot)
             })
             .disposed(by: self.disposeBag)
-    }
-
-    private func configureCollectionView() {
-        self.clotingCollectionView.register(
-            AllClothingCollectionViewCell.self,
-            forCellWithReuseIdentifier: "cloting"
-        )
-        self.clotingCollectionView.register(
-            AllClotingCollectionHeaderView.self,
-            forSupplementaryViewOfKind: "header",
-            withReuseIdentifier: "header"
-        )
-
-        self.clotingSnapshot.appendSections(
-            [
-            ClotingSection.outer,
-            ClotingSection.top,
-            ClotingSection.bottoms,
-            ClotingSection.accessory
-            ]
-        )
-
-        self.clotingDataSource = self.dataSourceCloting()
-        self.provideSupplementaryViewForClotingCollectionView()
     }
 
     static func createClotingLayout() -> UICollectionViewLayout {

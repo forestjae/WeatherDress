@@ -45,11 +45,40 @@ class LocationViewModel {
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        let locations = input.viewWillAppear
+        let currentLocationAvailable = LocationManager.shared.authorizationStatus()
+            .share()
+            .map { status -> Bool in
+                switch status {
+                case .denied:
+                    return false
+                default:
+                    return true
+                }
+            }
+            .filter(!)
+            .map { _ in [LocationInfo]() }
+            .share()
+
+        let currentLocation = input.viewWillAppear
             .withUnretained(self)
             .flatMap { viewModel, _ in
-                viewModel.useCase.fetchLocations()
+                viewModel.useCase.fetchCurrentLocations()
             }
+            .share()
+
+        let currentLocationWithFailable = Observable
+            .merge(currentLocationAvailable, currentLocation.map { [$0] })
+            .share()
+
+        let favoriteLocations = input.viewWillAppear
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.useCase.fetchFavoriteLocations()
+            }
+            .share()
+
+        let locations = Observable.combineLatest(currentLocationWithFailable, favoriteLocations)
+            .map { $0.0 + $0.1 }
             .share()
 
         let weathers = locations

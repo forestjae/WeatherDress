@@ -12,14 +12,17 @@ import RxSwift
 final class LocationManager: NSObject {
 
     static let shared = LocationManager()
+
     private var manager: CLLocationManager = {
         let manager = CLLocationManager()
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 100
         return manager
     }()
+
     private var locationPublisher = BehaviorSubject<CLLocation>(value: CLLocation())
-    private var authorizationPublisher = PublishSubject<CLAuthorizationStatus>()
+    private var authorizationPublisher = BehaviorSubject<CLAuthorizationStatus>(value: .notDetermined)
+    private var lastLocation: CLLocation?
 
     override init() {
         super.init()
@@ -44,21 +47,26 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .denied, .restricted:
-            self.locationPublisher.onError(LocationError.denied)
+            self.locationPublisher.onNext(CLLocation())
         case .authorizedAlways, .authorizedWhenInUse:
             self.manager.startUpdatingLocation()
         case .notDetermined:
             self.manager.requestWhenInUseAuthorization()
         default:
-            self.locationPublisher.onError(LocationError.unexpected)
+            self.locationPublisher.onNext(CLLocation())
         }
         self.authorizationPublisher.onNext(status)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let last = locations.last else { return }
+        guard let last = locations.last else {
+            return
+        }
 
-        self.locationPublisher.onNext(last)
+        if last.coordinate != self.lastLocation?.coordinate {
+            self.locationPublisher.onNext(last)
+            self.lastLocation = last
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -67,11 +75,11 @@ extension LocationManager: CLLocationManagerDelegate {
         }
         switch error.code {
         case .denied:
-            self.locationPublisher.onError(LocationError.denied)
+            self.lastLocation = nil
         case .locationUnknown:
-            self.locationPublisher.onError(LocationError.invalid)
+            self.lastLocation = nil
         default:
-            self.locationPublisher.onError(LocationError.unexpected)
+            self.lastLocation = nil
         }
     }
 }

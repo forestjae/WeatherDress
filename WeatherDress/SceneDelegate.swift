@@ -34,9 +34,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         LocationManager.shared.authorizationStatus()
+            .skip(1)
+            .filter { $0 != .notDetermined}
+            .take(1)
             .flatMap { status -> Observable<Void> in
                 switch status {
-                case .authorizedAlways, .authorizedWhenInUse:
+                case .authorizedAlways, .authorizedWhenInUse, .denied, .restricted:
                     return appCoordinator.start()
                 default:
                     return Observable.never()

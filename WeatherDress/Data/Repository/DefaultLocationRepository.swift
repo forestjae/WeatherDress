@@ -19,7 +19,7 @@ final class DefaultLocationRepository: LocationRepository {
         self.apiService = apiService
         self.dataBase = database
         self.currentLocation = LocationManager.shared.currentLocation()
-            .share()
+            .filter { $0.coordinate.latitude != 0.0 }
             .flatMap {
                 apiService.coordinateToAddress(
                 xCoordinate: $0.coordinate.longitude,

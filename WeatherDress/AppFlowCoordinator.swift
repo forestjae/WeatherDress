@@ -31,7 +31,7 @@ class AppFlowCoordinator: Coordinator<Void> {
     }
 
     private func mainViewFlow(navigationController: UINavigationController) -> Observable<Void> {
-        let pageSceneCoordinator = PageSceneCoordinator(navigationController: navigationController)
+        let pageSceneCoordinator = MainCoordinator(navigationController: navigationController)
         return self.coordinate(to: pageSceneCoordinator)
     }
 

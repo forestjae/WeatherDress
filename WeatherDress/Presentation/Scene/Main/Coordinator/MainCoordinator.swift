@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-class PageSceneCoordinator: Coordinator<Void> {
+class MainCoordinator: Coordinator<Void> {
 
     private let navigationController: UINavigationController
     private let mainViewController: MainViewController

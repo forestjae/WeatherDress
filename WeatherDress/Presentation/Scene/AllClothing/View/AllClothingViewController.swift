@@ -231,7 +231,7 @@ class AllClothingViewController: ModalDimmedBackViewController {
             configuration: configuration
         )
 
-        layout.register(HourlyBackgroundView.self, forDecorationViewOfKind: "background")
+        layout.register(CollectionViewBackgroundView.self, forDecorationViewOfKind: "background")
 
         return layout
     }

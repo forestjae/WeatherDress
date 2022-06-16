@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HourlyBackgroundView: UICollectionReusableView {
+class CollectionViewBackgroundView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)

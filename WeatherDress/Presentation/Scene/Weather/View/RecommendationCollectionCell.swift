@@ -12,7 +12,7 @@ class RecommendationCollectionCell: ClothesCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = .preferredFont(forTextStyle: .caption1)
+        label.font = .systemFont(ofSize: 11)
         label.layer.cornerRadius = 5
         label.layer.borderWidth = 1
         label.layer.borderColor = UIColor.gray.cgColor
@@ -30,9 +30,9 @@ class RecommendationCollectionCell: ClothesCell {
     override func configureConstraint() {
         super.configureConstraint()
         self.categoryLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.contentView).offset(-8)
-            $0.trailing.equalTo(self.contentView).offset(-6)
-            $0.width.equalTo(40)
+            $0.bottom.equalTo(self.contentView).offset(-6)
+            $0.trailing.equalTo(self.contentView).offset(-5)
+            $0.width.equalTo(36)
             $0.height.equalTo(15)
         }
     }

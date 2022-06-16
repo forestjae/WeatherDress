@@ -58,12 +58,17 @@ class RecommendationCollectionHeaderView: UICollectionReusableView {
         self.configureConstraint()
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("Not implemented")
+    }
+
+    func configure(for section: RecommendationSection) {
+        self.clotingTypeTitleLabel.text = section.title
+    }
+
     private func configureConstraint() {
-        self.separatorView.snp.makeConstraints {
-            $0.height.equalTo(0.4)
-            $0.width.equalTo(self)
-            $0.leading.equalTo(self)
-            $0.bottom.equalTo(self).offset(1)
+        self.clotingTypeTitleLabel.snp.makeConstraints {
+            $0.top.leading.equalTo(self).offset(10)
         }
 
         self.allClotingButton.snp.makeConstraints {
@@ -74,24 +79,21 @@ class RecommendationCollectionHeaderView: UICollectionReusableView {
         self.slider.snp.makeConstraints {
             $0.top.equalTo(self.clotingTypeTitleLabel.snp.bottom).offset(5)
             $0.leading.equalTo(self).offset(10)
-            $0.width.equalTo(250)
+            $0.width.equalTo(self).dividedBy(1.35)
             $0.height.equalTo(30)
         }
 
         self.leaveReturnTimeLabel.snp.makeConstraints {
             $0.leading.equalTo(self.slider.snp.trailing).offset(5)
+            $0.trailing.equalTo(self).offset(-5)
             $0.centerY.equalTo(self.slider)
         }
-    }
 
-    func configure(for section: RecommendationSection) {
-        self.clotingTypeTitleLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(self).offset(10)
+        self.separatorView.snp.makeConstraints {
+            $0.height.equalTo(0.4)
+            $0.width.equalTo(self)
+            $0.leading.equalTo(self)
+            $0.bottom.equalTo(self).offset(1)
         }
-        self.clotingTypeTitleLabel.text = section.title
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("Not implemented")
     }
 }

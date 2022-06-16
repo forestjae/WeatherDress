@@ -49,6 +49,7 @@ final class WeatherService {
             }
             return Disposables.create()
         }
+        .timeout(.milliseconds(3000), scheduler: MainScheduler.instance)
     }
 
     func fetchUltraShortForecast(
@@ -79,6 +80,7 @@ final class WeatherService {
             }
             return Disposables.create()
         }
+        .timeout(.milliseconds(3000), scheduler: MainScheduler.instance)
     }
 
     func fetchShortForecast(
@@ -109,6 +111,7 @@ final class WeatherService {
             }
             return Disposables.create()
         }
+        .timeout(.milliseconds(3000), scheduler: MainScheduler.instance)
     }
 
     func fetchMidWeatherForecast(
@@ -139,6 +142,7 @@ final class WeatherService {
             }
             return Disposables.create()
         }
+        .timeout(.milliseconds(3000), scheduler: MainScheduler.instance)
     }
 
     func fetchMidTemperatureForecast(
@@ -169,5 +173,6 @@ final class WeatherService {
             }
             return Disposables.create()
         }
+        .timeout(.milliseconds(3000), scheduler: MainScheduler.instance)
     }
 }

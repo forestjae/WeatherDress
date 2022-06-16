@@ -418,7 +418,7 @@ class WeatherViewController: UIViewController {
             configuration: configuration
         )
 
-        layout.register(HourlyBackgroundView.self, forDecorationViewOfKind: "background")
+        layout.register(CollectionViewBackgroundView.self, forDecorationViewOfKind: "background")
 
         return layout
     }
@@ -487,7 +487,7 @@ class WeatherViewController: UIViewController {
             configuration: configuration
         )
 
-        layout.register(HourlyBackgroundView.self, forDecorationViewOfKind: "background")
+        layout.register(CollectionViewBackgroundView.self, forDecorationViewOfKind: "background")
 
         return layout
     }
@@ -666,10 +666,15 @@ extension WeatherViewController {
                     withReuseIdentifier: "footer",
                     for: indexPath
                 ) as? RecommendationCollectionFooterView
+
+                guard let disposeBag = footer?.disposeBag else {
+                    return nil
+                }
                 footer?.configure(for: "")
                 footer?.randomButton.rx.tap
                     .subscribe(self.randomButtonDidTap)
-                    .disposed(by: self.disposeBag)
+                    .disposed(by: disposeBag)
+
                 return footer
             } else {
                 return nil

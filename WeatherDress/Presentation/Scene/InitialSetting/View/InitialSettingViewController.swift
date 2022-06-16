@@ -192,6 +192,11 @@ class InitialSettingViewController: UIViewController {
         self.binding()
     }
 
+    override func viewWillLayoutSubviews() {
+        self.leaveHourPicker.subviews[1].backgroundColor = .moderateSky.withAlphaComponent(0.1)
+        self.returnHourPicker.subviews[1].backgroundColor = .moderateSky.withAlphaComponent(0.1)
+    }
+
     private func configureController() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.stackView)
@@ -303,38 +308,29 @@ class InitialSettingViewController: UIViewController {
         }
 
         output.leaveTimeDates
-            .drive(self.leaveHourPicker.rx.items) { (_, element, view) in
-                var label: UILabel
-                if let reusingLabel = view as? UILabel {
+            .drive(self.leaveHourPicker.rx.items) { (_, date, view) in
+                var label: HourPickerViewLabel
+                if let reusingLabel = view as? HourPickerViewLabel {
                     label = reusingLabel
                 } else {
-                    let newLabel = UILabel()
-                    newLabel.font = .preferredFont(forTextStyle: .subheadline)
-                    newLabel.textAlignment = .center
-                    newLabel.textColor = .black
+                    let newLabel = HourPickerViewLabel()
                     label = newLabel
                 }
-                let date = element
-                let dayDescription = Calendar.day(from: date) == Calendar.today ? "" : "다음날"
-                label.text = dayDescription + " " + date.convert(to: .hourlyTime)
+                label.configureContent(for: date)
                 return label
             }
             .disposed(by: self.disposeBag)
 
         output.returnTimeDates
-            .drive(self.returnHourPicker.rx.items) { (_, element, view) in
-                var label: UILabel
-                if let reusingLabel = view as? UILabel {
+            .drive(self.returnHourPicker.rx.items) { (_, date, view) in
+                var label: HourPickerViewLabel
+                if let reusingLabel = view as? HourPickerViewLabel {
                     label = reusingLabel
                 } else {
-                    let newLabel = UILabel()
-                    newLabel.font = .preferredFont(forTextStyle: .subheadline)
-                    newLabel.textAlignment = .center
+                    let newLabel = HourPickerViewLabel()
                     label = newLabel
                 }
-                let date = element
-                let dayDescription = Calendar.day(from: date) == Calendar.today ? "" : "다음날"
-                label.text = dayDescription + " " + date.convert(to: .hourlyTime)
+                label.configureContent(for: date)
                 return label
             }
             .disposed(by: self.disposeBag)

@@ -326,15 +326,16 @@ class UserSettingViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.initialLeaveTimePickerIndex
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {
-                self.leaveHourPicker.selectRow($0, inComponent: 0, animated: true)
+            .withUnretained(self)
+            .subscribe(onNext: { viewController, index in
+                viewController.leaveHourPicker.selectRow(index, inComponent: 0, animated: true)
             })
             .disposed(by: self.disposeBag)
 
         output.initialReturnTimePickerIndex
-            .subscribe(onNext: {
-                self.returnHourPicker.selectRow($0, inComponent: 0, animated: true)
+            .withUnretained(self)
+            .subscribe(onNext: { viewController, index in
+                self.returnHourPicker.selectRow(index, inComponent: 0, animated: true)
             })
             .disposed(by: self.disposeBag)
 

@@ -38,6 +38,24 @@ struct LocationInfo: Hashable {
 }
 
 extension LocationInfo {
+    static let notServiced: LocationInfo = {
+        return LocationInfo(
+            identifer: UUID(),
+            longtitude: 0.0,
+            latitude: 0.0,
+            address: .init(
+                fullAddress: "",
+                firstRegion: "",
+                secondRegion: "",
+                thirdRegion: nil,
+                fourthRegion: nil
+            ),
+            isCurrent: true
+        )
+    }()
+}
+
+extension LocationInfo {
     init?(searchedAddressSet: AddressSearchResponse.AddressSet) {
         guard searchedAddressSet.address.region2DepthName != "" else {
             return nil
@@ -70,6 +88,9 @@ extension LocationInfo {
 
 extension LocationInfo {
     func shortAddress() -> String {
+        if self.address.firstRegion == "" {
+            return "서비스가 불가능한 지역입니다"
+        }
         return [self.address.secondRegion,
                 self.address.thirdRegion ?? "",
                 self.address.fourthRegion ?? ""]

@@ -22,9 +22,11 @@ final class DefaultLocationRepository: LocationRepository {
             .filter { $0.coordinate.latitude != 0.0 }
             .flatMap {
                 apiService.coordinateToAddress(
-                xCoordinate: $0.coordinate.longitude,
-                yCoordinate: $0.coordinate.latitude
-                )}
+                    xCoordinate: $0.coordinate.longitude,
+                    yCoordinate: $0.coordinate.latitude
+                )
+                .catchAndReturn(LocationInfo.notServiced)
+            }
     }
 
     func fetchCurrentLocation() -> Observable<LocationInfo> {

@@ -115,13 +115,14 @@ final class WeatherViewModel {
 
         let locationAddress = self.locationInfo
             .map { $0.shortAddress() }
-            .asDriver(onErrorJustReturn: "위치 정보가 없습니다")
+            .asDriver(onErrorJustReturn: "서비스가 불가능한 지역입니다.")
 
         let isCurrentLocation = self.locationInfo
             .map { $0.isCurrent }
             .asDriver(onErrorJustReturn: false)
         
         let currentWeather = self.locationInfo
+            .filter { $0.address.firstRegion != "" }
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
                 viewModel.useCase.fetchCurrentWeather(from: locationInfo)

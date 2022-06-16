@@ -307,9 +307,7 @@ class WeatherViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.leaveReturnTitleText
-            .subscribe(onNext: {
-                self.leaveReturnTimeLabelText.onNext($0)
-            })
+            .subscribe(self.leaveReturnTimeLabelText)
             .disposed(by: self.disposeBag)
 
         output.allClothingViewDismiss
@@ -317,22 +315,19 @@ class WeatherViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.recommendedClotingItem.asObservable()
-            .subscribe(onNext: { _ in
-                self.activityIndicator.stop()
-                self.activityIndicator.isHidden = true
+            .withUnretained(self)
+            .subscribe(onNext: { viewController, _ in
+                viewController.activityIndicator.stop()
+                viewController.activityIndicator.isHidden = true
             })
             .disposed(by: self.disposeBag)
 
         output.initialLeaveTime
-            .subscribe(onNext: {
-                self.initialLeaveTimeSliderValue.onNext($0)
-            })
+            .subscribe(self.initialLeaveTimeSliderValue)
             .disposed(by: self.disposeBag)
 
         output.initialReturnTIme
-            .subscribe(onNext: {
-                self.initialReturnTimeSliderValue.onNext($0)
-            })
+            .subscribe(self.initialReturnTimeSliderValue)
             .disposed(by: self.disposeBag)
     }
 
@@ -647,16 +642,10 @@ extension WeatherViewController {
                     .disposed(by: self.disposeBag)
 
                 header?.slider.rx.lower
-                    .subscribe(onNext: {
-                        self.leaveTimeSliderValue.onNext($0)
-
-                    })
+                    .subscribe(self.leaveTimeSliderValue)
                     .disposed(by: self.disposeBag)
-
                 header?.slider.rx.upper
-                    .subscribe(onNext: {
-                        self.returnTimeSliderValue.onNext($0)
-                    })
+                    .subscribe(self.returnTimeSliderValue)
                     .disposed(by: self.disposeBag)
 
                 return header

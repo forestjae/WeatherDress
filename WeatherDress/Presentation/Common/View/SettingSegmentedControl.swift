@@ -19,6 +19,7 @@ class SettingSegmentedControl: UISegmentedControl {
 
     private func configure() {
         self.selectedSegmentTintColor = .skyWhite
+        self.setTitleTextAttributes([.foregroundColor: UIColor.deepDarkGray], for: .normal)
         self.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
 }

@@ -340,12 +340,14 @@ class InitialSettingViewController: UIViewController {
             .subscribe(onNext: { index in
                 self.leaveHourPicker.selectRow(index, inComponent: 0, animated: false)
             })
+            .disposed(by: self.disposeBag)
 
         output.initialReturnTimeDate
             .asObservable()
             .subscribe(onNext: { index in
                 self.returnHourPicker.selectRow(index, inComponent: 0, animated: false)
             })
+            .disposed(by: self.disposeBag)
 
         output.isAcceptable
             .drive(

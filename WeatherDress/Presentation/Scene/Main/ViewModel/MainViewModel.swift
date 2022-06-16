@@ -11,12 +11,12 @@ import RxCocoa
 
 final class MainViewModel {
 
-    let coordinator: PageSceneCoordinator
+    let coordinator: MainCoordinator
 
     private let disposeBag = DisposeBag()
     private let useCase: LocationUseCase
 
-    init(useCase: LocationUseCase, coordinator: PageSceneCoordinator) {
+    init(useCase: LocationUseCase, coordinator: MainCoordinator) {
         self.useCase = useCase
         self.coordinator = coordinator
     }
@@ -76,18 +76,18 @@ final class MainViewModel {
             .subscribe()
 
         _ = currentLocationAvailable
-                .withLatestFrom(
-                    currentLocationIsVisible,
-                    resultSelector: { isAvailable, isVisible -> Bool in
-                        isVisible == true && isAvailable == false
-                })
-                .filter { $0 == true }
-                .observe(on: MainScheduler.instance)
-                .do(onNext: { [weak self] _ in
-                    self?.coordinator.deleteCurrentLocationWeatherViewController()
-                    currentLocationIsVisible.onNext(false)
-                })
-                .subscribe()
+            .withLatestFrom(
+                currentLocationIsVisible,
+                resultSelector: { isAvailable, isVisible -> Bool in
+                    isVisible == true && isAvailable == false
+            })
+            .filter { $0 == true }
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { [weak self] _ in
+                self?.coordinator.deleteCurrentLocationWeatherViewController()
+                currentLocationIsVisible.onNext(false)
+            })
+            .subscribe()
 
         _ = Observable.combineLatest(
             favoriteLocations,

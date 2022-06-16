@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 private enum Design {
     static let mainFont: UIFont = .systemFont(ofSize: 14, weight: .bold).metrics(for: .body)
@@ -14,6 +15,8 @@ private enum Design {
 }
 
 class RecommendationCollectionFooterView: UICollectionReusableView {
+    var disposeBag = DisposeBag()
+
     let randomButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "arrow.clockwise.circle.fill"), for: .normal)
@@ -43,6 +46,18 @@ class RecommendationCollectionFooterView: UICollectionReusableView {
         self.configureConstraint()
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("Not implemented")
+    }
+
+    override func prepareForReuse() {
+        self.disposeBag = DisposeBag()
+    }
+
+    func configure(for message: String) {
+        self.clotingDescriptionLabel.text = message
+    }
+
     private func configureConstraint() {
         self.separatorView.snp.makeConstraints {
             $0.height.equalTo(0.4)
@@ -60,13 +75,5 @@ class RecommendationCollectionFooterView: UICollectionReusableView {
             $0.top.equalTo(self).offset(30)
             $0.centerX.equalTo(self)
         }
-    }
-
-    func configure(for message: String) {
-        self.clotingDescriptionLabel.text = message
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("Not implemented")
     }
 }

@@ -5,15 +5,21 @@
 //  Created by Lee Seung-Jae on 2022/04/08.
 //
 
-import Foundation
 import UIKit
 
 struct RegionCodeConverting {
-    static let shared = RegionCodeConverting()
-    private let code = NSDataAsset(name: "WeatherCode")
-    private var list: [RegionCodeInfo] = []
 
-    init() {
+    enum CodeType {
+        case weather
+        case temperature
+    }
+
+    static let shared = RegionCodeConverting()
+
+    private var list: [RegionCodeInfo] = []
+    private let code = NSDataAsset(name: "WeatherCode")
+
+    private init() {
         let decoder = JSONDecoder()
         if let data = self.code?.data {
             do {
@@ -31,6 +37,7 @@ struct RegionCodeConverting {
         if let first = filteredByThird.first, filteredByThird.count == 1 {
             return regionCode(from: first, for: type)
         }
+
         let filteredBySecond = self.list.filter { address.contains($0.secondRegion) }
         if let first = filteredBySecond.first, filteredBySecond.count == 1 {
             return regionCode(from: first, for: type)
@@ -40,6 +47,7 @@ struct RegionCodeConverting {
                 return regionCode(from: first, for: type)
             }
         }
+
         return nil
     }
 
@@ -51,17 +59,4 @@ struct RegionCodeConverting {
             return code.temperatureCode
         }
     }
-
-    enum CodeType {
-        case weather
-        case temperature
-    }
-}
-
-struct RegionCodeInfo: Decodable {
-    let firstRegion: String
-    let secondRegion: String
-    let thirdRegion: String
-    let weatherCode: String
-    let temperatureCode: String
 }

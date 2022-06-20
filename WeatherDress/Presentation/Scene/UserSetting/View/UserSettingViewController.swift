@@ -10,7 +10,7 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
-class UserSettingViewController: UIViewController {
+final class UserSettingViewController: UIViewController {
     var viewModel: UserSettingViewModel?
     private let disposeBag = DisposeBag()
     private let pickerValue = PublishSubject<Date>()

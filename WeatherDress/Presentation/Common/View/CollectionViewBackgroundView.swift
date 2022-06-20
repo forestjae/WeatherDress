@@ -7,8 +7,7 @@
 
 import UIKit
 
-class CollectionViewBackgroundView: UICollectionReusableView {
-
+final class CollectionViewBackgroundView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.deepSky.withAlphaComponent(0.7)

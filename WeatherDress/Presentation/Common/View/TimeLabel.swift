@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TimeLabel: UILabel {
+final class TimeLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configureLabel()

@@ -5,11 +5,10 @@
 //  Created by Lee Seung-Jae on 2022/04/16.
 //
 
-import Foundation
 import UIKit
 import RxSwift
 
-class LocationListCoordinator: Coordinator<LocationListDismissAction> {
+final class LocationListCoordinator: Coordinator<LocationListDismissAction> {
 
     private let parentViewController: UIViewController
 

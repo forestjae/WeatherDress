@@ -8,8 +8,7 @@
 import Foundation
 import RxSwift
 
-class WeatherCacheService {
-
+final class WeatherCacheService {
     static let shared = WeatherCacheService()
 
     let ultraShortNowcastCache = NSCache<NSString, CacheValue<UltraShortNowcastWeatherItem>>()

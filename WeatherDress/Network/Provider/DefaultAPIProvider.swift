@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DefaultAPIProvider: APIProvider {
+final class DefaultAPIProvider: APIProvider {
     let session = URLSession.shared
 
     func request<T: APIRequest>(

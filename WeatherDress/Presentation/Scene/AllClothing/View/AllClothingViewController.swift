@@ -28,7 +28,7 @@ enum ClotingSection: Int {
     }
 }
 
-class AllClothingViewController: ModalDimmedBackViewController {
+final class AllClothingViewController: ModalDimmedBackViewController {
     var clotingDataSource: UICollectionViewDiffableDataSource<ClotingSection, ClothesItemViewModel>?
     var clotingSnapshot = NSDiffableDataSourceSnapshot<ClotingSection, ClothesItemViewModel>()
     var viewModel: AllClothingViewModel?

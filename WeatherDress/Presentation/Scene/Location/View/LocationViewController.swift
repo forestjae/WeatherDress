@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class LocationViewController: UIViewController {
+final class LocationViewController: UIViewController {
     var viewModel: LocationViewModel?
 
     private var dataSource: UICollectionViewDiffableDataSource<LocationSection, LocationItem>?

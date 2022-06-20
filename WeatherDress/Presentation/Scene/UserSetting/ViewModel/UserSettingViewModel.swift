@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class UserSettingViewModel {
+final class UserSettingViewModel {
     let backBarButtonDidTap: Observable<Void>
 
     private let coordinator: UserSettingCoordinator

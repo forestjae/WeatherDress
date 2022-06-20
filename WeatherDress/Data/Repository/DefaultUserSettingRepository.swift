@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class DefaultUserSettingRepository: UserSettingRepository {
+final class DefaultUserSettingRepository: UserSettingRepository {
     let userDefault = UserDefaults.standard
 
     func setUserGender(for gender: Gender) {

@@ -12,7 +12,7 @@ private enum Design {
     static let mainFontColor: UIColor = .white
 }
 
-class LocationCollectionViewCell: UICollectionViewCell {
+final class LocationCollectionViewCell: UICollectionViewCell {
     private let listContentView: UIListContentView = {
         let listContentView = UIListContentView(configuration: .subtitleCell())
         listContentView.layer.shadowColor = UIColor.black.cgColor

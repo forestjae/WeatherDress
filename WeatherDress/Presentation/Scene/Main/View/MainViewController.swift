@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
 
     var viewModel: MainViewModel?
     var orderedViewControllers: [WeatherViewController] = []

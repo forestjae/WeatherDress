@@ -13,7 +13,7 @@ private enum Design {
     static let mainFontColor: UIColor = .cold
 }
 
-class AllClotingCollectionHeaderView: UICollectionReusableView {
+final class AllClotingCollectionHeaderView: UICollectionReusableView {
     private let clotingTypeTitleLabel: UILabel = {
         let label = UILabel()
         label.font = Design.mainFont

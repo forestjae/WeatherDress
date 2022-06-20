@@ -13,7 +13,7 @@ private enum Design {
     static let mainFontColor: UIColor = .cold
 }
 
-class HourlyCollectionReusableView: UICollectionReusableView {
+final class HourlyCollectionReusableView: UICollectionReusableView {
     private let hourlyWeatherTitleLabel: UILabel = {
         let label = UILabel()
         label.font = Design.mainFont

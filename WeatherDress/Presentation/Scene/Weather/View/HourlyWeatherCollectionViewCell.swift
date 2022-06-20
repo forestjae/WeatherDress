@@ -16,7 +16,7 @@ private enum Design {
         .metrics(for: .headline)
 }
 
-class HourlyWeatherCollectionViewCell: UICollectionViewCell {
+final class HourlyWeatherCollectionViewCell: UICollectionViewCell {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()

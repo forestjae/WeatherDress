@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Lottie
 
-class CurrentWeatherImageView: UIView {
+final class CurrentWeatherImageView: UIView {
 
     enum ImageType {
         case staticImage

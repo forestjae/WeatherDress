@@ -8,8 +8,7 @@
 import UIKit
 import RxSwift
 
-class InitialSettingCoordinator: Coordinator<Void> {
-
+final class InitialSettingCoordinator: Coordinator<Void> {
     private let parentViewController: UINavigationController
 
     init(parentViewController: UINavigationController) {

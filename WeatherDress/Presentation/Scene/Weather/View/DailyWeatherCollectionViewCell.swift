@@ -12,7 +12,7 @@ private enum Design {
     static let mainFontColor: UIColor = .white
 }
 
-class DailyWeaterCollectionViewCell: UICollectionViewCell {
+final class DailyWeaterCollectionViewCell: UICollectionViewCell {
 
     private let dayOfWeekLabel: UILabel = {
         let label = UILabel()

@@ -16,7 +16,7 @@ private enum Design {
     static let mainFontColor: UIColor = .white
 }
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
 
     var viewModel: WeatherViewModel?
     var weatherDataSource: UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>?

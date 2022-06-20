@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class RealmManager {
+final class RealmManager {
     static let shared = RealmManager()
     private let realm: Realm
 

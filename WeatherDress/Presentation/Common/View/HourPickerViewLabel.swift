@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HourPickerViewLabel: UILabel {
+final class HourPickerViewLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configure()

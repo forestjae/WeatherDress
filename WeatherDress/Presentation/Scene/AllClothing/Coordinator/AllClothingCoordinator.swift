@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class AllClothingCoordinator: Coordinator<Void> {
+final class AllClothingCoordinator: Coordinator<Void> {
 
     private let parentViewController: UIViewController
     private let clothingItems: Observable<[ClothesItemViewModel]>

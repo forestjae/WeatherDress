@@ -6,8 +6,5 @@
 //
 
 import Foundation
-import SnapKit
 
-class AllClothingCollectionViewCell: ClothesCell {
-
-}
+final class AllClothingCollectionViewCell: ClothesCell { }

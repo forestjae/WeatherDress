@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class WeatherCoordinator {
+final class WeatherCoordinator {
     let viewController: WeatherViewController
 
     init(viewController: WeatherViewController) {

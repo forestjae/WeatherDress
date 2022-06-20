@@ -10,7 +10,6 @@ import SnapKit
 import RxSwift
 
 final class MainViewController: UIViewController {
-
     var viewModel: MainViewModel?
     var orderedViewControllers: [WeatherViewController] = []
 
@@ -147,9 +146,7 @@ final class MainViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.currentIndex
-            .drive(onNext: {
-                self.setCurrentPageViewController(at: $0)
-            })
+            .drive(onNext: self.setCurrentPageViewController)
             .disposed(by: self.disposeBag)
 
         output.currentLocationAvailable

@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class InitialSettingViewModel {
+final class InitialSettingViewModel {
     let acceptButtonDidTap: Observable<Void>
 
     private let coordinator: InitialSettingCoordinator

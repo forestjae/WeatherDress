@@ -9,24 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class LocationViewModel {
-
-    private let disposeBag = DisposeBag()
-    private let useCase: LocationUseCase
-    private let weatherUseCase: WeatherUseCase
-    private let coordinator: LocationListCoordinator
-    private(set) var locationListCellDidTap = PublishSubject<Int>()
-
-    init(
-        useCase: LocationUseCase,
-        weatherUseCase: WeatherUseCase,
-        coordinator: LocationListCoordinator
-    ) {
-        self.useCase = useCase
-        self.weatherUseCase = weatherUseCase
-        self.coordinator = coordinator
-    }
-
+final class LocationViewModel {
     struct Input {
         let viewWillAppear: Observable<Void>
         let locationListCellSelected: Observable<Int>
@@ -42,6 +25,21 @@ class LocationViewModel {
         let searchedLocations: Driver<[LocationInfo]>
         let locationDidDeleted: Observable<Void>
         let newLocationCreated: Observable<Void>
+    }
+
+    private let useCase: LocationUseCase
+    private let weatherUseCase: WeatherUseCase
+    private let coordinator: LocationListCoordinator
+    private(set) var locationListCellDidTap = PublishSubject<Int>()
+
+    init(
+        useCase: LocationUseCase,
+        weatherUseCase: WeatherUseCase,
+        coordinator: LocationListCoordinator
+    ) {
+        self.useCase = useCase
+        self.weatherUseCase = weatherUseCase
+        self.coordinator = coordinator
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
@@ -99,7 +97,7 @@ class LocationViewModel {
 
         input.locationListCellSelected
             .subscribe(self.locationListCellDidTap)
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
 
         let locationDidDeleted = input.listCellDidDeleted
             .withUnretained(self)

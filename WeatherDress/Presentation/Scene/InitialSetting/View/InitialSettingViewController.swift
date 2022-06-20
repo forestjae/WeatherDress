@@ -10,8 +10,9 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
-class InitialSettingViewController: UIViewController {
+final class InitialSettingViewController: UIViewController {
     var viewModel: InitialSettingViewModel?
+
     private let disposeBag = DisposeBag()
 
     private let stackView: UIStackView = {

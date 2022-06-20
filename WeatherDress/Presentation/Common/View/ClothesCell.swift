@@ -17,7 +17,6 @@ private enum Design {
 }
 
 class ClothesCell: UICollectionViewCell {
-
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical

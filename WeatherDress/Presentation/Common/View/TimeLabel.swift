@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TimeLabel: UILabel {
+final class TimeLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configureLabel()
@@ -18,7 +18,7 @@ class TimeLabel: UILabel {
         self.configureLabel()
     }
 
-    func configureLabel() {
+    private func configureLabel() {
         self.font = .systemFont(ofSize: 12, weight: .semibold).metrics(for: .caption1)
         self.textColor = .deepDarkGray
         self.layer.backgroundColor = UIColor.white.cgColor

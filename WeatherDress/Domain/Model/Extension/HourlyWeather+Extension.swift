@@ -18,7 +18,6 @@ extension HourlyWeather {
 }
 
 extension Sequence where Element == HourlyWeather {
-
     func toDaily() -> [DailyWeather] {
         let todayItems = self
             .filter { Calendar.day(from: $0.date) == Calendar.today }

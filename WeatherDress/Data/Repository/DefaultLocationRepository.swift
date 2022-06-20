@@ -10,27 +10,25 @@ import RxSwift
 import CoreLocation
 
 final class DefaultLocationRepository: LocationRepository {
-    private let disposeBag = DisposeBag()
     private let apiService: GeoSearchService
     private let dataBase: LocalDatabaseService
-    private let currentLocation: Observable<LocationInfo>
 
     init(apiService: GeoSearchService, database: LocalDatabaseService) {
         self.apiService = apiService
         self.dataBase = database
-        self.currentLocation = LocationManager.shared.currentLocation()
-            .filter { $0.coordinate.latitude != 0.0 }
-            .flatMap {
-                apiService.coordinateToAddress(
-                    xCoordinate: $0.coordinate.longitude,
-                    yCoordinate: $0.coordinate.latitude
-                )
-                .catchAndReturn(LocationInfo.notServiced)
-            }
     }
 
     func fetchCurrentLocation() -> Observable<LocationInfo> {
-        return self.currentLocation
+        return LocationManager.shared.currentLocation()
+            .filter { $0.coordinate.latitude != 0.0 }
+            .withUnretained(self)
+            .flatMap { repository, location in
+                repository.apiService.coordinateToAddress(
+                    xCoordinate: location.coordinate.longitude,
+                    yCoordinate: location.coordinate.latitude
+                )
+                .catchAndReturn(LocationInfo.notServiced)
+            }
     }
 
     func fetchFavoriteLocations() -> Observable<[LocationInfo]> {
@@ -39,18 +37,10 @@ final class DefaultLocationRepository: LocationRepository {
 
     func deleteLocation(location: LocationInfo) -> Completable {
         return self.dataBase.delete(location)
-            .andThen(Completable.create { completable in
-                completable(.completed)
-                return Disposables.create()
-            })
     }
 
     func createLocation(location: LocationInfo) -> Completable {
         return self.dataBase.create(location)
-            .andThen(Completable.create { completable in
-                completable(.completed)
-                return Disposables.create()
-            })
     }
 
     func searchLocation(for query: String) -> Observable<[LocationInfo]> {

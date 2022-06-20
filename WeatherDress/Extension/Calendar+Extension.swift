@@ -8,7 +8,6 @@
 import Foundation
 
 extension Calendar {
-
     static func day(from date: Date) -> Int? {
         return Calendar.current.dateComponents([.day], from: date).day
     }

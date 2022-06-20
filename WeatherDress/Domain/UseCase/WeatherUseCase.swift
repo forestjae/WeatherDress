@@ -25,7 +25,7 @@ final class WeatherUseCase {
             }
     }
 
-    func fetchHourlWeatehr(from location: LocationInfo) -> Observable<[HourlyWeather]> {
+    func fetchHourlyWeather(from location: LocationInfo) -> Observable<[HourlyWeather]> {
         return self.repository.fetchHourlyWeathers(for: location, at: Date())
             .retry { error in
                 error.flatMap { _ in

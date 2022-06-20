@@ -8,8 +8,7 @@
 import Foundation
 import RxSwift
 
-class UserSetttingUseCase {
-
+final class UserSetttingUseCase {
     let repository: UserSettingRepository
 
     init(repository: UserSettingRepository) {

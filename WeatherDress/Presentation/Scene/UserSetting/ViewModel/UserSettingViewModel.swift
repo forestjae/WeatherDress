@@ -9,22 +9,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class UserSettingViewModel {
-    let backBarButtonDidTap: Observable<Void>
-
-    private let coordinator: UserSettingCoordinator
-    private let useCase: UserSetttingUseCase
-    private let _backBarButtonDidTap = PublishSubject<Void>()
-
-    init(
-        useCase: UserSetttingUseCase,
-        coordinator: UserSettingCoordinator
-    ) {
-        self.useCase = useCase
-        self.coordinator = coordinator
-        self.backBarButtonDidTap = self._backBarButtonDidTap.asObservable()
-    }
-
+final class UserSettingViewModel {
+    
     struct Input {
         let viewWillAppear: Observable<Void>
         let genderSegmentedIndex: BehaviorRelay<Int>
@@ -44,6 +30,21 @@ class UserSettingViewModel {
         let leaveTimeDates: Driver<[Date]>
         let returnTimeDates: Driver<[Date]>
         let isAcceptable: Driver<Bool>
+    }
+
+    let backBarButtonDidTap: Observable<Void>
+
+    private let coordinator: UserSettingCoordinator
+    private let useCase: UserSetttingUseCase
+    private let _backBarButtonDidTap = PublishSubject<Void>()
+
+    init(
+        useCase: UserSetttingUseCase,
+        coordinator: UserSettingCoordinator
+    ) {
+        self.useCase = useCase
+        self.coordinator = coordinator
+        self.backBarButtonDidTap = self._backBarButtonDidTap.asObservable()
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {

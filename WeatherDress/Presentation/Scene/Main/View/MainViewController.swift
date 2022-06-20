@@ -9,10 +9,9 @@ import UIKit
 import SnapKit
 import RxSwift
 
-class MainViewController: UIViewController {
-
+final class MainViewController: UIViewController {
     var viewModel: MainViewModel?
-    var orderedViewControllers: [WeatherViewController] = []
+    var orderedViewControllers: [WeatherClothingViewController] = []
 
     private let disposeBag = DisposeBag()
     private let toolBar = UIToolbar()
@@ -147,9 +146,7 @@ class MainViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.currentIndex
-            .drive(onNext: {
-                self.setCurrentPageViewController(at: $0)
-            })
+            .drive(onNext: self.setCurrentPageViewController)
             .disposed(by: self.disposeBag)
 
         output.currentLocationAvailable
@@ -189,7 +186,7 @@ extension MainViewController: UIPageViewControllerDataSource {
         _ pageViewController: UIPageViewController,
         viewControllerBefore viewController: UIViewController
     ) -> UIViewController? {
-        guard let weatherViewController = viewController as? WeatherViewController else {
+        guard let weatherViewController = viewController as? WeatherClothingViewController else {
             return nil
         }
 
@@ -214,7 +211,7 @@ extension MainViewController: UIPageViewControllerDataSource {
         _ pageViewController: UIPageViewController,
         viewControllerAfter viewController: UIViewController
     ) -> UIViewController? {
-        guard let weatherViewController = viewController as? WeatherViewController else {
+        guard let weatherViewController = viewController as? WeatherClothingViewController else {
             return nil
         }
         guard let index = self.orderedViewControllers.firstIndex(of: weatherViewController) else {

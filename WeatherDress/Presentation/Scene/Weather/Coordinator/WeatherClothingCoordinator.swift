@@ -8,10 +8,10 @@
 import UIKit
 import RxSwift
 
-class WeatherCoordinator {
-    let viewController: WeatherViewController
+final class WeatherClothingCoordinator {
+    let viewController: WeatherClothingViewController
 
-    init(viewController: WeatherViewController) {
+    init(viewController: WeatherClothingViewController) {
         self.viewController = viewController
         self.viewController.navigationController?.isNavigationBarHidden = true
     }

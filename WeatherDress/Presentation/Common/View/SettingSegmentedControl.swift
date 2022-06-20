@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class SettingSegmentedControl: UISegmentedControl {
+final class SettingSegmentedControl: UISegmentedControl {
     override init(items: [Any]?) {
         super.init(items: items)
         self.configure()

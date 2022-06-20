@@ -13,7 +13,7 @@ private enum Design {
     static let mainFontColor: UIColor = .cold
 }
 
-class RecommendationCollectionHeaderView: UICollectionReusableView {
+final class RecommendationCollectionHeaderView: UICollectionReusableView {
     let slider: RangeSlider = {
       let slider = RangeSlider()
       slider.minValue = 5

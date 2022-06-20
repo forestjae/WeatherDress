@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-class RealmService: LocalDatabaseService {
+final class RealmService: LocalDatabaseService {
     static let shared = RealmService()
     private let manager: RealmManager
     private let locations = BehaviorSubject<[LocationInfo]>(value: [])

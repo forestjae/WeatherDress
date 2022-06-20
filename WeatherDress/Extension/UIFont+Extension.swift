@@ -5,7 +5,6 @@
 //  Created by Lee Seung-Jae on 2022/04/28.
 //
 
-import Foundation
 import UIKit
 
 extension UIFont {

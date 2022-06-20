@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class UserSettingCoordinator: Coordinator<Void> {
+final class UserSettingCoordinator: Coordinator<Void> {
 
     private let parentViewController: UINavigationController
 

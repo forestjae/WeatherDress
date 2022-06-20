@@ -10,7 +10,6 @@ import RxSwift
 
 final class GeoSearchService {
     let apiProvider: APIProvider
-    let serviceKey = Bundle.main.kakaoApiKey
 
     init(apiProvider: APIProvider) {
         self.apiProvider = apiProvider
@@ -28,8 +27,11 @@ final class GeoSearchService {
             self.apiProvider.request(request) { result in
                 switch result {
                 case .success(let response):
-                    guard let addressComponent = response.documents.first else { return }
-                    guard let locationInfo = LocationInfo(geocodeAddress: addressComponent) else { return }
+                    guard let addressComponent = response.documents.first,
+                          let locationInfo = LocationInfo(geocodeAddress: addressComponent)
+                    else {
+                        return
+                    }
                     single(.success(locationInfo))
                 case .failure(let error):
                     single(.failure(error))

@@ -8,8 +8,7 @@
 import UIKit
 import SnapKit
 
-class LocationSearchResultViewController: UIViewController {
-
+final class LocationSearchResultViewController: UIViewController {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColor.deepSkyDim

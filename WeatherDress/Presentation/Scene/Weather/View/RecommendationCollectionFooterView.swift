@@ -14,7 +14,7 @@ private enum Design {
     static let mainFontColor: UIColor = .cold
 }
 
-class RecommendationCollectionFooterView: UICollectionReusableView {
+final class RecommendationCollectionFooterView: UICollectionReusableView {
     var disposeBag = DisposeBag()
 
     let randomButton: UIButton = {

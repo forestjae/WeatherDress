@@ -11,7 +11,7 @@ struct UltraShortForecastRequest: ShortForecastRequestable {
     typealias Response = UltraShortForecastWeatherResponse
 
     let path: String = "getUltraSrtFcst"
-    let headers: [String : String]? = nil
+    let headers: [String: String]? = nil
     let method: HTTPMethod = .get
     let pageNo: Int = 1
     let numOfRows: Int = 1000

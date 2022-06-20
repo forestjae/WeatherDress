@@ -9,8 +9,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-class DefaultClothesRepository: ClothesRepository {
-
+final class DefaultClothesRepository: ClothesRepository {
     let clothes: [Clothes]
 
     init() {

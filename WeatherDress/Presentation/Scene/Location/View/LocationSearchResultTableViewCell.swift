@@ -7,8 +7,7 @@
 
 import UIKit
 
-class LocationSearchResultTableViewCell: UITableViewCell {
-
+final class LocationSearchResultTableViewCell: UITableViewCell {
     private let locationLabel: UILabel = {
         let label = UILabel()
         label.textColor = .systemGray4

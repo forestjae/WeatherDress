@@ -5,11 +5,10 @@
 //  Created by Lee Seung-Jae on 2022/04/12.
 //
 
-import Foundation
 import UIKit
 import RxSwift
 
-class AppFlowCoordinator: Coordinator<Void> {
+final class AppFlowCoordinator: Coordinator<Void> {
     var window: UIWindow
 
     init(window: UIWindow) {

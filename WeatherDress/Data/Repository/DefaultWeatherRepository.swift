@@ -9,10 +9,8 @@ import Foundation
 import RxSwift
 
 final class DefaultWeatherRepository: WeatherRepository {
-    let apiService: WeatherService
-    let cacheService: WeatherCacheService
-
-    private let disposeBag = DisposeBag()
+    private let apiService: WeatherService
+    private let cacheService: WeatherCacheService
 
     init(apiService: WeatherService) {
         self.apiService = apiService
@@ -24,6 +22,7 @@ final class DefaultWeatherRepository: WeatherRepository {
         at date: Date
     ) -> Observable<CurrentWeather> {
         let ultraShortNowcast: Observable<UltraShortNowcastWeatherItem>
+
         if let usnCache = self.cacheService.fetchUltraShortNowcast(for: location, at: date) {
             ultraShortNowcast = Observable.just(usnCache).share()
         } else {
@@ -40,7 +39,9 @@ final class DefaultWeatherRepository: WeatherRepository {
                 })
                 .asObservable()
         }
+
         let ultraShortForecast: Observable<UltraShortForecastWeatherList>
+
         if let usfCache = self.cacheService.fetchUltraShortForecast(for: location, at: date) {
             ultraShortForecast = Observable.just(usfCache).share()
         } else {
@@ -130,8 +131,8 @@ final class DefaultWeatherRepository: WeatherRepository {
                 .asObservable()
         }
         return Observable.zip(midWeatherForecast, midTemperatureForecast)
-            .map { weather, temperature in
-                zip(weather, temperature)
+            .map { weathers, temperatures in
+                zip(weathers, temperatures)
                     .map { weather, temperature in
                         DailyWeather(
                             midWeatherForecast: weather,

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class RecommendationCollectionCell: ClothesCell {
+final class RecommendationCollectionCell: ClothesCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black

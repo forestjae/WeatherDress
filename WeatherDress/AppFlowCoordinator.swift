@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class AppFlowCoordinator: Coordinator<Void> {
+final class AppFlowCoordinator: Coordinator<Void> {
     var window: UIWindow
 
     init(window: UIWindow) {

@@ -9,12 +9,19 @@ import Foundation
 
 struct GridConverting {
 
+    struct GeoSearchInfo {
+        var latitude: Double
+        var longtitude: Double
+        var xGrid: Int
+        var yGRid: Int
+    }
+
     enum Mode {
         case toGrid
         case toCoordinate
     }
 
-    static func convertGRID_GPS(
+    static func gridConvert(
         mode: Mode,
         xComponent: Double,
         yComponent: Double
@@ -30,68 +37,61 @@ struct GridConverting {
         let originLongtitude = 126.0 * degreeToRadianFactor
         let originLatitude = 38.0 * degreeToRadianFactor
 
-        var sn = tan(Double.pi * 0.25 + standardLatitude2 * 0.5) / tan(Double.pi * 0.25 + standardLatitude1 * 0.5)
-        sn = log(cos(standardLatitude1) / cos(standardLatitude2)) / log(sn)
-        var sf = tan(Double.pi * 0.25 + standardLatitude1 * 0.5)
-        sf = pow(sf, sn) * cos(standardLatitude1) / sn
-        var ro = tan(Double.pi * 0.25 + originLatitude * 0.5)
-        ro = earthRadiusByGridSize * sf / pow(ro, sn)
-        var rs = GeoSearchInfo(latitude: 0, longtitude: 0, xGrid: 0, yGRid: 0)
+        var snValue = tan(Double.pi * 0.25 + standardLatitude2 * 0.5) / tan(Double.pi * 0.25 + standardLatitude1 * 0.5)
+        snValue = log(cos(standardLatitude1) / cos(standardLatitude2)) / log(snValue)
+        var sfValue = tan(Double.pi * 0.25 + standardLatitude1 * 0.5)
+        sfValue = pow(sfValue, snValue) * cos(standardLatitude1) / snValue
+        var roValue = tan(Double.pi * 0.25 + originLatitude * 0.5)
+        roValue = earthRadiusByGridSize * sfValue / pow(roValue, snValue)
+        var rsValue = GeoSearchInfo(latitude: 0, longtitude: 0, xGrid: 0, yGRid: 0)
 
-        if mode == .toGrid {
-            rs.latitude = yComponent
-            rs.longtitude = xComponent
-            var ra = tan(Double.pi * 0.25 + (yComponent) * degreeToRadianFactor * 0.5)
-            ra = earthRadiusByGridSize * sf / pow(ra, sn)
+        switch mode {
+        case .toGrid:
+            rsValue.latitude = yComponent
+            rsValue.longtitude = xComponent
+            var raValue = tan(Double.pi * 0.25 + (yComponent) * degreeToRadianFactor * 0.5)
+            raValue = earthRadiusByGridSize * sfValue / pow(raValue, snValue)
             var theta = xComponent * degreeToRadianFactor - originLongtitude
+
             if theta > Double.pi {
                 theta -= 2.0 * Double.pi
-            }
-            if theta < -Double.pi {
+            } else if theta < -Double.pi {
                 theta += 2.0 * Double.pi
             }
 
-            theta *= sn
-            rs.xGrid = Int(floor(ra * sin(theta) + originXGrid + 0.5))
-            rs.yGRid = Int(floor(ro - ra * cos(theta) + originYGrid + 0.5))
-        }
-        else if mode == .toCoordinate {
-            rs.xGrid = Int(xComponent)
-            rs.yGRid = Int(yComponent)
-            let xn = xComponent - originXGrid
-            let yn = ro - yComponent + originYGrid
-            var ra = sqrt(xn * xn + yn * yn)
-            if sn < 0.0 {
-                ra = -ra
+            theta *= snValue
+            rsValue.xGrid = Int(floor(raValue * sin(theta) + originXGrid + 0.5))
+            rsValue.yGRid = Int(floor(roValue - raValue * cos(theta) + originYGrid + 0.5))
+        case .toCoordinate:
+            rsValue.xGrid = Int(xComponent)
+            rsValue.yGRid = Int(yComponent)
+            let xnValue = xComponent - originXGrid
+            let ynValue = roValue - yComponent + originYGrid
+            var raValue = sqrt(xnValue * xnValue + ynValue * ynValue)
+
+            if snValue < 0.0 {
+                raValue = -raValue
             }
-            var alat = pow((earthRadiusByGridSize * sf / ra), (1.0 / sn))
+            var alat = pow((earthRadiusByGridSize * sfValue / raValue), (1.0 / snValue))
+            var theta = 0.0
             alat = 2.0 * atan(alat) - Double.pi * 0.5
 
-            var theta = 0.0
-            if abs(xn) <= 0.0 {
+            if abs(xnValue) <= 0.0 {
                 theta = 0.0
-            } else {
-                if abs(yn) <= 0.0 {
-                    theta = Double.pi * 0.5
-                    if xn < 0.0 {
-                        theta = -theta
-                    }
-                } else {
-                    theta = atan2(xn, yn)
+            } else if abs(ynValue) <= 0.0 {
+                theta = Double.pi * 0.5
+                if xnValue < 0.0 {
+                    theta = -theta
                 }
+            } else {
+                theta = atan2(xnValue, ynValue)
             }
-            let alon = theta / sn + originLongtitude
-            rs.latitude = alat * radianTodegreeFactor
-            rs.longtitude = alon * radianTodegreeFactor
+
+            let alon = theta / snValue + originLongtitude
+            rsValue.latitude = alat * radianTodegreeFactor
+            rsValue.longtitude = alon * radianTodegreeFactor
         }
-        return rs
-    }
 
-    struct GeoSearchInfo {
-        public var latitude: Double
-        public var longtitude: Double
-
-        public var xGrid: Int
-        public var yGRid: Int
+        return rsValue
     }
 }

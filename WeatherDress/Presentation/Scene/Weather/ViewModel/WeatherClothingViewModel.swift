@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class WeatherViewModel {
+final class WeatherClothingViewModel {
     struct Input {
         let viewWillAppear: Observable<Void>
         let randomButtonTapped: Observable<Void>
@@ -36,13 +36,13 @@ final class WeatherViewModel {
         let initialReturnTIme: Observable<Double>
     }
 
-    private let coordinator: WeatherCoordinator
+    private let coordinator: WeatherClothingCoordinator
     private let useCase: WeatherUseCase
     private let clothingUseCase: ClothesUseCase
     private let userSettingUseCase: UserSetttingUseCase
     private let locationInfo: BehaviorSubject<LocationInfo>
 
-    init(coordinator: WeatherCoordinator,
+    init(coordinator: WeatherClothingCoordinator,
          useCase: WeatherUseCase,
          clothingUseCase: ClothesUseCase,
          location: LocationInfo

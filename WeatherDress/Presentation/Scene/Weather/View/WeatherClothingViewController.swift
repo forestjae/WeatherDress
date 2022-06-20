@@ -16,13 +16,13 @@ private enum Design {
     static let mainFontColor: UIColor = .white
 }
 
-final class WeatherViewController: UIViewController {
+final class WeatherClothingViewController: UIViewController {
     typealias WeatherDataSource = UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>
     typealias ClothingDataSource = UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>
     typealias WeatherSnapshot = NSDiffableDataSourceSnapshot<WeatherSection, WeatherItem>
     typealias ClothingSnapshot = NSDiffableDataSourceSnapshot<RecommendationSection, ClothesItemViewModel>
 
-    var viewModel: WeatherViewModel?
+    var viewModel: WeatherClothingViewModel?
     var weatherDataSource: WeatherDataSource?
     var clothingDataSource: ClothingDataSource?
     var snapshot = WeatherSnapshot()
@@ -222,7 +222,7 @@ final class WeatherViewController: UIViewController {
 
     private func binding() {
         guard let viewModel = self.viewModel else { return }
-        let input = WeatherViewModel.Input(
+        let input = WeatherClothingViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             randomButtonTapped: self.randomButtonDidTap.asObservable(),
             allClotingButtonTapped: self.allClotingButtonDidTap.asObservable(),
@@ -235,7 +235,7 @@ final class WeatherViewController: UIViewController {
         self.bindingOutput(for: output)
     }
 
-    private func bindingOutput(for output: WeatherViewModel.Output) {
+    private func bindingOutput(for output: WeatherClothingViewModel.Output) {
         output.initialLeaveTime
             .subscribe(self.leaveTimeSliderValue)
             .disposed(by: self.disposeBag)
@@ -559,7 +559,7 @@ enum WeatherSection: Int {
     }
 }
 
-extension WeatherViewController {
+extension WeatherClothingViewController {
     private func dataSource() -> WeatherDataSource {
         return WeatherDataSource(
             collectionView: self.hourlyWeatherCollectionView

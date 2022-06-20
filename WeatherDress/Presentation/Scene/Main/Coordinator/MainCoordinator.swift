@@ -109,7 +109,7 @@ final class MainCoordinator: Coordinator<Void> {
             self.mainViewController.orderedViewControllers.append(viewController)
             self.mainViewController.setCurrentPageViewController(at: 0)
         } else if childCount > targetCount {
-            let favoriteViewController: [WeatherViewController]
+            let favoriteViewController: [WeatherClothingViewController]
             if isCurrentVisible {
                 favoriteViewController = Array(self.mainViewController.orderedViewControllers.dropFirst())
             } else {
@@ -127,10 +127,10 @@ final class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func makeWeatherViewController(with location: LocationInfo) -> WeatherViewController {
-        let weatherViewController = WeatherViewController()
-        let weatherCoordinator = WeatherCoordinator(viewController: weatherViewController)
-        let viewModel = WeatherViewModel(
+    private func makeWeatherViewController(with location: LocationInfo) -> WeatherClothingViewController {
+        let weatherViewController = WeatherClothingViewController()
+        let weatherCoordinator = WeatherClothingCoordinator(viewController: weatherViewController)
+        let viewModel = WeatherClothingViewModel(
             coordinator: weatherCoordinator,
             useCase: WeatherUseCase(
                 repository: DefaultWeatherRepository(

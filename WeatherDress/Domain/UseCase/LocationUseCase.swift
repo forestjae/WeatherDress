@@ -33,9 +33,6 @@ final class LocationUseCase {
     }
 
     func search(for query: String) -> Observable<[LocationInfo]> {
-        if query == "" {
-            return self.repository.searchLocation(for: " ")
-        }
-        return self.repository.searchLocation(for: query)
+        return self.repository.searchLocation(for: query == "" ? " " : query)
     }
 }

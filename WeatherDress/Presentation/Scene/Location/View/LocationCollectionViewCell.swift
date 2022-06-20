@@ -5,7 +5,6 @@
 //  Created by Lee Seung-Jae on 2022/05/01.
 //
 
-import Foundation
 import UIKit
 
 private enum Design {
@@ -65,7 +64,7 @@ extension LocationCollectionViewCell {
         }
         content.textProperties.font = .systemFont(ofSize: 20, weight: .bold).metrics(for: .body)
         content.textProperties.color = Design.mainFontColor
-        content.secondaryText = weather.weatherCondition.rawValue
+        content.secondaryText = weather.weatherCondition.description
         content.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
         content.secondaryTextProperties.color = Design.mainFontColor
         content.textToSecondaryTextVerticalPadding = 35

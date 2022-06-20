@@ -7,15 +7,30 @@
 
 import Foundation
 
-enum WeatherCondition: String {
-    case clear = "청명함"
-    case partlyCloudy = "구름많음"
-    case cloudy = "흐림"
-    case rain = "비"
-    case snow = "눈"
+enum WeatherCondition {
+    case clear
+    case partlyCloudy
+    case cloudy
+    case rain
+    case snow
 }
 
 extension WeatherCondition {
+    var description: String {
+        switch self {
+        case .clear:
+            return "청명함"
+        case .partlyCloudy:
+            return "구름많음"
+        case .cloudy:
+            return "흐림"
+        case .rain:
+            return "비"
+        case .snow:
+            return "눈"
+        }
+    }
+
     var staticImageURL: String {
         switch self {
         case .clear:

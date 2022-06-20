@@ -17,12 +17,16 @@ private enum Design {
 }
 
 final class WeatherViewController: UIViewController {
+    typealias WeatherDataSource = UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>
+    typealias ClothingDataSource = UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>
+    typealias WeatherSnapshot = NSDiffableDataSourceSnapshot<WeatherSection, WeatherItem>
+    typealias ClothingSnapshot = NSDiffableDataSourceSnapshot<RecommendationSection, ClothesItemViewModel>
 
     var viewModel: WeatherViewModel?
-    var weatherDataSource: UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>?
-    var clotingDataSource: UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>?
-    var snapshot = NSDiffableDataSourceSnapshot<WeatherSection, WeatherItem>()
-    var clotingSnapshot = NSDiffableDataSourceSnapshot<RecommendationSection, ClothesItemViewModel>()
+    var weatherDataSource: WeatherDataSource?
+    var clothingDataSource: ClothingDataSource?
+    var snapshot = WeatherSnapshot()
+    var clotingSnapshot = ClothingSnapshot()
 
     private let disposeBag = DisposeBag()
     private let allClotingButtonDidTap = PublishSubject<Void>()
@@ -261,7 +265,7 @@ final class WeatherViewController: UIViewController {
                 let identifer = self.clotingSnapshot.itemIdentifiers(inSection: .cloting)
                 self.clotingSnapshot.deleteItems(identifer)
                 self.clotingSnapshot.appendItems($0, toSection: .cloting)
-                self.clotingDataSource?.apply(self.clotingSnapshot)
+                self.clothingDataSource?.apply(self.clotingSnapshot)
             })
             .disposed(by: self.disposeBag)
 
@@ -368,7 +372,7 @@ final class WeatherViewController: UIViewController {
         )
 
         self.clotingSnapshot.appendSections([RecommendationSection.cloting])
-        self.clotingDataSource = self.dataSourceCloting()
+        self.clothingDataSource = self.dataSourceCloting()
         self.provideSupplementaryViewForClotingCollectionView()
     }
 
@@ -556,8 +560,8 @@ enum WeatherSection: Int {
 }
 
 extension WeatherViewController {
-    func dataSource() -> UICollectionViewDiffableDataSource<WeatherSection, WeatherItem> {
-        return UICollectionViewDiffableDataSource<WeatherSection, WeatherItem>(
+    private func dataSource() -> WeatherDataSource {
+        return WeatherDataSource(
             collectionView: self.hourlyWeatherCollectionView
         ) { collectionView, indexPath, itemIdentifier in
             switch itemIdentifier {
@@ -594,8 +598,8 @@ extension WeatherViewController {
         }
     }
 
-    func dataSourceCloting() -> UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel> {
-        return UICollectionViewDiffableDataSource<RecommendationSection, ClothesItemViewModel>(
+    private func dataSourceCloting() -> ClothingDataSource {
+        return ClothingDataSource(
             collectionView: self.clotingCollectionView
         ) { collectionView, indexPath, itemIdentifier in
                 let cell = collectionView.dequeueReusableCell(
@@ -608,7 +612,7 @@ extension WeatherViewController {
     }
 
     private func provideSupplementaryViewForClotingCollectionView() {
-        self.clotingDataSource?.supplementaryViewProvider = { (_, kind, indexPath) in
+        self.clothingDataSource?.supplementaryViewProvider = { (_, kind, indexPath) in
             if kind == "header" {
                 let header = self.clotingCollectionView.dequeueReusableSupplementaryView(
                     ofKind: "header",

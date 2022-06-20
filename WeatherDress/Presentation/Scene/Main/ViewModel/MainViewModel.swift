@@ -11,16 +11,6 @@ import RxCocoa
 
 final class MainViewModel {
 
-    let coordinator: MainCoordinator
-
-    private let disposeBag = DisposeBag()
-    private let useCase: LocationUseCase
-
-    init(useCase: LocationUseCase, coordinator: MainCoordinator) {
-        self.useCase = useCase
-        self.coordinator = coordinator
-    }
-
     struct Input {
         let viewWillAppear: Observable<Void>
         let locationButtonDidTap: Observable<Void>
@@ -32,7 +22,15 @@ final class MainViewModel {
         let locations: Driver<Int>
         let currentIndex: Driver<Int>
         let currentLocationAvailable: Driver<Bool>
-        let anyLocationAvailable : Driver<Bool>
+        let anyLocationAvailable: Driver<Bool>
+    }
+
+    private let coordinator: MainCoordinator
+    private let useCase: LocationUseCase
+
+    init(useCase: LocationUseCase, coordinator: MainCoordinator) {
+        self.useCase = useCase
+        self.coordinator = coordinator
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
@@ -49,7 +47,7 @@ final class MainViewModel {
 
         currentLocationIsVisible
             .subscribe()
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
 
         let currentLocation = self.useCase.fetchCurrentLocations()
             .share()
@@ -66,10 +64,10 @@ final class MainViewModel {
                 (location, isVisible)
             })
             .observe(on: MainScheduler.instance)
-            .do(onNext: { [weak self] location, isVisible1 in
+            .do(onNext: { [weak self] location, isVisible in
                 self?.coordinator.setCurrentLocationWeatherViewController(
                     with: location,
-                    isVisible: isVisible1
+                    isVisible: isVisible
                 )
                 currentLocationIsVisible.onNext(true)
             })
@@ -123,13 +121,13 @@ final class MainViewModel {
                 coordinator.coordinateToUserSetting()
             }
             .subscribe()
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
 
         currentLocationAvailable
             .subscribe(onNext: {
                 $0 ? () : currentLocationIsVisible.onNext(false)
             })
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
 
         return Output(
             currentLocation: currentLocation,

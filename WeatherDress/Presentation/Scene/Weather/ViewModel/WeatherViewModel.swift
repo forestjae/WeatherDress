@@ -10,26 +10,6 @@ import RxSwift
 import RxCocoa
 
 final class WeatherViewModel {
-
-    private let coordinator: WeatherCoordinator
-    private let useCase: WeatherUseCase
-    private let clothingUseCase: ClothesUseCase
-    private let userSettingUseCase: UserSetttingUseCase
-    private let locationInfo: BehaviorSubject<LocationInfo>
-
-    init(coordinator: WeatherCoordinator,
-         useCase: WeatherUseCase,
-         clothingUseCase: ClothesUseCase,
-         location: LocationInfo
-    ) {
-        self.coordinator = coordinator
-        self.useCase = useCase
-        self.clothingUseCase = clothingUseCase
-        self.userSettingUseCase = UserSetttingUseCase(repository: DefaultUserSettingRepository())
-        let locationInfo = BehaviorSubject<LocationInfo>(value: location)
-        self.locationInfo = locationInfo
-    }
-
     struct Input {
         let viewWillAppear: Observable<Void>
         let randomButtonTapped: Observable<Void>
@@ -54,6 +34,25 @@ final class WeatherViewModel {
         let allClothingViewDismiss: Observable<Void>
         let initialLeaveTime: Observable<Double>
         let initialReturnTIme: Observable<Double>
+    }
+
+    private let coordinator: WeatherCoordinator
+    private let useCase: WeatherUseCase
+    private let clothingUseCase: ClothesUseCase
+    private let userSettingUseCase: UserSetttingUseCase
+    private let locationInfo: BehaviorSubject<LocationInfo>
+
+    init(coordinator: WeatherCoordinator,
+         useCase: WeatherUseCase,
+         clothingUseCase: ClothesUseCase,
+         location: LocationInfo
+    ) {
+        self.coordinator = coordinator
+        self.useCase = useCase
+        self.clothingUseCase = clothingUseCase
+        self.userSettingUseCase = UserSetttingUseCase(repository: DefaultUserSettingRepository())
+        let locationInfo = BehaviorSubject<LocationInfo>(value: location)
+        self.locationInfo = locationInfo
     }
 
     func setLocationInfo(_ location: LocationInfo) {
@@ -132,7 +131,7 @@ final class WeatherViewModel {
         let hourlyWeathers = self.locationInfo
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
-                viewModel.useCase.fetchHourlWeatehr(from: locationInfo)
+                viewModel.useCase.fetchHourlyWeather(from: locationInfo)
             }
             .share()
 
@@ -148,7 +147,7 @@ final class WeatherViewModel {
             .asDriver(onErrorJustReturn: "--")
 
         let currentWeatherCondition = currentWeather
-            .map { $0.weatherCondition.rawValue }
+            .map { $0.weatherCondition.description }
             .asDriver(onErrorJustReturn: "-")
 
         let currentWeatherConditionImageURL = currentWeather

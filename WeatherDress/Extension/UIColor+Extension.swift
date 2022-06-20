@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIColor {
-
     convenience init(red: Int, green: Int, blue: Int) {
         self.init(
             red: CGFloat(red) / 255.0,
@@ -20,7 +19,7 @@ extension UIColor {
 }
 
 extension UIColor {
-    static let skyWhite = UIColor(red: 96 + 15, green: 144 + 23, blue: 206 + 33)
+    static let skyWhite = UIColor(red: 111, green: 167, blue: 239)
     static let lightSky = UIColor(red: 96, green: 144, blue: 206)
     static let moderateSky = UIColor(red: 67, green: 122, blue: 210)
     static let deepSky = UIColor(red: 67, green: 122, blue: 196)

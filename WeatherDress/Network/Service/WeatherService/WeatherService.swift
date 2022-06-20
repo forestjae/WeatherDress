@@ -20,7 +20,7 @@ final class WeatherService {
         for location: LocationInfo,
         at date: Date
     ) -> Single<UltraShortNowcastWeatherItem> {
-        let converted = GridConverting.convertGRID_GPS(
+        let converted = GridConverting.gridConvert(
             mode: .toGrid,
             xComponent: location.longtitude,
             yComponent: location.latitude
@@ -56,7 +56,7 @@ final class WeatherService {
         for location: LocationInfo,
         at date: Date
     ) -> Single<UltraShortForecastWeatherList> {
-        let converted = GridConverting.convertGRID_GPS(
+        let converted = GridConverting.gridConvert(
             mode: .toGrid,
             xComponent: location.longtitude,
             yComponent: location.latitude
@@ -87,7 +87,7 @@ final class WeatherService {
         for location: LocationInfo,
         at date: Date
     ) -> Single<ShortForecastWeatherList> {
-        let converted = GridConverting.convertGRID_GPS(
+        let converted = GridConverting.gridConvert(
             mode: .toGrid,
             xComponent: location.longtitude,
             yComponent: location.latitude

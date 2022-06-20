@@ -8,7 +8,6 @@
 import Foundation
 
 struct HourlyWeatherItemViewModel: Hashable {
-
     let timeDescription: String
     let day: Int?
     let weatherImageURL: String

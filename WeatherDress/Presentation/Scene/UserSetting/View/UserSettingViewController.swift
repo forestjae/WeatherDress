@@ -12,6 +12,7 @@ import RxCocoa
 
 final class UserSettingViewController: UIViewController {
     var viewModel: UserSettingViewModel?
+
     private let disposeBag = DisposeBag()
     private let pickerValue = PublishSubject<Date>()
 

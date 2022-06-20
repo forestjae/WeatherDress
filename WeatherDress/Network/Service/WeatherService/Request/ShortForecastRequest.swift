@@ -11,7 +11,7 @@ struct ShortForecastRequest: ShortForecastRequestable {
     typealias Response = ShortForecastWeatherResponse
 
     let path: String = "getVilageFcst"
-    let headers: [String : String]? = nil
+    let headers: [String: String]? = nil
     let method: HTTPMethod = .get
     let pageNo: Int = 1
     let numOfRows: Int = 1000

@@ -33,9 +33,19 @@ extension Sequence where Element == HourlyWeather {
                       let first = items.first else {
                           return nil
                       }
+                let weatherConditionList = items.map { $0.weatherCondition }
+                var weatherConditionDict = [WeatherCondition: Int]()
+                weatherConditionList.forEach { weatherConditionDict[$0, default: 0] += 1 }
+                guard let dailyWeatherCondition = weatherConditionDict
+                    .sorted(by: { $0.value > $1.value } )
+                    .first?.key
+                else {
+                    return nil
+                }
+                
                 return DailyWeather(
                     date: first.date,
-                    weatherCondition: .clear,
+                    weatherCondition: dailyWeatherCondition,
                     rainfallProbability: 0,
                     maximumTemperature: maxTemp,
                     minimunTemperature: minTemp

@@ -137,3 +137,5 @@ xcuserdata
 WeatherDress/Secret.plist
 WeatherDress/Resources
 .swiftlint.yml
+
+Podfile.lock

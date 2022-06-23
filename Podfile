@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+# platform :ios, '14.0'
 
 target 'WeatherDress' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -14,20 +14,16 @@ target 'WeatherDress' do
   pod 'lottie-ios'
   pod 'RealmSwift', '~> 10'
 
-  target 'APINetworkingTests' do
-    inherit! :search_paths
-   
-  pod 'RxSwift' 
-  end
-
   target 'WeatherDressUseCaseTests' do
   pod 'RxSwift'
   pod 'RxTest'
   pod 'RxNimble', subspecs: ['RxBlocking', 'RxTest']
   end
 
-  target 'WeatherDressUITests' do
-    # Pods for testing
+  target 'WeatherDressViewModelTests' do
+  pod 'RxSwift'
+  pod 'RxTest'
+  pod 'RxNimble', subspecs: ['RxBlocking', 'RxTest']
   end
 
 end

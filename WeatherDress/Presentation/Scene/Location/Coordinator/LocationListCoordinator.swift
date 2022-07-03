@@ -29,7 +29,7 @@ final class LocationListCoordinator: Coordinator<LocationListDismissAction> {
                     ),
                     database: database)
             ),
-            weatherUseCase: WeatherUseCase(
+            weatherUseCase: DefaultWeatherUseCase(
                 repository: DefaultWeatherRepository(
                     apiService: WeatherService(apiProvider: DefaultAPIProvider())))
             ,

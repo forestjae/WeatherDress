@@ -28,13 +28,13 @@ final class LocationViewModel {
     }
 
     private let useCase: LocationUseCase
-    private let weatherUseCase: WeatherUseCase
+    private let weatherUseCase: DefaultWeatherUseCase
     private let coordinator: LocationListCoordinator
     private(set) var locationListCellDidTap = PublishSubject<Int>()
 
     init(
         useCase: LocationUseCase,
-        weatherUseCase: WeatherUseCase,
+        weatherUseCase: DefaultWeatherUseCase,
         coordinator: LocationListCoordinator
     ) {
         self.useCase = useCase

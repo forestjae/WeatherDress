@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class WeatherUseCase {
+final class DefaultWeatherUseCase: WeatherUseCase {
     let repository: WeatherRepository
 
     init(repository: WeatherRepository) {

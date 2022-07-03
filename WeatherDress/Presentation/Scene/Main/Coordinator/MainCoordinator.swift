@@ -132,7 +132,7 @@ final class MainCoordinator: Coordinator<Void> {
         let weatherCoordinator = WeatherClothingCoordinator(viewController: weatherViewController)
         let viewModel = WeatherClothingViewModel(
             coordinator: weatherCoordinator,
-            useCase: WeatherUseCase(
+            useCase: DefaultWeatherUseCase(
                 repository: DefaultWeatherRepository(
                     apiService: WeatherService(
                         apiProvider: DefaultAPIProvider()

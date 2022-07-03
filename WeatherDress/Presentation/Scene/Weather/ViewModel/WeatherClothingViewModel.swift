@@ -37,13 +37,13 @@ final class WeatherClothingViewModel {
     }
 
     private let coordinator: WeatherClothingCoordinator
-    private let useCase: WeatherUseCase
+    private let useCase: DefaultWeatherUseCase
     private let clothingUseCase: ClothesUseCase
     private let userSettingUseCase: UserSetttingUseCase
     private let locationInfo: BehaviorSubject<LocationInfo>
 
     init(coordinator: WeatherClothingCoordinator,
-         useCase: WeatherUseCase,
+         useCase: DefaultWeatherUseCase,
          clothingUseCase: ClothesUseCase,
          location: LocationInfo
     ) {

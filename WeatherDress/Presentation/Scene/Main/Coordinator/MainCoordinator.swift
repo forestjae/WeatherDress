@@ -139,7 +139,7 @@ final class MainCoordinator: Coordinator<Void> {
                     )
                 )
             ),
-            clothingUseCase: ClothesUseCase(repository: DefaultClothesRepository()),
+            clothingUseCase: DefaultClothesUseCase(repository: DefaultClothesRepository()),
             location: location
         )
 

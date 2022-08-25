@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class ClothesUseCase {
+final class DefaultClothesUseCase: ClothesUseCase {
     let repository: ClothesRepository
 
     init(repository: ClothesRepository) {

@@ -246,10 +246,10 @@ final class WeatherClothingViewModel {
             }
             .asDriver(onErrorJustReturn: "- / -")
 
-        let allClothingViewDismiss = input.allClotingButtonTapped
-            .withUnretained(self.coordinator)
-            .flatMap { coordinator, _ in
-                coordinator.coordinateToAllClothing(for: allClothingItems)
+        let allClothingViewDismiss = input.allClothingButtonTapped
+            .withUnretained(self)
+            .flatMap { viewModel, _ in
+                viewModel.coordinator.coordinateToAllClothing(for: allClothingItems)
             }
 
         let leaveReturnTitleText = Observable.combineLatest(leaveTime, returnTime)

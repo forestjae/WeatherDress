@@ -140,6 +140,7 @@ final class MainCoordinator: Coordinator<Void> {
                 )
             ),
             clothingUseCase: DefaultClothesUseCase(repository: DefaultClothesRepository()),
+            userSettingUseCase: DefaultUserSetttingUseCase(repository: DefaultUserSettingRepository()),
             location: location
         )
 

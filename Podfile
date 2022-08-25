@@ -8,17 +8,11 @@ target 'WeatherDress' do
   # Pods for WeatherDress
 
   pod 'RxSwift'
+  pod 'RxCocoa', '6.5.0'
   pod 'SwiftLint'
   pod 'SnapKit'  
-  pod 'RxDataSources', '~> 5.0'
   pod 'lottie-ios'
-  pod 'RealmSwift', '~> 10'
-
-  target 'WeatherDressUseCaseTests' do
-  pod 'RxSwift'
-  pod 'RxTest'
-  pod 'RxNimble', subspecs: ['RxBlocking', 'RxTest']
-  end
+  pod 'RealmSwift', '~> 10' 
 
   target 'WeatherDressViewModelTests' do
   pod 'RxSwift'

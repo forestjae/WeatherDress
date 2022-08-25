@@ -31,7 +31,6 @@ final class WeatherClothingViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let allClotingButtonDidTap = PublishSubject<Void>()
     private let randomButtonDidTap = PublishSubject<Void>()
-    private let timeConfigureButtonDidTap = PublishSubject<Void>()
     private let leaveReturnTimeLabelText = BehaviorSubject<String>(value: "")
     private let leaveTimeSliderValue = PublishSubject<Double>()
     private let returnTimeSliderValue = PublishSubject<Double>()
@@ -225,8 +224,7 @@ final class WeatherClothingViewController: UIViewController {
         let input = WeatherClothingViewModel.Input(
             viewWillAppear: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
             randomButtonTapped: self.randomButtonDidTap.asObservable(),
-            allClotingButtonTapped: self.allClotingButtonDidTap.asObservable(),
-            timeConfigurationButtonTapped: self.timeConfigureButtonDidTap.asObservable(),
+            allClothingButtonTapped: self.allClotingButtonDidTap.asObservable(),
             timeSliderLowerValueChanged: self.leaveTimeSliderValue,
             timeSliderUpperValueChnaged: self.returnTimeSliderValue
         )
@@ -240,7 +238,7 @@ final class WeatherClothingViewController: UIViewController {
             .subscribe(self.leaveTimeSliderValue)
             .disposed(by: self.disposeBag)
 
-        output.initialReturnTIme
+        output.initialReturnTime
             .subscribe(self.returnTimeSliderValue)
             .disposed(by: self.disposeBag)
 
@@ -257,7 +255,7 @@ final class WeatherClothingViewController: UIViewController {
             .drive(self.currentTemperatureLabel.rx.text)
             .disposed(by: self.disposeBag)
 
-        output.recommendedClotingItem
+        output.recommendedClothingItem
             .drive(onNext: { [weak self] in
                 guard let self = self else {
                     return
@@ -318,7 +316,7 @@ final class WeatherClothingViewController: UIViewController {
             .subscribe()
             .disposed(by: self.disposeBag)
 
-        output.recommendedClotingItem.asObservable()
+        output.recommendedClothingItem.asObservable()
             .withUnretained(self)
             .subscribe(onNext: { viewController, _ in
                 viewController.activityIndicator.stop()
@@ -330,7 +328,7 @@ final class WeatherClothingViewController: UIViewController {
             .subscribe(self.initialLeaveTimeSliderValue)
             .disposed(by: self.disposeBag)
 
-        output.initialReturnTIme
+        output.initialReturnTime
             .subscribe(self.initialReturnTimeSliderValue)
             .disposed(by: self.disposeBag)
     }

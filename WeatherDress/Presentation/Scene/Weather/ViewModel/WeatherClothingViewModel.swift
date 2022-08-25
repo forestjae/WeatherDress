@@ -13,8 +13,7 @@ final class WeatherClothingViewModel {
     struct Input {
         let viewWillAppear: Observable<Void>
         let randomButtonTapped: Observable<Void>
-        let allClotingButtonTapped: Observable<Void>
-        let timeConfigurationButtonTapped: Observable<Void>
+        let allClothingButtonTapped: Observable<Void>
         let timeSliderLowerValueChanged: Observable<Double>
         let timeSliderUpperValueChnaged: Observable<Double>
     }
@@ -28,28 +27,28 @@ final class WeatherClothingViewModel {
         let minMaxTemperature: Driver<String>
         let hourlyWeatherItem: Driver<[HourlyWeatherItemViewModel]>
         let dailyWeatherItem: Driver<[DailyWeatherItemViewModel]>
-        let allClotingItem: Observable<[ClothesItemViewModel]>
-        let recommendedClotingItem: Driver<[ClothesItemViewModel]>
+        let allClothingItem: Observable<[ClothesItemViewModel]>
+        let recommendedClothingItem: Driver<[ClothesItemViewModel]>
         let leaveReturnTitleText: Observable<String>
         let allClothingViewDismiss: Observable<Void>
         let initialLeaveTime: Observable<Double>
-        let initialReturnTIme: Observable<Double>
+        let initialReturnTime: Observable<Double>
     }
 
     private let coordinator: WeatherClothingCoordinator
-    private let useCase: DefaultWeatherUseCase
+    private let weatherUseCase: WeatherUseCase
     private let clothingUseCase: ClothesUseCase
     private let userSettingUseCase: UserSettingUseCase
     private let locationInfo: BehaviorSubject<LocationInfo>
 
     init(coordinator: WeatherClothingCoordinator,
-         useCase: DefaultWeatherUseCase,
+         useCase: WeatherUseCase,
          clothingUseCase: ClothesUseCase,
          userSettingUseCase: UserSettingUseCase,
          location: LocationInfo
     ) {
         self.coordinator = coordinator
-        self.useCase = useCase
+        self.weatherUseCase = useCase
         self.clothingUseCase = clothingUseCase
         self.userSettingUseCase = userSettingUseCase
         let locationInfo = BehaviorSubject<LocationInfo>(value: location)
@@ -125,21 +124,21 @@ final class WeatherClothingViewModel {
             .filter { $0.address.firstRegion != "" }
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
-                viewModel.useCase.fetchCurrentWeather(from: locationInfo)
+                viewModel.weatherUseCase.fetchCurrentWeather(from: locationInfo)
             }
             .share()
 
         let hourlyWeathers = self.locationInfo
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
-                viewModel.useCase.fetchHourlyWeather(from: locationInfo)
+                viewModel.weatherUseCase.fetchHourlyWeather(from: locationInfo)
             }
             .share()
 
         let dailyWeathers = locationInfo
             .withUnretained(self)
             .flatMap { viewModel, locationInfo in
-                viewModel.useCase.fetchDailyWeather(from: locationInfo)
+                viewModel.weatherUseCase.fetchDailyWeather(from: locationInfo)
             }
             .share()
 
@@ -269,12 +268,12 @@ final class WeatherClothingViewModel {
             minMaxTemperature: minMaxTemperature,
             hourlyWeatherItem: hourlyWeatherItemViewModel,
             dailyWeatherItem: dailyWeatherItemViewModel,
-            allClotingItem: allClothingItems,
-            recommendedClotingItem: recommendedClotingItemViewModel,
+            allClothingItem: allClothingItems,
+            recommendedClothingItem: recommendedClotingItemViewModel,
             leaveReturnTitleText: leaveReturnTitleText,
             allClothingViewDismiss: allClothingViewDismiss,
             initialLeaveTime: initialLeaveTimeSliderVlaue,
-            initialReturnTIme: initialReturnTimeSliderValue
+            initialReturnTime: initialReturnTimeSliderValue
         )
     }
 }

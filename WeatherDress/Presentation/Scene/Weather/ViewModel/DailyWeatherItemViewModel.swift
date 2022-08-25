@@ -33,7 +33,9 @@ struct DailyWeatherItemViewModel: Hashable {
             }
         }
     }
+}
 
+extension DailyWeatherItemViewModel {
     init(dailyWeather: DailyWeather, index: Int) {
         switch index {
         case 0:

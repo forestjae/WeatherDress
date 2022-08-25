@@ -22,7 +22,7 @@ final class LocationListCoordinator: Coordinator<LocationListDismissAction> {
         }
         let locationListViewController = LocationViewController()
         let locationListViewModel = LocationViewModel(
-            useCase: LocationUseCase(
+            useCase: DefaultLocationUseCase(
                 repository: DefaultLocationRepository(
                     apiService: GeoSearchService(
                         apiProvider: DefaultAPIProvider()

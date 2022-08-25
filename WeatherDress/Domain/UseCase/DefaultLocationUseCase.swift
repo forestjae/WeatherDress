@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class LocationUseCase {
+final class DefaultLocationUseCase: LocationUseCase {
     let repository: LocationRepository
 
     init(repository: LocationRepository) {

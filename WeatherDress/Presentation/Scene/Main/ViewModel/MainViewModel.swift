@@ -26,9 +26,9 @@ final class MainViewModel {
     }
 
     private let coordinator: MainCoordinator
-    private let useCase: LocationUseCase
+    private let useCase: DefaultLocationUseCase
 
-    init(useCase: LocationUseCase, coordinator: MainCoordinator) {
+    init(useCase: DefaultLocationUseCase, coordinator: MainCoordinator) {
         self.useCase = useCase
         self.coordinator = coordinator
     }

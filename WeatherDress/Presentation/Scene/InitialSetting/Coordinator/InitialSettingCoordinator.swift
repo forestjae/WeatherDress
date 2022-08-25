@@ -18,7 +18,7 @@ final class InitialSettingCoordinator: Coordinator<Void> {
     override func start() -> Observable<Void> {
         let initialSettingViewController = InitialSettingViewController()
         let userSettingRepository = DefaultUserSettingRepository()
-        let userSettingUseCase = UserSetttingUseCase(repository: userSettingRepository)
+        let userSettingUseCase = DefaultUserSetttingUseCase(repository: userSettingRepository)
         let initialSettingViewModel = InitialSettingViewModel(
             useCase: userSettingUseCase,
             coordinator: self

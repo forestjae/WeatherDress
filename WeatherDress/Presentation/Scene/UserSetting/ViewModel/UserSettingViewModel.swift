@@ -35,11 +35,11 @@ final class UserSettingViewModel {
     let backBarButtonDidTap: Observable<Void>
 
     private let coordinator: UserSettingCoordinator
-    private let useCase: UserSetttingUseCase
+    private let useCase: DefaultUserSetttingUseCase
     private let _backBarButtonDidTap = PublishSubject<Void>()
 
     init(
-        useCase: UserSetttingUseCase,
+        useCase: DefaultUserSetttingUseCase,
         coordinator: UserSettingCoordinator
     ) {
         self.useCase = useCase

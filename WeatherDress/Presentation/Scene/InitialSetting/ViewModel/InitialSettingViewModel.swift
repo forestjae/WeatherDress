@@ -13,11 +13,11 @@ final class InitialSettingViewModel {
     let acceptButtonDidTap: Observable<Void>
 
     private let coordinator: InitialSettingCoordinator
-    private let useCase: UserSetttingUseCase
+    private let useCase: DefaultUserSetttingUseCase
     private let _accept = PublishSubject<Void>()
 
     init(
-        useCase: UserSetttingUseCase,
+        useCase: DefaultUserSetttingUseCase,
         coordinator: InitialSettingCoordinator
     ) {
         self.useCase = useCase

@@ -39,18 +39,19 @@ final class WeatherClothingViewModel {
     private let coordinator: WeatherClothingCoordinator
     private let useCase: DefaultWeatherUseCase
     private let clothingUseCase: ClothesUseCase
-    private let userSettingUseCase: UserSetttingUseCase
+    private let userSettingUseCase: UserSettingUseCase
     private let locationInfo: BehaviorSubject<LocationInfo>
 
     init(coordinator: WeatherClothingCoordinator,
          useCase: DefaultWeatherUseCase,
          clothingUseCase: ClothesUseCase,
+         userSettingUseCase: UserSettingUseCase,
          location: LocationInfo
     ) {
         self.coordinator = coordinator
         self.useCase = useCase
         self.clothingUseCase = clothingUseCase
-        self.userSettingUseCase = UserSetttingUseCase(repository: DefaultUserSettingRepository())
+        self.userSettingUseCase = userSettingUseCase
         let locationInfo = BehaviorSubject<LocationInfo>(value: location)
         self.locationInfo = locationInfo
     }

@@ -25,12 +25,12 @@ final class LocationViewModel {
         let searchedLocations: Driver<[LocationInfo]>
         let locationDidDeleted: Observable<Void>
         let newLocationCreated: Observable<Void>
+        let pageSceneDismissed: Observable<Void>
     }
 
     private let useCase: DefaultLocationUseCase
     private let weatherUseCase: DefaultWeatherUseCase
     private let coordinator: LocationListCoordinator
-    private(set) var locationListCellDidTap = PublishSubject<Int>()
 
     init(
         useCase: DefaultLocationUseCase,
@@ -95,10 +95,6 @@ final class LocationViewModel {
             }
             .asDriver(onErrorJustReturn: [])
 
-        input.locationListCellSelected
-            .subscribe(self.locationListCellDidTap)
-            .disposed(by: disposeBag)
-
         let locationDidDeleted = input.listCellDidDeleted
             .withUnretained(self)
             .flatMap { viewModel, location in
@@ -113,12 +109,19 @@ final class LocationViewModel {
             }
             .map { _ in }
 
+        let pageSceneDismissed = input.locationListCellSelected
+            .withUnretained(self)
+            .flatMap { viewModel, index in
+                viewModel.coordinator.coordinateToPageScene(index: index)
+            }
+
         return Output(
             locations: locations,
             weathers: weathers,
             searchedLocations: searchResult,
             locationDidDeleted: locationDidDeleted,
-            newLocationCreated: newLocationCreated
+            newLocationCreated: newLocationCreated,
+            pageSceneDismissed: pageSceneDismissed
         )
     }
 }

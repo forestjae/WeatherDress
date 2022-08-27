@@ -53,10 +53,6 @@ final class LocationViewController: UIViewController {
         self.binding()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
     private func configureHierarchy() {
         self.view.addSubview(self.locationCollectionView)
     }
@@ -162,6 +158,10 @@ final class LocationViewController: UIViewController {
             .disposed(by: self.disposeBag)
 
         output.newLocationCreated
+            .subscribe()
+            .disposed(by: self.disposeBag)
+
+        output.pageSceneDismissed
             .subscribe()
             .disposed(by: self.disposeBag)
     }

@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 
 final class InitialSettingCoordinator: Coordinator<Void> {
-    private let parentViewController: UINavigationController
+    private let parentViewController: UIViewController
 
-    init(parentViewController: UINavigationController) {
+    init(parentViewController: UIViewController) {
         self.parentViewController = parentViewController
     }
 
@@ -25,20 +25,15 @@ final class InitialSettingCoordinator: Coordinator<Void> {
         )
 
         initialSettingViewController.viewModel = initialSettingViewModel
-        self.parentViewController.pushViewController(initialSettingViewController, animated: true)
-        self.parentViewController.isNavigationBarHidden = true
+        initialSettingViewController.modalPresentationStyle = .fullScreen
+
+        self.parentViewController.present(initialSettingViewController, animated: false)
 
         let accept = initialSettingViewModel.acceptButtonDidTap
 
         return accept
-            .flatMap {
-                self.mainViewFlow(navigationController: self.parentViewController)
-            }
+            .do(onNext: {
+                initialSettingViewController.dismiss(animated: true)
+            })
     }
-
-    private func mainViewFlow(navigationController: UINavigationController) -> Observable<Void> {
-        let pageSceneCoordinator = MainCoordinator(navigationController: navigationController)
-        return self.coordinate(to: pageSceneCoordinator)
-    }
-
 }

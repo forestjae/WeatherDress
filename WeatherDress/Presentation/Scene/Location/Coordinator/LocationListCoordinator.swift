@@ -8,20 +8,22 @@
 import UIKit
 import RxSwift
 
-final class LocationListCoordinator: Coordinator<LocationListDismissAction> {
+final class LocationListCoordinator: Coordinator<Void> {
+    private let navigationController: UINavigationController
+    private let locationViewController: LocationViewController
 
-    private let parentViewController: UIViewController
-
-    init(parentViewController: UIViewController) {
-        self.parentViewController = parentViewController
+    init(navigationViewController: UINavigationController) {
+        self.navigationController = navigationViewController
+        let locationViewController = LocationViewController()
+        self.locationViewController = locationViewController
     }
 
-    override func start() -> Observable<LocationListDismissAction> {
+    override func start() -> Observable<Void> {
         guard let database = RealmService.shared else {
             return Observable.never()
         }
-        let locationListViewController = LocationViewController()
-        let locationListViewModel = LocationViewModel(
+
+        let locationViewModel = LocationViewModel(
             useCase: DefaultLocationUseCase(
                 repository: DefaultLocationRepository(
                     apiService: GeoSearchService(
@@ -35,24 +37,19 @@ final class LocationListCoordinator: Coordinator<LocationListDismissAction> {
             ,
             coordinator: self
         )
-        locationListViewController.viewModel = locationListViewModel
-        let navigationController = UINavigationController(
-            rootViewController: locationListViewController
-        )
-        navigationController.modalTransitionStyle = .crossDissolve
-        navigationController.modalPresentationStyle = .fullScreen
-        self.parentViewController.present(navigationController, animated: true, completion: nil)
+        locationViewController.viewModel = locationViewModel
 
-        let locationResult = locationListViewModel.locationListCellDidTap
-            .map { LocationListDismissAction.cellDidTap(index: $0) }
+        self.navigationController.setViewControllers([locationViewController], animated: false)
 
-        return locationResult
-            .do(onNext: { _ in
-                locationListViewController.dismiss(animated: true, completion: nil)
-            })
+        return self.coordinateToPageScene()
     }
-}
 
-enum LocationListDismissAction {
-    case cellDidTap(index: Int)
+    func coordinateToPageScene(index: Int = 0, animated: Bool = true) -> Observable<Void> {
+        let pageSceneCoordinator = MainCoordinator(
+            index: index,
+            parentViewController: self.navigationController,
+            animated: animated
+        )
+        return self.coordinate(to: pageSceneCoordinator)
+    }
 }

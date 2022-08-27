@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 final class AppFlowCoordinator: Coordinator<Void> {
-    var window: UIWindow
+    private let window: UIWindow
 
     init(window: UIWindow) {
         self.window = window
@@ -17,28 +17,35 @@ final class AppFlowCoordinator: Coordinator<Void> {
 
     override func start() -> Observable<Void> {
         let navigationController = UINavigationController()
-        navigationController.setNavigationBarHidden(true, animated: false)
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        if UserDefaults.standard.string(forKey: "Gender") == nil {
-            return self.initialSettingFlow(navigationController: navigationController)
+        guard UserDefaults.standard.bool(forKey: "InitialSettingDone") == true else {
+            return self.coordinateToInitialSettingFlow(parentViewController: navigationController)
+                .flatMap { _ in
+                    self.coordinateToLocationSceneFlow(navigationController: navigationController)
+                }
         }
 
-        return self.mainViewFlow(navigationController: navigationController)
+        return self.coordinateToLocationSceneFlow(navigationController: navigationController)
     }
 
-    private func mainViewFlow(navigationController: UINavigationController) -> Observable<Void> {
-        let pageSceneCoordinator = MainCoordinator(navigationController: navigationController)
-        return self.coordinate(to: pageSceneCoordinator)
-    }
-
-    private func initialSettingFlow(
+    private func coordinateToLocationSceneFlow(
         navigationController: UINavigationController
     ) -> Observable<Void> {
+        let locationSceneCoordinator = LocationListCoordinator(
+            navigationViewController: navigationController
+        )
+
+        return self.coordinate(to: locationSceneCoordinator)
+    }
+
+    private func coordinateToInitialSettingFlow(
+        parentViewController: UINavigationController
+    ) -> Observable<Void> {
         let initialSettingCoordinator = InitialSettingCoordinator(
-            parentViewController: navigationController
+            parentViewController: parentViewController
         )
 
         return self.coordinate(to: initialSettingCoordinator)

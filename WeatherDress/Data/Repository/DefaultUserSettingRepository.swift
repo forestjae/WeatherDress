@@ -11,6 +11,10 @@ import RxSwift
 final class DefaultUserSettingRepository: UserSettingRepository {
     let userDefault = UserDefaults.standard
 
+    func setUserInitialSettingDone() {
+        self.userDefault.set(true, forKey: "InitialSettingDone")
+    }
+
     func setUserGender(for gender: Gender) {
         self.userDefault.set(gender.rawValue, forKey: "Gender")
     }

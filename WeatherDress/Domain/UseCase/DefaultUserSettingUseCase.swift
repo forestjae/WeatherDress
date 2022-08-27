@@ -15,6 +15,10 @@ final class DefaultUserSetttingUseCase: UserSettingUseCase {
         self.repository = repository
     }
 
+    func setUserInitialSettingDone() {
+        self.repository.setUserInitialSettingDone()
+    }
+
     func setUserGender(for gender: Gender) {
         self.repository.setUserGender(for: gender)
     }

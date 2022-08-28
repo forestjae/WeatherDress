@@ -10,13 +10,19 @@ import UIKit
 import RxSwift
 
 final class MainCoordinator: Coordinator<Void> {
+    private let parentViewController: UIViewController
     private let navigationController: UINavigationController
     private let mainViewController: MainViewController
 
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-        let mainViewController = MainViewController()
-        self.mainViewController = mainViewController
+    private let animated: Bool
+    private let index: Int
+
+    init(index: Int, parentViewController: UIViewController, animated: Bool) {
+        self.parentViewController = parentViewController
+        self.navigationController = UINavigationController()
+        self.mainViewController = MainViewController()
+        self.animated = animated
+        self.index = index
     }
 
     override func start() -> Observable<Void> {
@@ -32,33 +38,29 @@ final class MainCoordinator: Coordinator<Void> {
                     ),
                     database: database)
             ),
-            coordinator: self
+            coordinator: self, index: index
         )
+
         self.mainViewController.viewModel = viewModel
-        self.navigationController.setViewControllers([self.mainViewController], animated: true)
+        self.navigationController.setViewControllers([self.mainViewController], animated: false)
+        self.navigationController.setNavigationBarHidden(true, animated: false)
+        self.navigationController.modalPresentationStyle = .fullScreen
+        self.navigationController.modalTransitionStyle = .crossDissolve
 
-        return Observable.never()
-    }
+        self.parentViewController.present(navigationController, animated: self.animated)
 
-    func coordinateToLocationList() -> Observable<Int> {
-        return self.coordinate(
-            to: LocationListCoordinator(
-                parentViewController:
-                    self.navigationController
-            )
-        )
-            .map { result in
-                switch result {
-                case .cellDidTap(let index):
-                    return index
-                }
-            }
+        let dismiss = viewModel.dismiss
+
+        return dismiss
+            .do(onNext: { _ in
+                self.mainViewController.dismiss(animated: true, completion: nil)
+            })
     }
 
     func coordinateToUserSetting() -> Observable<Void> {
         return self.coordinate(
             to: UserSettingCoordinator(
-                parentViewController: self.navigationController
+                navigationController: self.navigationController
             )
         )
     }
@@ -99,31 +101,7 @@ final class MainCoordinator: Coordinator<Void> {
                     viewController.view.tag = index + targetCount - locations.count
                     return viewController
                 })
-            self.mainViewController.setCurrentPageViewController(at: 0)
-        } else if childCount < targetCount {
-            guard let last = locations.last else {
-                return
-            }
-            let viewController = self.makeWeatherViewController(with: last)
-            viewController.view.tag = targetCount - 1
-            self.mainViewController.orderedViewControllers.append(viewController)
-            self.mainViewController.setCurrentPageViewController(at: 0)
-        } else if childCount > targetCount {
-            let favoriteViewController: [WeatherClothingViewController]
-            if isCurrentVisible {
-                favoriteViewController = Array(self.mainViewController.orderedViewControllers.dropFirst())
-            } else {
-                favoriteViewController = self.mainViewController.orderedViewControllers
-            }
-
-            zip(favoriteViewController, locations).forEach { viewController, location in
-                viewController.viewModel?.setLocationInfo(location)
-            }
-
-            self.mainViewController.orderedViewControllers.remove(at: targetCount)
-            if self.mainViewController.orderedViewControllers.count > 0 {
-                self.mainViewController.setCurrentPageViewController(at: 0)
-            }
+            self.mainViewController.setCurrentPageViewController(at: index)
         }
     }
 

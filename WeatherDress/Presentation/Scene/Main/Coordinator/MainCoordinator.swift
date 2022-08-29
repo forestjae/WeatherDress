@@ -105,9 +105,15 @@ final class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func makeWeatherViewController(with location: LocationInfo) -> WeatherClothingViewController {
+    private func makeWeatherViewController(
+        with location: LocationInfo
+    ) -> WeatherClothingViewController {
         let weatherViewController = WeatherClothingViewController()
-        let weatherCoordinator = WeatherClothingCoordinator(viewController: weatherViewController)
+        let weatherCoordinator = WeatherClothingCoordinator(
+            weatherViewController:
+                weatherViewController
+        )
+
         let viewModel = WeatherClothingViewModel(
             coordinator: weatherCoordinator,
             useCase: DefaultWeatherUseCase(

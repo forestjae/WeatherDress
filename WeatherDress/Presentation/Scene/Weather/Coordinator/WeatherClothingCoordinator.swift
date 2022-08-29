@@ -9,18 +9,17 @@ import UIKit
 import RxSwift
 
 final class WeatherClothingCoordinator {
-    let viewController: WeatherClothingViewController
+    private weak var weatherViewController: WeatherClothingViewController!
 
-    init(viewController: WeatherClothingViewController) {
-        self.viewController = viewController
-        self.viewController.navigationController?.isNavigationBarHidden = true
+    init(weatherViewController: WeatherClothingViewController) {
+        self.weatherViewController = weatherViewController
     }
 
     func coordinateToAllClothing(
         for clotingItems: Observable<[ClothesItemViewModel]>
     ) -> Observable<Void> {
         let allClothingCoordinator = AllClothingCoordinator(
-            parentViewController: self.viewController,
+            parentViewController: self.weatherViewController,
             for: clotingItems
         )
 

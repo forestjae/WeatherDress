@@ -9,11 +9,10 @@ import UIKit
 import RxSwift
 
 final class UserSettingCoordinator: Coordinator<Void> {
+    private let navigationController: UINavigationController
 
-    private let parentViewController: UINavigationController
-
-    init(parentViewController: UINavigationController) {
-        self.parentViewController = parentViewController
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
     }
 
     override func start() -> Observable<Void> {
@@ -27,18 +26,25 @@ final class UserSettingCoordinator: Coordinator<Void> {
 
         userSettingViewController.viewModel = userSettingViewModel
 
-        self.parentViewController.pushViewController(userSettingViewController, animated: true)
-        self.parentViewController.setNavigationBarHidden(false, animated: true)
+        self.navigationController.pushViewController(
+            userSettingViewController, animated: true
+        )
+
+        self.navigationController.setNavigationBarHidden(
+            false,
+            animated: true
+        )
+
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithDefaultBackground()
             appearance.backgroundColor = .moderateSky
             appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-            self.parentViewController.navigationBar.standardAppearance = appearance
-            self.parentViewController.navigationBar.scrollEdgeAppearance = appearance
+            self.navigationController.navigationBar.standardAppearance = appearance
+            self.navigationController.navigationBar.scrollEdgeAppearance = appearance
         } else {
-            self.parentViewController.navigationBar.barTintColor = .moderateSky
-            self.parentViewController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            self.navigationController.navigationBar.barTintColor = .moderateSky
+            self.navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         }
 
         userSettingViewController.navigationController?.navigationBar.barTintColor = .blue
@@ -47,8 +53,8 @@ final class UserSettingCoordinator: Coordinator<Void> {
 
         return backBarButtonDidTap
             .do(onNext: {
-                self.parentViewController.isNavigationBarHidden = true
-                self.parentViewController.popViewController(animated: true)
+                self.navigationController.isNavigationBarHidden = true
+                self.navigationController.popViewController(animated: true)
             })
     }
 }

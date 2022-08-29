@@ -356,5 +356,9 @@ final class InitialSettingViewController: UIViewController {
                 self.acceptButton.rx.isEnabled
             )
             .disposed(by: self.disposeBag)
+
+        output.userSettingDone
+            .subscribe()
+            .disposed(by: self.disposeBag)
     }
 }

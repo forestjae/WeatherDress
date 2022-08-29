@@ -13,14 +13,14 @@ final class InitialSettingViewModel {
     let acceptButtonDidTap: Observable<Void>
 
     private weak var coordinator: InitialSettingCoordinator!
-    private let useCase: DefaultUserSetttingUseCase
+    private let userSettingUseCase: DefaultUserSetttingUseCase
     private let _accept = PublishSubject<Void>()
 
     init(
         useCase: DefaultUserSetttingUseCase,
         coordinator: InitialSettingCoordinator
     ) {
-        self.useCase = useCase
+        self.userSettingUseCase = useCase
         self.coordinator = coordinator
         self.acceptButtonDidTap = self._accept.asObservable()
     }
@@ -39,15 +39,10 @@ final class InitialSettingViewModel {
         let initialLeaveTimeDate: Driver<Int>
         let initialReturnTimeDate: Driver<Int>
         let isAcceptable: Driver<Bool>
+        let userSettingDone: Observable<Void>
     }
 
     func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        let acceptButtonDidTapped = input.acceptButtonDidTap
-
-        acceptButtonDidTapped
-            .subscribe(self._accept)
-            .disposed(by: disposeBag)
-
         let list = [Int](5...23)
             .map { DateFormatter.yearMonthDay.string(from: Date()) + String(format: "%02d", $0) }
             .compactMap { DateFormatter.yearMonthDayHour.date(from: $0)} +
@@ -57,22 +52,24 @@ final class InitialSettingViewModel {
 
         let leaveTimeDateSource = Array(list.prefix(23))
 
-        let returnTImeDateSource = Array(list.suffix(23))
+        let returnTimeDateSource = Array(list.suffix(23))
 
         let leaveTimeDates = Driver.of(leaveTimeDateSource)
-        let returnTimeDates = Driver.of(returnTImeDateSource)
+        let returnTimeDates = Driver.of(returnTimeDateSource)
 
         let initialLeaveTimeDate = Driver.just(3)
         let initialReturnTimeDate = Driver.just(12)
 
-        let leaveTime = Driver.merge(
-            input.leaveTime.asDriver(),
-            Driver.just(leaveTimeDateSource[3])
+        let leaveTime = Observable.merge(
+            input.leaveTime.asObservable(),
+            Observable.just(leaveTimeDateSource[3])
         )
-        let returnTime = Driver.merge(
-            input.returnTime.asDriver(),
-            Driver.just(returnTImeDateSource[12])
+
+        let returnTime = Observable.merge(
+            input.returnTime.asObservable(),
+            Observable.just(returnTimeDateSource[12])
         )
+
         let selectedGender = input.genderSegmentedIndex
             .asObservable()
             .compactMap { Gender(index: $0) }
@@ -81,42 +78,38 @@ final class InitialSettingViewModel {
             .asObservable()
             .compactMap { TemperatureSensitiveness(rawValue: $0) }
 
-        _ = acceptButtonDidTapped.withLatestFrom(selectedGender)
-            .do(onNext: { [weak self] gender in
-                self?.useCase.setUserGender(for: gender)
-            })
-            .compactMap { $0.rawValue }
-            .subscribe()
+        let currentSetting = Observable.combineLatest(
+            selectedGender,
+            selectedTemperatureSensitive,
+            leaveTime,
+            returnTime
+        )
 
-        _ = acceptButtonDidTapped.withLatestFrom(selectedTemperatureSensitive)
-            .do(onNext: { [weak self] temperatureSensitive in
-                self?.useCase.setUserTemperatureSensitive(for: temperatureSensitive)
-            })
-            .subscribe()
-
-        _ = acceptButtonDidTapped.withLatestFrom(leaveTime)
-            .map { $0.convert(to: .leaveReturnTime) }
-            .do(onNext: { [weak self] leaveTime in
-                self?.useCase.setUserLeaveTime(for: leaveTime)
-            }).subscribe()
-
-        _ = acceptButtonDidTapped.withLatestFrom(returnTime)
-            .map { $0.convert(to: .leaveReturnTime) }
-            .do(onNext: { [weak self] returnTime in
-                self?.useCase.setUserReturnTime(for: returnTime)
-            }).subscribe()
-
-        let isAcceptable = Driver.combineLatest(leaveTime, returnTime)
+        let isAcceptable = Observable.combineLatest(leaveTime, returnTime)
             .map { leaveTime, returnTime in
                 leaveTime + 3600 <= returnTime
             }
+            .asDriver(onErrorJustReturn: false)
+
+        let settingDone = input.acceptButtonDidTap
+            .withLatestFrom(currentSetting)
+            .do(onNext: { [weak self] gender, temperatureSensitive, leaveTime, returnTime in
+                self?.userSettingUseCase.setUserGender(for: gender)
+                self?.userSettingUseCase.setUserTemperatureSensitive(for: temperatureSensitive)
+                self?.userSettingUseCase.setUserLeaveTime(for: leaveTime.convert(to: .leaveReturnTime))
+                self?.userSettingUseCase.setUserReturnTime(for: returnTime.convert(to: .leaveReturnTime))
+                self?.userSettingUseCase.setUserInitialSettingDone()
+                self?._accept.onNext(())
+            })
+            .map { _ in }
 
         return Output(
             leaveTimeDates: leaveTimeDates,
             returnTimeDates: returnTimeDates,
             initialLeaveTimeDate: initialLeaveTimeDate,
             initialReturnTimeDate: initialReturnTimeDate,
-            isAcceptable: isAcceptable
+            isAcceptable: isAcceptable,
+            userSettingDone: settingDone
         )
     }
 }

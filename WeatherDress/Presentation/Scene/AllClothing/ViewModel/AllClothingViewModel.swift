@@ -12,6 +12,7 @@ import RxCocoa
 final class AllClothingViewModel {
     let cancel: Observable<Void>
 
+    private weak var coordinator: AllClothingCoordinator!
     private let clothes: Observable<[ClothesItemViewModel]>
     private let _cancel = PublishSubject<Void>()
 
@@ -19,6 +20,7 @@ final class AllClothingViewModel {
         coordinator: AllClothingCoordinator,
         clothes: Observable<[ClothesItemViewModel]>
     ) {
+        self.coordinator = coordinator
         self.clothes = clothes.share(replay: 1)
         self.cancel = self._cancel.asObservable()
     }

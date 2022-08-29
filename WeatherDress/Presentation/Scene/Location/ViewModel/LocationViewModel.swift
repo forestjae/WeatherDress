@@ -30,7 +30,7 @@ final class LocationViewModel {
 
     private let useCase: DefaultLocationUseCase
     private let weatherUseCase: DefaultWeatherUseCase
-    private let coordinator: LocationListCoordinator
+    private weak var coordinator: LocationListCoordinator!
 
     init(
         useCase: DefaultLocationUseCase,

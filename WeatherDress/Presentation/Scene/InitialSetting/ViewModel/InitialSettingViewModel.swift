@@ -12,7 +12,7 @@ import RxCocoa
 final class InitialSettingViewModel {
     let acceptButtonDidTap: Observable<Void>
 
-    private let coordinator: InitialSettingCoordinator
+    private weak var coordinator: InitialSettingCoordinator!
     private let useCase: DefaultUserSetttingUseCase
     private let _accept = PublishSubject<Void>()
 

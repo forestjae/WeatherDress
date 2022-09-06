@@ -25,7 +25,7 @@ final class MainViewModel {
         let anyLocationAvailable: Driver<Bool>
     }
 
-    private let coordinator: MainCoordinator
+    private weak var coordinator: MainCoordinator!
     private let useCase: DefaultLocationUseCase
 
     init(useCase: DefaultLocationUseCase, coordinator: MainCoordinator) {

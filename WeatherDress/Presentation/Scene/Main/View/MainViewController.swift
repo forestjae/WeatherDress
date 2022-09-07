@@ -145,9 +145,10 @@ final class MainViewController: UIViewController {
             .drive(self.pageControl.rx.numberOfPages)
             .disposed(by: self.disposeBag)
 
-        output.currentIndex
-            .drive(onNext: self.setCurrentPageViewController)
-            .disposed(by: self.disposeBag)
+       // self.setCurrentPageViewController(at: viewModel.initialIndex)
+//        output.currentIndex
+//            .drive(onNext: self.setCurrentPageViewController)
+//            .disposed(by: self.disposeBag)
 
         output.currentLocationAvailable
             .drive(self.pageControl.rx.currentLocationAvailable)

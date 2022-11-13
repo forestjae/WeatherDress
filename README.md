@@ -233,4 +233,4 @@ Diffable DataSource / Compositional Layout 을 사용하여 Collection View를 �
 <br>
 
 ## Reference
-- RangeSlider 구현에 김종권님의 글을 참고했습니다. - [[iOS - SwiftUI] Slider 사용 방법](https://ios-development.tistory.com/1090)
+- RangeSlider 구현에 김종권님의 글을 참고했습니다. - [[iOS - swift] Custom Slider (커스텀 슬라이더), point, beginTracking, continueTracking, endTracking](https://ios-development.tistory.com/993)

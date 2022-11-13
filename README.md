@@ -231,3 +231,6 @@ Diffable DataSource / Compositional Layout 을 사용하여 Collection View를 �
 - WWDC 22에서 발표된 Swift 5.7 버전부터 사용가능한 Generic Protocol으로 구현 변경하기
 
 <br>
+
+## Reference
+- RangeSlider 구현에 김종권님의 글을 참고했습니다. - [[iOS - SwiftUI] Slider 사용 방법](https://ios-development.tistory.com/1090)
